@@ -94,11 +94,6 @@ export class ItemDetailsPage implements OnInit {
   }
 
   onSubmit(formData) {
-      this.formData.push(formData.value) ;
-      console.log(this.formData);
-
-      // console.log(body);
-
   }
 
   onClick() {
@@ -114,10 +109,17 @@ export class ItemDetailsPage implements OnInit {
   }
 
   onSave() {
-    console.log(this.formData);
+    let arrayData = [];
+    for (let index of this.formGroupList) {
+      arrayData.push(index._value);
+      //console.log(index._value[Object.keys(index._value)[0]]);
+    }
+    console.log(arrayData)
     // convert array to obj
-    var responses = {};
-    for (let response of this.formData) {
+    let responses = {};
+    for (let response of arrayData) {
+      //console.log(Object.keys(responses));
+      //console.log(responses[Object.keys(response)[0]]);
       responses[Object.keys(response)[0]] = response[Object.keys(response)[0]]
     }
     console.log(responses);
@@ -131,9 +133,4 @@ export class ItemDetailsPage implements OnInit {
         }
       );
   }
-/*
-  submit() {
-    console.log(this.formGroupList);
-    alert('Votre dossier a été envoyé!');
-  }*/
 }

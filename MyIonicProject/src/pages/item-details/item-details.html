@@ -21,9 +21,9 @@
         </dynamic-ionic-form>
         <button ion-button (click)="onBack()" *ngIf="i > 0">Back</button>
         <button ion-button (click)="onNext()" *ngIf="i < this.models.length - 1">Next</button>
-        <button ion-button type="submit" *ngIf="i == this.models.length - 1">Submit</button>
+        <button ion-button type="submit" *ngIf="i == this.models.length - 1" (click)="onSave()">Submit</button>
       </form>
-      <button ion-button type="submit" *ngIf="i == this.models.length - 1" (click)="onSave()">Save</button>
+
     </ion-slide>
   </ion-slides>
 </ion-content>
