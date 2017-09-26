@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-navbar id="headerbar">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>E-Medicin App</ion-title>
+
+    <ion-buttons margin-right end>
+      <button ion-button icon-only (click)="search()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="bg-style">
+  <div text-justify margin>
+    <h3>Pourquoi ABCXYZ?</h3>
+    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+    </p>
+  </div>
+</ion-content>
+
+<ion-footer >
+  <ion-navbar>
+    <ion-buttons margin-horizontal left>
+      <button ion-button icon-only>
+        <ion-icon name="ios-home"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons margin-horizontal left>
+      <button ion-button icon-only [navPush]="questionPage">
+        <ion-icon name="ios-book-outline" id="question"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons margin-horizontal left>
+      <button ion-button icon-only (click)="settings()">
+        <ion-icon name="ios-aperture-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-footer>
