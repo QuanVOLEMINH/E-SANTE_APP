@@ -17,11 +17,24 @@
 
 .bg-style{
 	//background: url('../assets/img/b.png') no-repeat fixed center;
-	background-color: blue;
+
+}
+
+.icon{
+	color: white;
+}
+
+.toolbar-background {
+  background-color: #809FFC;
+
+}
+
+.toolbar-title.toolbar-title-md,.toolbar-title.toolbar-title-ios,.toolbar-title.toolbar-title-wp {
+	color: white;
 }
 
 .bg-question{
-	background: url('../assets/img/b.png') no-repeat fixed center;
+
 }
 
 @media only screen and (max-width: 400px) {
@@ -36,7 +49,7 @@
 
 @media only screen and (max-width: 400px) {
 	.bg-question{
-		background: url('../assets/img/dolphin.png') no-repeat fixed center;
+		
 		-webkit-background-size: cover;
 	    -moz-background-size: cover;
 	    -o-background-size: cover;
