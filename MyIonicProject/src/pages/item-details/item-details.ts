@@ -1,6 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NavController, NavParams, Slides} from 'ionic-angular';
-import { HelloIonicPage } from '../hello-ionic/hello-ionic';
 import {FormGroup} from "@angular/forms";
 import {DynamicSelectModel} from "@ng-dynamic-forms/core/src/model/select/dynamic-select.model";
 import {DynamicInputModel} from "@ng-dynamic-forms/core/src/model/input/dynamic-input.model";

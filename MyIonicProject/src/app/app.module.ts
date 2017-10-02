@@ -31,7 +31,7 @@ import {HttpModule} from "@angular/http";
     IonicModule.forRoot(MyApp, {
       scrollPadding: false,
       scrollAssist: true,
-      autoFocusAssist: false}),
+      autoFocusAssist: true}),
     DynamicFormsCoreModule.forRoot(),
     DynamicFormsIonicUIModule,
   ],
