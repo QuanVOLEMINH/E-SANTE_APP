@@ -1,4 +1,3 @@
-
 <ion-header>
   <ion-navbar>
     <button ion-button menuToggle >
@@ -12,19 +11,28 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content class="bg-question">
-    <ion-slides>
-      <ion-slide *ngFor="let model of this.models; let i = index">
-        <form  [formGroup]="this.formGroupList[i]" (ngSubmit)="onSubmit(this.formGroupList[i])">
-          <dynamic-ionic-form [model]="[model]" [group]="this.formGroupList[i]" style="color:blue;">
-          </dynamic-ionic-form>
-          <button ion-button round class="question_btn" (click)="onBack()" *ngIf="i > 0">Back</button>
-          <button ion-button round class="question_btn" (click)="onNext()" *ngIf="i < this.models.length - 1">Next</button>
-          <button ion-button round class="question_btn" type="submit" *ngIf="i == this.models.length - 1" (click)="onSave()">Submit</button>
-        </form>
 
-      </ion-slide>
-    </ion-slides>
+
+<ion-content class="bg-question">
+  <ion-slides>
+    <ion-slide *ngFor="let model of this.models; let i = index">
+      <!--<div class="text-color">{{this.progress}} %</div>-->
+      <progress id="progressbar" class="progress" max="100" [value]="this.progress"></progress>
+      <div>{{label}}</div>
+      <form  [formGroup]="this.formGroupList[i]" (ngSubmit)="onSubmit(this.formGroupList[i])">
+        <dynamic-ionic-form [model]="[model]"
+                            [group]="this.formGroupList[i]"
+                            [formControl]=""
+                            style="color:blue;">
+          <div *ngIf="this.formGroupList[i].hasErrorMessages">XXXXXXXXXXXXXXXX</div>
+        </dynamic-ionic-form>
+        <button ion-button round class="question_btn" (click)="onBack()" *ngIf="i > 0">Back</button>
+        <button ion-button round class="question_btn" (click)="onNext()" *ngIf="i < this.models.length - 1">Next</button>
+        <button ion-button round class="question_btn" type="submit" *ngIf="i == this.models.length - 1" (click)="onSave()">Submit</button>
+      </form>
+
+    </ion-slide>
+  </ion-slides>
 </ion-content>
 
 
@@ -43,7 +51,7 @@
     </ion-buttons>
 
     <ion-buttons margin-horizontal  left>
-      <button ion-button icon-only (click)="settings()">
+      <button ion-button icon-only> <!--(click)="settings()"-->
         <ion-icon name="ios-aperture-outline"></ion-icon>
       </button>
     </ion-buttons>

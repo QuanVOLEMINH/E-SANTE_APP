@@ -23,12 +23,15 @@
 	color: #D2D9DF;
 }
 
-.bg-home div{
-	display: inline-block;
+#content-maintext{
+	//display: inline-block;
+	margin: 0px 20px;
+	padding: 20px 20px;
+	text-align: justify;
 	background-color: #2D3D54;
 	opacity: 0.75;
-	height: 245px;
-	margin: 20px;
+
+
 }
 
 .icon{

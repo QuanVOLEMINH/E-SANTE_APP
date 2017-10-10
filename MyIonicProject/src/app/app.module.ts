@@ -29,7 +29,7 @@ import {HttpModule} from "@angular/http";
     HttpModule,
     BrowserModule,
     IonicModule.forRoot(MyApp, {
-      scrollPadding: false,
+      scrollPadding: true,
       scrollAssist: true,
       autoFocusAssist: true}),
     DynamicFormsCoreModule.forRoot(),

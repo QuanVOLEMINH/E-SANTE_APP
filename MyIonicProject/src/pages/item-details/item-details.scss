@@ -1,3 +1,44 @@
 page-item-details {
 
 }
+
+.slide-zoom{
+  height: 85%;
+  overflow-y: scroll;
+}
+
+@media only screen and (max-width: 400px) {
+  .slide-zoom{
+    height: 85%;
+    overflow-y: scroll;
+  }
+}
+
+progress.progress{
+  color:#33cd5f;
+  margin: 10px 2%;
+  border-radius: 5px;
+  background-color:#3299E6;
+  width: 90%;
+
+}
+
+.text-color{
+  color: black;
+}
+
+progress[value] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: #33cd5f;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+progress[value]::-webkit-progress-value {
+  background-color: #FF6347;
+  border-radius: 2px;
+}

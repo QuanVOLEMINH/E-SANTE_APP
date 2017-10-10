@@ -1,13 +1,16 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {NavController, NavParams, Slides} from 'ionic-angular';
-import {FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DynamicSelectModel} from "@ng-dynamic-forms/core/src/model/select/dynamic-select.model";
 import {DynamicInputModel} from "@ng-dynamic-forms/core/src/model/input/dynamic-input.model";
 import {DynamicRadioGroupModel} from "@ng-dynamic-forms/core/src/model/radio/dynamic-radio-group.model";
 import {DynamicFormService} from "@ng-dynamic-forms/core/src/service/dynamic-form.service";
 import {DynamicFormGroupModel} from "@ng-dynamic-forms/core/src/model/form-group/dynamic-form-group.model";
-import {QUESTIONS_DATA} from "./item-details.model";
 import {QuestionServiceProvider} from "../../providers/question-service/question-service";
+import {stringify} from "@angular/core/src/util";
+import {errorHandler} from "@angular/platform-browser/src/browser";
+import {Subscription} from "rxjs/Subscription";
+
 
 @Component({
   selector: 'page-item-details',
@@ -16,12 +19,14 @@ import {QuestionServiceProvider} from "../../providers/question-service/question
 export class ItemDetailsPage implements OnInit {
   @ViewChild(Slides) slider: Slides;
   selectedItem: any;
+  public progress: any;
 
   public questions: any;
   private formData: any;
-  change: boolean;
   public models;
   public formGroupList;
+  public id: string;
+  public error: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -31,24 +36,38 @@ export class ItemDetailsPage implements OnInit {
     this.selectedItem = navParams.get('item');
     this.formGroupList = [];
     this.formData = [];
+    this.id = this.navParams.get('param1');
   }
 
   ngOnInit() {
-    this._questionService.getListQuestions()
+    console.log(this.id);
+    this._questionService.getListQuestionsById(this.id)
       .subscribe(
         response => {
           console.log(response);
-          this.models = this.modelGenerator(response);
+          this.models = this.modelGenerator(response.questioncatalog);
           for (let _i = 0; _i < this.models.length; _i++) {
             let formModel = this.models[_i];
+            console.log(formModel);
             this.formGroupList.push(this._formService.createFormGroup([formModel]));
           }
           console.log(this.formGroupList);
+          /*for (let index of this.formGroupList) {
+            let valid = index.controls.info;
+            console.log(valid);
+
+            for (let i of valid) {
+              console.log(i.validator);
+            }
+            //console.log(valid);
+          }*/
         },
         error => {
           console.log(error);
         }
       );
+    this.progress = 0;
+    //this.error = this.models[0].group[0].errorMessages.required;
   }
 
   modelGenerator(questionsInput) {
@@ -63,7 +82,9 @@ export class ItemDetailsPage implements OnInit {
               id: question,
               label: questionsInput[formGroup]['questions'][question]['label'],
               maxLength: questionsInput[formGroup]['questions'][question]['maxlength'],
-              placeholder: questionsInput[formGroup]['questions'][question]['placeholder']
+              placeholder: questionsInput[formGroup]['questions'][question]['placeholder'],
+              validators: questionsInput[formGroup]['questions'][question]['validators'],
+              errorMessages: questionsInput[formGroup]['questions'][question]['errorMessages']
             }));
             break;
           case 'Select':
@@ -95,25 +116,24 @@ export class ItemDetailsPage implements OnInit {
   onSubmit(formData) {
   }
 
-  onClick() {
-    return this.change = !this.change;
-  }
-
   onNext() {
+    this.progress = Math.round(this.progress + 100/this.models.length);
     this.slider.slideNext();
   }
 
   onBack() {
     this.slider.slidePrev();
+    this.progress = Math.round(this.progress - 100/this.models.length);
   }
 
   onSave() {
+    this.progress = 100;
     let arrayData = [];
     for (let index of this.formGroupList) {
       arrayData.push(index._value);
       //console.log(index._value[Object.keys(index._value)[0]]);
     }
-    console.log(arrayData)
+    console.log(arrayData);
     // convert array to obj
     let responses = {};
     for (let response of arrayData) {
@@ -131,5 +151,5 @@ export class ItemDetailsPage implements OnInit {
           console.log(error);
         }
       );
-  }
+  };
 }
