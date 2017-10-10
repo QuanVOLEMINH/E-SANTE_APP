@@ -35,7 +35,7 @@
         "cordova-plugin-console": "^1.0.5",
         "cordova-plugin-device": "^1.1.4",
         "cordova-plugin-googlefit": "git+https://github.com/ilovept/cordova-plugin-googlefit.git",
-        "cordova-plugin-health": "^1.0.0",
+        "cordova-plugin-health": "^1.0.1",
         "cordova-plugin-intent": "git+https://github.com/napolitano/cordova-plugin-intent.git",
         "cordova-plugin-splashscreen": "^4.0.3",
         "cordova-plugin-statusbar": "^2.2.2",
@@ -61,10 +61,7 @@
             "cordova-plugin-statusbar": {},
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
-            "cordova-plugin-health": {
-                "HEALTH_READ_PERMISSION": "App needs read access",
-                "HEALTH_WRITE_PERMISSION": "App needs write access"
-            }
+            "cordova-plugin-health": {}
         },
         "platforms": [
             "android",

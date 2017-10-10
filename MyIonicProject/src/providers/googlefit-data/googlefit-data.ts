@@ -53,18 +53,19 @@ export class GoogleFitDataProvider {
   }
 
   sendDataToServer(data) {
-    //let body = JSON.stringify(data);
+    let body = JSON.stringify(data);
     //console.log(body);
+    for (var i = 0; i < data.length; i++){
+      console.log("Day " + i + " : " + data[i]['value']);
+    }
+    let headers = new Headers({'Content-Type': 'application/json'});
 
-    console.log(data);
-    /*let headers = new Headers({'Content-Type': 'application/json'});
-
-    return this.http.post(this.apiUrl + 'responses', body, {headers: headers})
-    .map (function (response) {
-      return response.json();
-    })
-    .catch (function (error) {
-      return Observable.throw(error);
-    })*/
+    this.http.post(this.apiUrl + 'responses', body, headers).map (function (response) {
+        console.log(response)
+        return response.json();
+      })
+      .catch (function (error) {
+        return Observable.throw(error);
+      })
   }
 }

@@ -35,7 +35,7 @@ export class MyApp {
     public http: Http
   ) {
     this.initializeApp();
-    this.googlefitAccess();
+
     // set our app's pages
     this.pages = [
       { title: 'Accueil', component: HelloIonicPage },
@@ -58,12 +58,12 @@ export class MyApp {
       this.keyboard.onKeyboardHide().subscribe(() => {
         document.body.classList.remove('keyboard-is-open');
       });
+      this.googlefitAccess();
     });
   }
 
   googlefitAccess(){
-    var temp;
-    temp = this.googlefitData.getData().then(function(res){
+    var temp = this.googlefitData.getData().then(function(res){
       console.log("Data in app ts is: ");
       for (var i = 0; i < res.length; i++){
         console.log(res[i]['value']);
@@ -71,10 +71,7 @@ export class MyApp {
       console.log("End");
       return res;
     });
-    console.log('start exp');
-    //this.googlefitData.sendDataToServer(temp);
-    console.log(temp);
-    console.log('end exp');
+    temp.then(res => this.googlefitData.sendDataToServer(res));
   }
 
   openPage(page) {
