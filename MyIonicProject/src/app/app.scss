@@ -14,24 +14,8 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
-
-.bg-home{
-	//background: url('../assets/img/b.png') no-repeat fixed center;
-	//background: #2D3D54;
-	background: url('../assets/img/h3.jpeg') no-repeat fixed center;
-	background-size: cover;
-	color: #D2D9DF;
-}
-
-#content-maintext{
-	//display: inline-block;
-	margin: 0px 20px;
-	padding: 20px 20px;
-	text-align: justify;
-	background-color: #2D3D54;
-	opacity: 0.75;
-
-
+html{
+	font-family: "Open Sans";
 }
 
 .icon{
@@ -46,73 +30,9 @@
 	color: #D2D9DF;
 }
 
-.bg-question{
-	//background-color: #2D3D54;   opacity: 0.9;
-	background: url('../assets/img/h2.jpg') no-repeat fixed center;
-	background-size: cover;
-	color: #D2D9DF;
-}
-
-.bg-question form .form-row {
-	background-color: red;
-}
-
-
-@media only screen and (max-width: 400px) {
-	/*.bg-home{
-		background: url('../assets/img/hope1.jpg') no-repeat fixed center;
-		-webkit-background-size: cover;
-	    -moz-background-size: cover;
-	    -o-background-size: cover;
-	    background-size: cover;
-	}*/
-}
-
-@media only screen and (max-width: 400px) {
-	/*.bg-question{
-
-		-webkit-background-size: cover;
-	    -moz-background-size: cover;
-	    -o-background-size: cover;
-	    background-size: cover;
-	}*/
-
-}
-
-html{
-	font-family: "Open Sans";
-}
-
-.question_btn{
-	color: custom_button;
-}
-
-#main_pic{
-	border-radius:20%;
-	display: block;
-  margin: auto;
-	width: 50%;
-}
-
 body.keyboard-is-open ion-footer {
-  //display: none;
-	display: none;
-
-
+//	display: none;
 }
-
-body.keyboard-is-open ion-header {
-	display: none;
-}
-
-
-body.keyboard-is-open .bg-question {
-	background-color: red;
-	height: 100%;
-	margin-top: 0px;
-	overflow: hidden;
-}
-
 
 #menu_header{
 	background: url('../assets/img/bs7.jpg');
@@ -131,7 +51,4 @@ body.keyboard-is-open .bg-question {
 	width: 60%;
 	display: block;
 	margin: auto;
-}
-#menu_content{
-	//background-color: #2D3D54;
 }

@@ -9,63 +9,71 @@ import { Health, HealthData } from '@ionic-native/health';
 
 @Injectable()
 export class GoogleFitDataProvider {
-  apiUrl = this.appSettings.getApiUrl();
-  constructor(public http: Http, public appSettings: AppSettingsProvider, private health: Health) {
-    console.log('GoogleFitDataProvider');
-  }
+      apiUrl = this.appSettings.getApiUrl();
+      constructor(public http: Http, public appSettings: AppSettingsProvider, private health: Health) {
+            console.log('GoogleFitDataProvider');
+      }
 
-  getData() {
-    return this.health.isAvailable()
-    .then((available:boolean) => {
-      console.log("This api is " + available);
-      return this.health.requestAuthorization([
-        {
-          read: ['steps', 'height', 'calories', 'distance', 'activity']      //read only permission
-        }
-      ])
-      .then(res => {
-        console.log(res);
-        console.log('can authorize');
-        var startDate = new Date(new Date().getTime() - 3 * 24 * 60 * 60 * 1000);
-        var endDate = new Date();
-        return this.health.queryAggregated({startDate, endDate, dataType: 'distance', bucket: 'day'})
-        .then((data) => {
-          //console.log(data);
-          console.log('query successed');
-          return data;
-        })
-        .catch(e => {
-          console.log(e);
-          console.log('query failed');
-          return e;
-        });
-      })
-      .catch(e => {
-        console.log(e);
-        console.log('can not authorize');
-        return e;
-      });
-    }).catch(e => {
-      console.log(e);
-      console.log('Not found');
-      return e;
-    });
-  }
+      getData() {
+            return this.health.isAvailable()
+            .then((available:boolean) => {
+                  console.log("This api is " + available);
+                  return this.health.requestAuthorization([
+                        {
+                              read: ['steps', 'height', 'calories', 'distance', 'activity']      //read only permission
+                        }
+                  ])
+                  .then(res => {
+                        console.log(res);
+                        console.log('can authorize');
+                        var startDate = new Date(new Date().getTime() - 1 * 24 * 60 * 60 * 1000);
+                        var endDate = new Date();
+                        return this.health.queryAggregated({startDate, endDate, dataType: 'calories', bucket: 'day'})
+                        .then((data) => {
+                              //console.log(data);
+                              console.log('query successed');
+                              return data;
+                        })
+                        .catch(e => {
+                              console.log(e);
+                              console.log('query failed');
+                              return e;
+                        });
+                  })
+                  .catch(e => {
+                        console.log(e);
+                        console.log('can not authorize');
+                        return e;
+                  });
+            }).catch(e => {
+                  console.log(e);
+                  console.log('Not found');
+                  return e;
+            });
+      }
 
-  sendDataToServer(data) {
-    let body = JSON.stringify(data);
-    //console.log(body);
-    for (var i = 0; i < data.length; i++){
-      console.log("Day " + i + " : " + data[i]['value']);
-    }
-    let headers = new Headers({'Content-Type': 'application/json'});
+      sendDataToServer(data) {
+            console.log("data is " + data);
 
-    this.http.post(this.apiUrl + 'responses', body, headers).map (function (response) {
-        console.log(response)
-        return response.json();
+
+            let temp = new Object();
+            for (let i = 0; i < Object.keys(data).length; i++){
+                  temp[i] = data[i];
+            }
+            let body = JSON.stringify(temp);
+            /*console.log("Body is  " + body);
+            console.log("Type Body is " + typeof(body));
+            for (var i = 0; i < data.length; i++){
+            console.log("Day " + i + " : " + data[i]['value']);
+      }*/
+
+      let headers = new Headers({'Content-Type': 'application/json'});
+      let options = new RequestOptions({ headers: headers });
+      return this.http.post(this.apiUrl + 'ggfit', body, options).map (function (response) {
+            return response.json();
       })
       .catch (function (error) {
-        return Observable.throw(error);
-      })
-  }
+            return Observable.throw(error);
+      });
+}
 }

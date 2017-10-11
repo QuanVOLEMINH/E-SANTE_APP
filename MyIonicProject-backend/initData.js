@@ -249,26 +249,23 @@ function createData() {
                         },
                         dateDeNaissance: {
                             label: "Date de naissance",
-                            maxLength: 51,
+                            inline: false,
                             placeholder: "",
-                            type: "Input",
-                            answer: "",
-                            /*validators: {
-                                customValidator: null,
-                                minLength: 5,
-                                maxLength: 10
-                            },
-                            errorMessages: {
-                                required: "{{ label }} is required",
-                                maxLength: "Max character count is 5"
-                            }*/
+                            type: "DateTime",
+                            answer: ""
                         },
                         age: {
                             label: "Age",
                             maxLength: 10,
                             placeholder: "",
                             type: "Input",
-                            answer: ""
+                            answer: "",
+                            validators: {
+                                required: null,
+                                minLength: 1,
+                                maxLength: 4,
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                            }
                         }
                     }
                 },
@@ -297,7 +294,13 @@ function createData() {
                             maxLength: 10,
                             placeholder: "",
                             type: "Input",
-                            answer: ""
+                            answer: "",
+                            validators: {
+                                required: null,
+                                minLength: 1,
+                                maxLength: 4,
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                            }
                         },
                         consommeTabac: {
                             label: "Dans le passé, avez-vous fumé?",
@@ -326,14 +329,24 @@ function createData() {
                             maxLength: 10,
                             placeholder: "",
                             type: "Input",
-                            answer: ""
+                            answer: "",
+                            validators: {
+                                required: null,
+                                maxLength: 4,
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                            }
                         },
                         poid: {
                             label: "Poid",
                             maxLength: 10,
                             placeholder: "",
                             type: "Input",
-                            answer: ""
+                            answer: "",
+                            validators: {
+                                required: null,
+                                maxLength: 4,
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                            }
                         },
                         enceinte: {
                             label: "Êtes-vous enceinte?",
@@ -409,7 +422,6 @@ function createData() {
                                     value: "homme"
                                 },
                                 {
-                                    disabled: true,
                                     label: "Femme",
                                     value: "femme"
                                 }
@@ -418,10 +430,11 @@ function createData() {
                         },
                         dateDeNaissance: {
                             label: "Date de naissance",
-                            maxLength: 51,
+                            inline: false,
                             placeholder: "",
-                            type: "Input",
-                            answer: "",
+                            type: "DateTime",
+                            answer: ""
+                        },
                             /*validators: {
                                 customValidator: null,
                                 minLength: 5,
@@ -430,8 +443,8 @@ function createData() {
                             errorMessages: {
                                 required: "{{ label }} is required",
                                 maxLength: "Max character count is 5"
-                            }*/
-                        },
+                            }
+                        },*/
                         age: {
                             label: "Age",
                             maxLength: 10,
@@ -627,10 +640,11 @@ function createData() {
                         },
                         dateDeNaissance: {
                             label: "Date de naissance",
-                            maxLength: 51,
+                            inline: false,
                             placeholder: "",
-                            type: "Input",
-                            answer: "",
+                            type: "DateTime",
+                            answer: ""
+                        },
                             /*validators: {
                                 customValidator: null,
                                 minLength: 5,
@@ -640,7 +654,7 @@ function createData() {
                                 required: "{{ label }} is required",
                                 maxLength: "Max character count is 5"
                             }*/
-                        },
+
                         age: {
                             label: "Age",
                             maxLength: 10,
@@ -693,9 +707,9 @@ function createData() {
                     legend: "MALADIE",
                     questions: {
                         ageEpileptique: {
-                            label: "",
+                            label: "A quel âge avez-vous été \n diagnostiquer epileptique?",
                             maxLength: 10,
-                            placeholder: "A quel âge avez-vous été diagnostiquer epileptique?",
+                            placeholder: "",
                             type: "Input",
                             answer: ""
                         },

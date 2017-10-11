@@ -15,69 +15,81 @@ import {Http, Headers, RequestOptions} from '@angular/http';
 
 
 @Component({
-  templateUrl: 'app.html',
-  providers: [Keyboard, Health, GoogleFitDataProvider]
+    templateUrl: 'app.html',
+    providers: [Keyboard, Health, GoogleFitDataProvider]
 })
 export class MyApp {
-  @ViewChild(Nav) nav: Nav;
+    @ViewChild(Nav) nav: Nav;
 
-  // make HelloIonicPage the root (or first) page
-  rootPage = HelloIonicPage;
-  pages: Array<{title: string, component: any}>;
+    // make HelloIonicPage the root (or first) page
+    rootPage = HelloIonicPage;
+    pages: Array<{title: string, component: any}>;
 
-  constructor(
-    public platform: Platform,
-    public menu: MenuController,
-    public statusBar: StatusBar,
-    public splashScreen: SplashScreen,
-    private keyboard: Keyboard,
-    public googlefitData: GoogleFitDataProvider,
-    public http: Http
-  ) {
-    this.initializeApp();
+    constructor(
+        public platform: Platform,
+        public menu: MenuController,
+        public statusBar: StatusBar,
+        public splashScreen: SplashScreen,
+        private keyboard: Keyboard,
+        public googlefitData: GoogleFitDataProvider,
+        public http: Http
+    ) {
+        this.initializeApp();
 
-    // set our app's pages
-    this.pages = [
-      { title: 'Accueil', component: HelloIonicPage },
-      { title: 'Questionnaires', component: ItemDetailsPage }
-    ];
-  }
+        // set our app's pages
+        this.pages = [
+            { title: 'Accueil', component: HelloIonicPage },
+            { title: 'Questionnaires', component: ItemDetailsPage }
+        ];
+    }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+    initializeApp() {
+        this.platform.ready().then(() => {
+            // Okay, so the platform is ready and our plugins are available.
+            // Here you can do any higher level native things you might need.
+            this.statusBar.styleDefault();
+            this.splashScreen.hide();
 
-      //add keyboard class
-      this.keyboard.onKeyboardShow().subscribe(() => {
-        document.body.classList.add('keyboard-is-open');
-        //this.keyboard.disableScroll(false);
-      });
-      this.keyboard.onKeyboardHide().subscribe(() => {
-        document.body.classList.remove('keyboard-is-open');
-      });
-      this.googlefitAccess();
-    });
-  }
+            //add keyboard class
+            this.keyboard.onKeyboardShow().subscribe(() => {
+                document.body.classList.add('keyboard-is-open');
+                this.keyboard.disableScroll(true);
+            });
+            this.keyboard.onKeyboardHide().subscribe(() => {
+                document.body.classList.remove('keyboard-is-open');
+            })
+            this.googlefitAccess();
+        });
+    }
 
-  googlefitAccess(){
-    var temp = this.googlefitData.getData().then(function(res){
-      console.log("Data in app ts is: ");
-      for (var i = 0; i < res.length; i++){
-        console.log(res[i]['value']);
-      }
-      console.log("End");
-      return res;
-    });
-    temp.then(res => this.googlefitData.sendDataToServer(res));
-  }
+    googlefitAccess(){
+        let temp = this.googlefitData.getData().then(function(res){
+            return res;
+        });
 
-  openPage(page) {
-    // close the menu when clicking a link from the menu
-    this.menu.close();
-    // navigate to the new page if it is not the current page
-    this.nav.setRoot(page.component);
-  }
-}
+        temp.then(
+            res =>
+            {
+                if (res == 'cordova_not_available'){
+                    throw 'error not found googlefit';
+                } else {
+                    this.googlefitData.sendDataToServer(res).subscribe(
+                        response => {
+                            console.log(response);
+                        },
+                        error => {
+                            console.log(error);
+                        });
+                    }
+                }
+            )
+            .catch(e => console.log(e));
+        }
+
+        openPage(page) {
+            // close the menu when clicking a link from the menu
+            this.menu.close();
+            // navigate to the new page if it is not the current page
+            this.nav.setRoot(page.component);
+        }
+    }

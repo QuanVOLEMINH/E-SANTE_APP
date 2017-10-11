@@ -2,7 +2,24 @@ page-hello-ionic {
 
 }
 
+.bg-home{
+	//background: url('../assets/img/b.png') no-repeat fixed center;
+	//background: #2D3D54;
+	background: url('../assets/img/h3.jpeg') no-repeat fixed center;
+	background-size: cover;
+	color: #D2D9DF;
+}
 
+#content-maintext{
+	//display: inline-block;
+	margin: 0px 20px;
+	padding: 20px 20px;
+	text-align: justify;
+	background-color: #2D3D54;
+	opacity: 0.75;
+
+
+}
 #idUser {
    margin : 20px;
    background-color: #2D3D54;

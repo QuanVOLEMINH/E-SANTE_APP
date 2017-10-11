@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {NavController, NavParams, Slides} from 'ionic-angular';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DynamicSelectModel} from "@ng-dynamic-forms/core/src/model/select/dynamic-select.model";
@@ -6,11 +6,9 @@ import {DynamicInputModel} from "@ng-dynamic-forms/core/src/model/input/dynamic-
 import {DynamicRadioGroupModel} from "@ng-dynamic-forms/core/src/model/radio/dynamic-radio-group.model";
 import {DynamicFormService} from "@ng-dynamic-forms/core/src/service/dynamic-form.service";
 import {DynamicFormGroupModel} from "@ng-dynamic-forms/core/src/model/form-group/dynamic-form-group.model";
+import {DynamicDatePickerModel} from "@ng-dynamic-forms/core/src/model/datepicker/dynamic-datepicker.model";
 import {QuestionServiceProvider} from "../../providers/question-service/question-service";
-import {stringify} from "@angular/core/src/util";
 import {errorHandler} from "@angular/platform-browser/src/browser";
-import {Subscription} from "rxjs/Subscription";
-
 
 @Component({
   selector: 'page-item-details',
@@ -66,9 +64,10 @@ export class ItemDetailsPage implements OnInit {
           console.log(error);
         }
       );
-    this.progress = 0;
+    this.progress = 20;
     //this.error = this.models[0].group[0].errorMessages.required;
   }
+
 
   modelGenerator(questionsInput) {
     let group = [];
@@ -101,6 +100,14 @@ export class ItemDetailsPage implements OnInit {
               options: questionsInput[formGroup]['questions'][question]['options']
             }));
             break;
+          case 'DateTime':
+            group.push(new DynamicDatePickerModel({
+              id: question,
+              inline: questionsInput[formGroup]['questions'][question]['inline'],
+              label: questionsInput[formGroup]['questions'][question]['label'],
+              placeholder: questionsInput[formGroup]['questions'][question]['placeholder']
+            }));
+            break;
         }
       }
 
@@ -113,17 +120,23 @@ export class ItemDetailsPage implements OnInit {
     return models;
   }
 
+  slideChanged() {
+    let currentIndex = this.slider.getActiveIndex();
+    this.progress = Math.round((this.slider.getActiveIndex()+1)/this.models.length*100);
+  }
+
   onSubmit(formData) {
   }
 
   onNext() {
-    this.progress = Math.round(this.progress + 100/this.models.length);
+    this.progress = Math.round((this.slider.getActiveIndex()+1)/this.models.length*100);
     this.slider.slideNext();
+    console.log(this.formGroupList);
   }
 
   onBack() {
     this.slider.slidePrev();
-    this.progress = Math.round(this.progress - 100/this.models.length);
+    this.progress = Math.round(this.slider.getActiveIndex()/this.models.length*100);
   }
 
   onSave() {

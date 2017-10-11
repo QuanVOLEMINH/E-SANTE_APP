@@ -17,21 +17,25 @@ import { AppSettingsProvider } from '../providers/app-settings/app-settings';
 import {DynamicFormService} from "@ng-dynamic-forms/core/src/service/dynamic-form.service";
 import {DynamicFormValidationService} from "@ng-dynamic-forms/core/src/service/dynamic-form-validation.service";
 import {HttpModule} from "@angular/http";
+import {NG_VALIDATORS} from "@angular/forms";
+import {customValidator} from "./app.validators";
+import {ValidationMessageComponent} from "../components/validation-message/validation-message";
 
 @NgModule({
   declarations: [
     MyApp,
     HelloIonicPage,
     ItemDetailsPage,
-    ListPage
+    ListPage,
+    ValidationMessageComponent
   ],
   imports: [
     HttpModule,
     BrowserModule,
     IonicModule.forRoot(MyApp, {
-      scrollPadding: true,
-      scrollAssist: true,
-      autoFocusAssist: true}),
+      scrollPadding: false,
+      scrollAssist: false,
+      autoFocusAssist: false}),
     DynamicFormsCoreModule.forRoot(),
     DynamicFormsIonicUIModule,
   ],
@@ -49,7 +53,8 @@ import {HttpModule} from "@angular/http";
     QuestionServiceProvider,
     AppSettingsProvider,
     DynamicFormService,
-    DynamicFormValidationService
+    DynamicFormValidationService,
+    {provide: NG_VALIDATORS, useValue: customValidator, multi: true }
   ]
 })
 export class AppModule {}
