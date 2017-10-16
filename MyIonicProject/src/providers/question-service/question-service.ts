@@ -16,7 +16,7 @@ import {Subject} from "rxjs/Subject";
 export class QuestionServiceProvider {
   apiUrl = this.appSettings.getApiUrl();
   constructor(public http: Http, public appSettings: AppSettingsProvider) {
-    console.log('Hello QuestionServiceProvider Provider');
+    //console.log('Hello QuestionServiceProvider Provider');
   }
 
 

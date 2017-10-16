@@ -12,7 +12,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import {ItemDetailsPage} from "../pages/item-details/item-details";
 import {GoogleFitDataProvider} from "../providers/googlefit-data/googlefit-data";
 import {Http, Headers, RequestOptions} from '@angular/http';
-
+import {Events} from 'ionic-angular';
 
 @Component({
     templateUrl: 'app.html',
@@ -32,7 +32,8 @@ export class MyApp {
         public splashScreen: SplashScreen,
         private keyboard: Keyboard,
         public googlefitData: GoogleFitDataProvider,
-        public http: Http
+        public http: Http,
+        public events: Events
     ) {
         this.initializeApp();
 
@@ -51,45 +52,41 @@ export class MyApp {
             this.splashScreen.hide();
 
             //add keyboard class
-            this.keyboard.onKeyboardShow().subscribe(() => {
-                document.body.classList.add('keyboard-is-open');
-                this.keyboard.disableScroll(true);
-            });
-            this.keyboard.onKeyboardHide().subscribe(() => {
-                document.body.classList.remove('keyboard-is-open');
-            })
-            this.googlefitAccess();
+            /*this.keyboard.onKeyboardShow().subscribe(() => {
+            document.body.classList.add('keyboard-is-open');
+            this.keyboard.disableScroll(true);
         });
-    }
+        this.keyboard.onKeyboardHide().subscribe(() => {
+        document.body.classList.remove('keyboard-is-open');
+    })*/
+        this.googlefitAccess();
+});
+}
 
-    googlefitAccess(){
-        let temp = this.googlefitData.getData().then(function(res){
-            return res;
-        });
-
-        temp.then(
-            res =>
-            {
-                if (res == 'cordova_not_available'){
-                    throw 'error not found googlefit';
-                } else {
-                    this.googlefitData.sendDataToServer(res).subscribe(
-                        response => {
-                            console.log(response);
-                        },
-                        error => {
-                            console.log(error);
-                        });
-                    }
-                }
-            )
-            .catch(e => console.log(e));
+googlefitAccess(){
+    let temp = this.googlefitData.getData().then(function(res){
+        return res;
+    });
+    console.log('temp in app ts is ok ');
+    //console.log(temp);
+    temp.then(
+        res =>
+        {
+            if (res == 'cordova_not_available'){
+                throw 'error not found googlefit';
+            } else {
+                this.events.subscribe('myEvent', function(){
+                    return res;
+                });
+            }
         }
+    ).catch(e => console.log(e));
+}
 
-        openPage(page) {
-            // close the menu when clicking a link from the menu
-            this.menu.close();
-            // navigate to the new page if it is not the current page
-            this.nav.setRoot(page.component);
-        }
+    openPage(page) {
+        // close the menu when clicking a link from the menu
+        this.menu.close();
+        // navigate to the new page if it is not the current page
+        this.nav.setRoot(page.component);
     }
+}
