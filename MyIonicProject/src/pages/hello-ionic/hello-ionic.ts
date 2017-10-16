@@ -19,7 +19,7 @@ export class HelloIonicPage {
   onClick() {
     this.navController.push(ItemDetailsPage, {param1: this.id});
     //console.log(this.id);
-    console.log('-------------');
+    //console.log('-------------');
     this._questionService.getListQuestionsById(this.id)
       .subscribe(
         response => {
@@ -29,6 +29,7 @@ export class HelloIonicPage {
           console.log(error)
         }
     );
+    
     let data =  this.events.publish('myEvent');
     console.log('data is ');
     //console.log(data);

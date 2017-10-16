@@ -26,9 +26,9 @@ export class GoogleFitDataProvider {
             .then(res => {
                 console.log(res);
                 console.log('can authorize');
-                var startDate = new Date(new Date().getTime() - 1 * 24 * 60 * 60 * 1000);
+                var startDate = new Date(new Date().getTime() - 3 * 24 * 60 * 60 * 1000);
                 var endDate = new Date();
-                return this.health.queryAggregated({startDate, endDate, dataType: 'calories', bucket: 'day'})
+                return this.health.queryAggregated({startDate, endDate, dataType: 'distance', bucket: 'day'})
                 .then((data) => {
                     console.log(data);
                     console.log('query successed');

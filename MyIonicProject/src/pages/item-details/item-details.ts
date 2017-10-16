@@ -146,7 +146,7 @@ export class ItemDetailsPage implements OnInit {
       arrayData.push(index._value);
       //console.log(index._value[Object.keys(index._value)[0]]);
     }
-    console.log(arrayData);
+    //console.log(arrayData);
     // convert array to obj
     let responses = {};
     for (let response of arrayData) {
@@ -154,6 +154,7 @@ export class ItemDetailsPage implements OnInit {
       //console.log(responses[Object.keys(response)[0]]);
       responses[Object.keys(response)[0]] = response[Object.keys(response)[0]]
     }
+    responses['id'] = this.id;
     console.log(responses);
     this._questionService.toListResponses(responses)
       .subscribe(
