@@ -130,6 +130,5 @@ app.post('/ggfit', function (req,  res) {
             }
           });
         }
-
       res.status(201).send({ "msg": "Success!" });
     });
