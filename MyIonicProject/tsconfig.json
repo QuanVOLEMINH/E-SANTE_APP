@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    //"outDir": "./dist/out-tsc",
     "allowSyntheticDefaultImports": true,
     "declaration": false,
     "emitDecoratorMetadata": true,
@@ -8,7 +9,7 @@
       "dom",
       "es2015"
     ],
-    "module": "es2015",
+    "module":/* "es2015"*/"commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
     "target": "es5"

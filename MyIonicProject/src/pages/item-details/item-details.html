@@ -1,60 +1,64 @@
 <ion-header>
-    <ion-navbar>
-        <button ion-button menuToggle >
-            <ion-icon light name="menu"></ion-icon>
-        </button>
-        <ion-title>Questionnaires</ion-title>
-        <ion-buttons margin-right end>
-            <button ion-button icon-only (click)="search()">
-                <ion-icon name="search"></ion-icon>
-            </button>
-        </ion-buttons>
-    </ion-navbar>
+  <ion-navbar>
+    <button ion-button menuToggle >
+      <ion-icon light name="menu"></ion-icon>
+    </button>
+    <ion-title>Questionnaires</ion-title>
+    <ion-buttons margin-right end>
+      <button ion-button icon-only (click)="search()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
 </ion-header>
 
 
 <ion-content class="bg-question">
-    <ion-row>
-        <progress id="progressbar" class="progress" max="100" [value]="this.progress"></progress>
-    </ion-row>
-    <ion-slides (ionSlideDidChange)="slideChanged()">
-        <ion-slide *ngFor="let model of this.models; let i = index">
-            <!--<div class="text-color">{{this.progress}} %</div>-->
-            <form  [formGroup]="this.formGroupList[i]" (ngSubmit)="onSubmit(this.formGroupList[i])">
-                <dynamic-ionic-form [model]="[model]"
-                [group]="this.formGroupList[i]"
-                [formControl]=""
-                style="color:blue;">
-            </dynamic-ionic-form>
-            <button ion-button round class="question_btn" (click)="onBack()" *ngIf="i > 0">Back</button>
-            <button ion-button round class="question_btn" (click)="onNext()" *ngIf="i < this.models.length - 1">Next</button>
-            <button ion-button round class="question_btn" type="submit" *ngIf="i == this.models.length - 1" (click)="onSave()">Submit</button>
-        </form>
+<ion-row>
+  <progress id="progressbar" class="progress" max="100" [value]="this.progress"></progress>
+ </ion-row>
+  <ion-slides (ionSlideDidChange)="slideChanged()">
+    <ion-slide *ngFor="let model of this.models; let i = index">
+      <!--<div class="text-color">{{this.progress}} %</div>-->
+      <form  [formGroup]="this.formGroupList[i]" (ngSubmit)="onSubmit(this.formGroupList[i])" novalidate>
+        <my-dynamic-ionic-form [model]="[model]"
+                            [group]="this.formGroupList[i]"
+                            style="color:blue;">
+        </my-dynamic-ionic-form>
+        <button ion-button round class="question_btn" (click)="onBack()" *ngIf="i > 0">Back</button>
+        <button ion-button round class="question_btn"
+                (click)="onNext(i)"
+                *ngIf="i < this.models.length - 1">Next</button>
+        <button ion-button round class="question_btn"
+                type="submit"
+                *ngIf="i == this.models.length - 1"
+                (click)="onSave()">Submit</button>
+      </form>
 
     </ion-slide>
-</ion-slides>
+  </ion-slides>
 
 </ion-content>
 
 
 <ion-footer>
-    <ion-navbar>
-        <ion-buttons margin-horizontal left>
-            <button ion-button icon-only navPop>
-                <ion-icon name="ios-home-outline" id="home"></ion-icon>
-            </button>
-        </ion-buttons>
+  <ion-navbar>
+    <ion-buttons margin-horizontal left>
+      <button ion-button icon-only navPop>
+        <ion-icon name="ios-home-outline" id="home"></ion-icon>
+      </button>
+    </ion-buttons>
 
-        <ion-buttons margin-horizontal left>
-            <button ion-button icon-only>
-                <ion-icon name="ios-book"></ion-icon>
-            </button>
-        </ion-buttons>
+    <ion-buttons margin-horizontal left>
+      <button ion-button icon-only>
+        <ion-icon name="ios-book"></ion-icon>
+      </button>
+    </ion-buttons>
 
-        <ion-buttons margin-horizontal  left>
-            <button ion-button icon-only> <!--(click)="settings()"-->
-                <ion-icon name="ios-aperture-outline"></ion-icon>
-            </button>
-        </ion-buttons>
-    </ion-navbar>
+    <ion-buttons margin-horizontal  left>
+      <button ion-button icon-only> <!--(click)="settings()"-->
+        <ion-icon name="ios-aperture-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
 </ion-footer>

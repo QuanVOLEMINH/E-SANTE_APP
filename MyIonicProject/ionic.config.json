@@ -3,6 +3,22 @@
   "app_id": "",
   "type": "ionic-angular",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "gulp": {}
+  },
+  "watchPatterns": [],
+  "gulp": {
+    "enabled": false,
+    "file": "/home/dhnguyen/Documents/test2/E-SANTE_APP_2/MyIonicProject"
+  },
+  "paths": {
+    "npm:": "node_modules/"
+  },
+
+  "map": {
+
+
+    "@ng-dynamic-forms/core": "npm:@ng-dynamic-forms/core/bundles/core.umd.js",
+    "@ng-dynamic-forms/ui-ionic": "npm:@ng-dynamic-forms/ui-ionic/bundles/ui-ionic.umd.js"
   }
 }

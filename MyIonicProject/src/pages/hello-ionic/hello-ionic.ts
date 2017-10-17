@@ -17,33 +17,31 @@ export class HelloIonicPage {
   }
 
   onClick() {
-    this.navController.push(ItemDetailsPage, {param1: this.id});
-    //console.log(this.id);
-    //console.log('-------------');
-    this._questionService.getListQuestionsById(this.id)
+    if (this.id != null) {
+      this.navController.push(ItemDetailsPage, {param1: this.id});
+      this._questionService.getListQuestionsById(this.id)
       .subscribe(
         response => {
-          console.log(response)
+          console.log(response);
         },
         error => {
-          console.log(error)
-        }
-    );
-    
-    let data =  this.events.publish('myEvent');
-    console.log('data is ');
-    //console.log(data);
-    data['id'] = this.id;
-    console.log(data);
-
-    this.googlefitData.sendDataToServer(data).subscribe(
-        response => {
-            console.log(response);
-        },
-        error => {
-            console.log(error);
+          console.log(error);
         });
-  }
-
-
+        let data =  this.events.publish('myEvent');
+        console.log('data is ');
+        if (data != null ){
+          data['id'] = this.id;
+          this.googlefitData.sendDataToServer(data).subscribe(
+            response => {
+              console.log(response);
+            },
+            error => {
+              console.log(error);
+            });
+          }
+          console.log(data);
+        } else {
+          alert('Please fill out ID information!');
+        }
+      }
 }
