@@ -17,7 +17,8 @@ export class HelloIonicPage {
   }
 
   onClick() {
-    if (this.id != null) {
+    if (this.id != null) this.id.replace(/\s/g, '');
+    if (this.id != null && this.id) {
       this.navController.push(ItemDetailsPage, {param1: this.id});
       this._questionService.getListQuestionsById(this.id)
       .subscribe(
@@ -44,4 +45,5 @@ export class HelloIonicPage {
           alert('Please fill out ID information!');
         }
       }
+
 }

@@ -57,7 +57,7 @@ export class QuestionServiceProvider {
   };
 */
   toListResponses(responses) {
-    console.log('response is '+ responses);
+    //console.log('response is '+ responses);
     let body = JSON.stringify(responses);
     console.log('body response is' + body);
     let headers = new Headers({'Content-Type': 'application/json'});

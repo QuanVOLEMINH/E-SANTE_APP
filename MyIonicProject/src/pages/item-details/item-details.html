@@ -14,29 +14,29 @@
 
 
 <ion-content class="bg-question">
-<ion-row>
-  <progress id="progressbar" class="progress" max="100" [value]="this.progress"></progress>
- </ion-row>
+  <ion-row>
+    <progress id="progressbar" class="progress" max="100" [value]="this.progress"></progress>
+  </ion-row>
   <ion-slides (ionSlideDidChange)="slideChanged()">
     <ion-slide *ngFor="let model of this.models; let i = index">
       <!--<div class="text-color">{{this.progress}} %</div>-->
       <form  [formGroup]="this.formGroupList[i]" (ngSubmit)="onSubmit(this.formGroupList[i])" novalidate>
         <my-dynamic-ionic-form [model]="[model]"
-                            [group]="this.formGroupList[i]"
-                            style="color:blue;">
-        </my-dynamic-ionic-form>
-        <button ion-button round class="question_btn" (click)="onBack()" *ngIf="i > 0">Back</button>
-        <button ion-button round class="question_btn"
-                (click)="onNext(i)"
-                *ngIf="i < this.models.length - 1">Next</button>
-        <button ion-button round class="question_btn"
-                type="submit"
-                *ngIf="i == this.models.length - 1"
-                (click)="onSave()">Submit</button>
-      </form>
+        [group]="this.formGroupList[i]"
+        style="color:blue;">
+      </my-dynamic-ionic-form>
+      <button ion-button round class="question_btn" (click)="onBack()" *ngIf="i > 0">Back</button>
+      <button ion-button round class="question_btn"
+      (click)="onNext(i)"
+      *ngIf="i < this.models.length - 1">Next</button>
+      <button ion-button round class="question_btn"
+      type="submit"
+      *ngIf="i == this.models.length - 1"
+      (click)="onSave()">Submit</button>
+    </form>
 
-    </ion-slide>
-  </ion-slides>
+  </ion-slide>
+</ion-slides>
 
 </ion-content>
 

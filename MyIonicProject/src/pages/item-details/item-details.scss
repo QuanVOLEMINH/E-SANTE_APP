@@ -1,23 +1,19 @@
 page-item-details {
 
 }
-.bg-question form input{
 
-}
 .bg-question{
-	//background-color: #2D3D54;   opacity: 0.9;
-	background: url('../assets/img/h2.jpg') no-repeat fixed center;
+	background-color: lightblue;  
+	//background: url('../assets/img/h2.jpg') no-repeat fixed center;
 	background-size: cover;
 	color: #D2D9DF;
 }
-
-
 .question_btn{
 	color: custom_button;
 }
 
 .slide-zoom{
-  height:70%;
+  height: 90%;
   overflow-y: auto;
 }
 

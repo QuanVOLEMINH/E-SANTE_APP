@@ -15,9 +15,18 @@ export class GoogleFitDataProvider {
     }
 
     getData() {
-        return this.health.isAvailable()
-        .then((available:boolean) => {
-            console.log("This api is " + available);
+
+      this.health.promptInstallFit().then(res => {
+        console.log(res);
+        console.log('Successfully demand');
+      })
+      .catch(err => {
+        console.log(err);
+        console.log('Not Successfully demand');
+      });
+        return this.health.promptInstallFit()
+        .then(() => {
+            //console.log("This api is " + available);
             return this.health.requestAuthorization([
                 {
                     read: ['steps', 'height', 'calories', 'distance', 'activity']      //read only permission
@@ -26,7 +35,7 @@ export class GoogleFitDataProvider {
             .then(res => {
                 console.log(res);
                 console.log('can authorize');
-                var startDate = new Date(new Date().getTime() - 3 * 24 * 60 * 60 * 1000);
+                var startDate = new Date(new Date().getTime() - 10 * 24 * 60 * 60 * 1000);
                 var endDate = new Date();
                 return this.health.queryAggregated({startDate, endDate, dataType: 'distance', bucket: 'day'})
                 .then((data) => {
