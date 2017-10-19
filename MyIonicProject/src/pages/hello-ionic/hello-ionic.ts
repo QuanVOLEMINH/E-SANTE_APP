@@ -17,8 +17,15 @@ export class HelloIonicPage {
   }
 
   onClick() {
-    if (this.id != null) this.id.replace(/\s/g, '');
-    if (this.id != null && this.id) {
+    try {
+      this.id = this.id.replace(/\s/g, '');
+    } catch (err){
+      console.log(err);
+    }
+    if (this.id == null || this.id =='') {
+      alert('Merci de remplir votre ID!');
+    }
+    else{
       this.navController.push(ItemDetailsPage, {param1: this.id});
       this._questionService.getListQuestionsById(this.id)
       .subscribe(
@@ -41,9 +48,7 @@ export class HelloIonicPage {
             });
           }
           console.log(data);
-        } else {
-          alert('Please fill out ID information!');
         }
       }
 
-}
+    }
