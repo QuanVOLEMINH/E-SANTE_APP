@@ -8,10 +8,11 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ItemDetailsPage } from "../pages/item-details/item-details";
 import { GoogleFitDataProvider } from "../providers/googlefit-data/googlefit-data";
 import { Events } from 'ionic-angular';
+import { AppAvailability } from '@ionic-native/app-availability';
 
 @Component({
   templateUrl: 'app.html',
-  providers: [Health, GoogleFitDataProvider]
+  providers: [Health, GoogleFitDataProvider, AppAvailability]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
@@ -28,6 +29,7 @@ export class MyApp {
     //private keyboard: Keyboard,
     public googlefitData: GoogleFitDataProvider,
     public events: Events,
+    public appAvailability: AppAvailability,
   ) {
     this.initializeApp();
     // set our app's pages
@@ -52,17 +54,23 @@ export class MyApp {
     this.keyboard.onKeyboardHide().subscribe(() => {
     document.body.classList.remove('keyboard-is-open');
   })*/
-    setTimeout(() => {
-      if (!this.flag){
-        if (confirm('To use this app, do you agree to install GGFit?')){
-          this.googlefitData.installationRequirements();
-          this.flag = true;
+      let app = 'com.google.android.apps.fitness';
+      this.appAvailability.check(app)
+      .then(
+        () => {
+          this.googlefitAccess();
+        },
+        () => {
+        setTimeout(
+          () => {
+            if (confirm('To use this app more efficiently, do you agree to install GoogleFit?'))
+            {
+              this.googlefitData.installationRequirements();
+            }
+          },
+          3000);
         }
-      } else{
-        this.googlefitAccess();
-      }
-
-    }, 5000);
+      );
     });
   }
 
