@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {NavController, NavParams, Slides, ToastController} from 'ionic-angular';
+import {NavController, NavParams, Slides, ToastController, AlertController} from 'ionic-angular';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DynamicSelectModel} from "@ng-dynamic-forms/core/src/model/select/dynamic-select.model";
 import {DynamicInputModel} from "@ng-dynamic-forms/core/src/model/input/dynamic-input.model";
@@ -9,6 +9,7 @@ import {DynamicFormGroupModel} from "@ng-dynamic-forms/core/src/model/form-group
 import {DynamicDatePickerModel} from "@ng-dynamic-forms/core/src/model/datepicker/dynamic-datepicker.model";
 import {QuestionServiceProvider} from "../../providers/question-service/question-service";
 import {errorHandler} from "@angular/platform-browser/src/browser";
+import {DynamicSliderModel} from "../../models/slider/dynamic-slider.model";
 
 @Component({
   selector: 'page-item-details',
@@ -27,13 +28,15 @@ export class ItemDetailsPage implements OnInit {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              public alertCtrl: AlertController,
               private _formService: DynamicFormService,
               public _questionService: QuestionServiceProvider,
               public toastCtrl: ToastController) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
-    this.formGroupList = [];
     this.id = this.navParams.get('param1');
+    this.formGroupList = [];
+
   }
 
   ngOnInit() {
@@ -59,7 +62,7 @@ export class ItemDetailsPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    this.slider.lockSwipes(false);
+    this.slider.lockSwipes(true);
   }
 
   modelGenerator(questionsInput) {
@@ -107,6 +110,17 @@ export class ItemDetailsPage implements OnInit {
               errorMessages: questionsInput[formGroup]['questions'][question]['errorMessages']
             }));
             break;
+          case 'Range':
+            group.push(new DynamicSliderModel({
+              id: question,
+              label: questionsInput[formGroup]['questions'][question]['label'],
+              min: questionsInput[formGroup]['questions'][question]['min'],
+              max: questionsInput[formGroup]['questions'][question]['max'],
+              step: questionsInput[formGroup]['questions'][question]['step'],
+              validators: questionsInput[formGroup]['questions'][question]['validators'],
+              errorMessages: questionsInput[formGroup]['questions'][question]['errorMessages']
+            }));
+            break;
         }
       }
 
@@ -141,12 +155,16 @@ export class ItemDetailsPage implements OnInit {
   onNext(index) {
     //Lock autoSwipes to next slides
     this.progress = Math.round((this.slider.getActiveIndex()+1)/this.models.length*100);
+    this.slider.lockSwipes(false);
     this.slider.slideNext();
+    this.slider.lockSwipes(true);
   }
 
   onBack() {
     //Lock autoSwipes to previous slides
+    this.slider.lockSwipes(false);
     this.slider.slidePrev();
+    this.slider.lockSwipes(true);
     this.progress = Math.round(this.slider.getActiveIndex()/this.models.length*100);
     console.log(this.formGroupList);
   }
@@ -187,18 +205,41 @@ export class ItemDetailsPage implements OnInit {
         }
       }
     }
-
     responses['id'] = this.id;
-    this._questionService.toListResponses(responses)
-      .subscribe(
-        response => {
-          console.log(response);
-          this.message = response.msg;
-          this.presentToast(this.message);
+
+
+   const alert = this.alertCtrl.create({
+      title: 'Confirmation',
+      message: 'Avez-vous confirmé tous vos réponses?',
+      buttons: [
+        {
+          text: 'Non',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
         },
-        error => {
-          console.log(error);
+        {
+          text: 'Oui',
+          handler: () => {
+            console.log('Submit clicked');
+            this._questionService.toListResponses(responses)
+              .subscribe(
+                response => {
+                  console.log(response);
+                  this.message = response.msg;
+                  this.presentToast(this.message);
+                },
+                error => {
+                  console.log(error);
+                }
+              );
+          }
         }
-      );
+      ]
+    });
+    alert.present();
+
+
     };
 }

@@ -55,7 +55,7 @@ function createIndex() {
 }
 
 function createData() {
-       client.create({
+    client.create({
         index: indexName,
         type: 'patients',
         id: 1,
@@ -110,11 +110,11 @@ function createData() {
                             validators: {
                                 required: null,
                                 maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-4][0-9]|150)$"
                             },
                             errorMessages: {
                                 required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 150"
                             }
                         }
                     }
@@ -154,11 +154,11 @@ function createData() {
                             validators: {
                                 required: null,
                                 maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-4][0-9]|150)$"
                             },
                             errorMessages: {
                                 required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 150"
                             }
                         },
                         consommeTabac: {
@@ -198,11 +198,11 @@ function createData() {
                             validators: {
                                 required: null,
                                 maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|[2][0-4][0-9]|250)$"
                             },
                             errorMessages: {
                                 required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 250"
                             }
                         },
                         poid: {
@@ -213,12 +213,11 @@ function createData() {
                             answer: "",
                             validators: {
                                 required: null,
-                                maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
                                 required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         },
                         enceinte: {
@@ -256,10 +255,12 @@ function createData() {
                             type: "Input",
                             answer: "",
                             validators: {
-                                required: null
+                                required: null,
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
-                                required: "{{label}} is required."
+                                required: "{{label}} is required",
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         },
                         cholesterol: {
@@ -269,10 +270,12 @@ function createData() {
                             type: "Input",
                             answer: "",
                             validators: {
-                                required: null
+                                required: null,
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
-                                required: "{{label}} is required."
+                                required: "{{label}} is required",
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         },
                         triglycerides: {
@@ -282,10 +285,12 @@ function createData() {
                             type: "Input",
                             answer: "",
                             validators: {
-                                required: null
+                                required: null,
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
-                                required: "{{label}} is required."
+                                required: "{{label}} is required",
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         }
                     }
@@ -363,11 +368,11 @@ function createData() {
                             validators: {
                                 required: null,
                                 maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-4][0-9]|150)$"
                             },
                             errorMessages: {
                                 required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 150"
                             }
                         }
                     }
@@ -435,11 +440,11 @@ function createData() {
                             validators: {
                                 required: null,
                                 maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-4][0-9]|150)$"
                             },
                             errorMessages: {
                                 required: "{{placeholder}} is required.",
-                                pattern: "Seuls des chiffres sont autorisés et {{placeholder}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés et {{placeholder}} < 150"
                             }
                         },
                         injectionsInsuline: {
@@ -497,11 +502,11 @@ function createData() {
                             validators: {
                                 required: null,
                                 maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|[2][0-4][0-9]|250)$"
                             },
                             errorMessages: {
                                 required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 250"
                             }
                         },
                         poid: {
@@ -512,15 +517,14 @@ function createData() {
                             answer: "",
                             validators: {
                                 required: null,
-                                maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
                                 required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         },
-                        enceinte: {
+                        exercices: {
                             label: "Faites vous des exercices Physiques?",
                             maxLength: 0,
                             placeholder: "",
@@ -552,10 +556,12 @@ function createData() {
                             type: "Input",
                             answer: "",
                             validators: {
-                                required: null
+                                required: null,
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
-                                required: "{{label}} is required."
+                                required: "{{label}} is required",
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         },
                         cholesterol: {
@@ -565,10 +571,12 @@ function createData() {
                             type: "Input",
                             answer: "",
                             validators: {
-                                required: null
+                                required: null,
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
-                                required: "{{label}} is required."
+                                required: "{{label}} is required",
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         },
                         triglycerides: {
@@ -578,10 +586,12 @@ function createData() {
                             type: "Input",
                             answer: "",
                             validators: {
-                                required: null
+                                required: null,
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
-                                required: "{{label}} is required."
+                                required: "{{label}} is required",
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         }
                     }
@@ -660,11 +670,11 @@ function createData() {
                             validators: {
                                 required: null,
                                 maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-4][0-9]|150)$"
                             },
                             errorMessages: {
                                 required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 150"
                             }
                         }
                     }
@@ -732,11 +742,11 @@ function createData() {
                             validators: {
                                 required: null,
                                 maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-4][0-9]|150)$"
                             },
                             errorMessages: {
                                 required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{placeholder}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés et {{placeholder}} < 150"
                             }
                         },
                         typeEpilepsie: {
@@ -767,10 +777,10 @@ function createData() {
                             }
                         },
                         freqCrises: {
-                            label: "Fréquence des crises",
-                            maxLength: 10,
-                            placeholder: "mois",
-                            type: "Input",
+                            label: "Fréquence des crises (mois)",
+                            min: 1,
+                            max: 12,
+                            type: "Range",
                             answer: "",
                             validators: {
                                 required: null,
@@ -784,6 +794,29 @@ function createData() {
                         },
                         traiteEpilepsie: {
                             label: "Etes-vous traité(e) pour l'epilepsie?",
+                            maxLength: 0,
+                            placeholder: "",
+                            type: "Radio",
+                            options: [
+                                {
+                                    label: "Oui",
+                                    value: "oui"
+                                },
+                                {
+                                    label: "Non",
+                                    value: "non"
+                                }
+                            ],
+                            answer: "",
+                            validators: {
+                                required: null
+                            },
+                            errorMessages: {
+                                required: "{{label}} is required."
+                            }
+                        },
+                        invalidite: {
+                            label: "Etes vous en invalidité?",
                             maxLength: 0,
                             placeholder: "",
                             type: "Radio",
@@ -819,11 +852,11 @@ function createData() {
                             validators: {
                                 required: null,
                                 maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|200)$"
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-9][0-9]|[2][0-4][0-9]|250)$"
                             },
                             errorMessages: {
                                 required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 250"
                             }
                         },
                         poid: {
@@ -834,15 +867,14 @@ function createData() {
                             answer: "",
                             validators: {
                                 required: null,
-                                maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1-9][0-9][0-9]|200)$"
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
                                 required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 200"
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         },
-                        enceinte: {
+                        exercices: {
                             label: "Faites vous des exercices Physiques?",
                             maxLength: 0,
                             placeholder: "",
@@ -877,10 +909,12 @@ function createData() {
                             type: "Input",
                             answer: "",
                             validators: {
-                                required: null
+                                required: null,
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
-                                required: "{{label}} is required."
+                                required: "{{label}} is required",
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         },
                         cholesterol: {
@@ -890,10 +924,12 @@ function createData() {
                             type: "Input",
                             answer: "",
                             validators: {
-                                required: null
+                                required: null,
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
-                                required: "{{label}} is required."
+                                required: "{{label}} is required",
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         },
                         triglycerides: {
@@ -903,10 +939,12 @@ function createData() {
                             type: "Input",
                             answer: "",
                             validators: {
-                                required: null
+                                required: null,
+                                pattern: "^\\d+(\\,\\d{1,2})?$"
                             },
                             errorMessages: {
-                                required: "{{label}} is required."
+                                required: "{{label}} is required",
+                                pattern: "Seuls des chiffres sont autorisés"
                             }
                         }
                     }

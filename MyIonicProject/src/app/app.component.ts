@@ -20,7 +20,6 @@ export class MyApp {
   // make HelloIonicPage the root (or first) page
   rootPage = HelloIonicPage;
   pages: Array<{title: string, component: any}>;
-  flag = false;
   constructor(
     public platform: Platform,
     public menu: MenuController,

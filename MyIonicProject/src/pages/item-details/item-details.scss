@@ -3,25 +3,35 @@ page-item-details {
 }
 
 .bg-question{
-	background-color: lightblue;
+	background-color: #2F2D44;   opacity: 0.8;
 	//background: url('../assets/img/h2.jpg') no-repeat fixed center;
 	background-size: cover;
 	color: #D2D9DF;
 }
+
+
 .question_btn{
 	color: custom_button;
 }
 
 .slide-zoom{
-  height: 90%;
+  height:100%;
   overflow-y: auto;
 }
 
 //create new line for label question with "\n"
 ion-label{
   white-space: pre-line;
+  font-size: large;
 }
 
+legend{
+  font-size: larger;
+}
+
+.label-md[stacked] {
+  font-size: 1.8rem;
+}
 progress.progress {
   /*color:#33cd5f;
   margin: 10px 2%;
