@@ -46,9 +46,8 @@ export class HelloIonicPage {
             error => {
               console.log(error);
             });
-          }
-          console.log(data);
         }
-      }
-
+          console.log(data);
     }
+  }
+}

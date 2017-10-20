@@ -35,10 +35,11 @@ body.keyboard-is-open ion-footer {
 }
 
 #menu_header{
-	background: url('../assets/img/bs7.jpg');
+	background: url('../assets/img/bs7_sm.jpg');
 	background-size: cover;
 	height: 180px;
 }
+
 #menu_toolbar{
 	.toolbar-background{
 		//background: transparent;
@@ -46,7 +47,9 @@ body.keyboard-is-open ion-footer {
 	}
 	position: absolute;
 	bottom: 0;
+
 }
+
 #menu_logo{
 	width: 60%;
 	display: block;

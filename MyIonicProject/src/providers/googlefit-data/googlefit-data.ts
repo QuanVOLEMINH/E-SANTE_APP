@@ -14,8 +14,7 @@ export class GoogleFitDataProvider {
     //console.log('GoogleFitDataProvider');
   }
 
-  getData() {
-
+  installationRequirements() {
     this.health.promptInstallFit().then(res => {
       console.log(res);
       console.log('Successfully demand');
@@ -24,6 +23,11 @@ export class GoogleFitDataProvider {
       console.log(err);
       console.log('Not Successfully demand');
     });
+  }
+  getData() {
+
+
+
     return this.health.isAvailable()
     .then((available) => {
       //console.log("This api is " + available);
