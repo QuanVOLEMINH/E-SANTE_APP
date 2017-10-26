@@ -2,12 +2,11 @@ var elasticsearch = require('elasticsearch');
 
 //Database: Patient
 var indexName = 'patientcatalog';
-
-
 var client = elasticsearch.Client({
     host: 'localhost:9200',
     log: 'info'
 });
+
 
 client.ping({
     requestTimeout: 30000
@@ -61,6 +60,7 @@ function createData() {
         id: 1,
         body: {
             idPatient: '1',
+            password: 'abc',
             questioncatalog: {
                 info: {
                     legend: "INFORMATIONS DEMOGRAPHIQUES",
@@ -309,6 +309,7 @@ function createData() {
         id: 2,
         body: {
             idPatient: '2',
+            password: 'cde',
             questioncatalog: {
                 info: {
                     legend: "INFORMATIONS DEMOGRAPHIQUES",
@@ -610,6 +611,7 @@ function createData() {
         id: 3,
         body: {
             idPatient: '3',
+            password: 'fgh',
             questioncatalog: {
                 info: {
                     legend: "INFORMATIONS DEMOGRAPHIQUES",

@@ -6,7 +6,7 @@
     <ion-title color="white">E-Medicin App</ion-title>
 
     <ion-buttons margin-right end>
-      <button ion-button icon-only >
+      <button ion-button icon-only>
         <ion-icon name="search"></ion-icon>
       </button>
     </ion-buttons>
@@ -16,23 +16,57 @@
 <ion-content padding class="bg-home">
 
   <div id="idUser">
-    <ion-input placeholder="Votre Identifiant" [(ngModel)]="id" id="userInput">
-    </ion-input>
-    <ion-row>
-      <button ion-button (click)="onClick()" id="submitButton">Submit</button>
-    </ion-row>
+    <form (ngSubmit)="onLogin()" [formGroup]="loginForm">
+
+      <ion-row class="lineInput">
+        <ion-item>
+          <ion-label col-4>Identifiant</ion-label>
+          <ion-input type="text" [(ngModel)]="user.id" formControlName="id" required></ion-input>
+          <!--for spacing-->
+          <button item-right class="btnInput" [style.visibility]="'hidden'">
+          </button>
+        </ion-item>
+      </ion-row>
+
+      <ion-row class="error-message" [hidden]="loginForm.controls.id.valid">
+        <p>
+          <strong>ID is required</strong>
+        </p>
+      </ion-row>
+
+      <ion-row class="lineInput">
+        <ion-item>
+          <ion-label col-4>Password</ion-label>
+          <ion-input type="{{ showpass ? 'text' : 'password' }}" [(ngModel)]="user.password" formControlName="password" required >
+          </ion-input>
+          <button ion-button clear icon-only item-right type="button" class="btnInput" (click)="showPassword()" >
+            <ion-icon name="ios-eye"></ion-icon>
+          </button>
+        </ion-item>
+      </ion-row>
+
+      <ion-row class="error-message" [hidden]="loginForm.controls.password.valid">
+        <p>
+          <strong>Password is required</strong>
+        </p>
+      </ion-row>
+
+      <ion-row class="error-message" *ngIf="loginFailed">
+        <p>
+          <strong> ID or password is incorrect</strong>
+        </p>
+      </ion-row>
+
+      <ion-row>
+        <button ion-button type="submit" [disabled]="!loginForm.valid">Login</button>
+      </ion-row>
+    </form>
   </div>
 
-  <div text-justify id="content-maintext" >
-    <h3>Pourquoi ABCXYZ?</h3>
-    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-      standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
-      type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-      remaining essentially unchanged.
-    </p>
+  <div text-justify id="content-maintext">
+    <h4>Pourquoi cette application?</h4>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis mollitia accusantium, repudiandae ut, vero libero molestiae officia possimus aliquid eligendi nam dolorum temporibus consequatur quia nisi soluta. Porro, sint repellat!</p>
   </div>
-
-
 
 </ion-content>
 
@@ -43,12 +77,12 @@
         <ion-icon name="ios-home"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-buttons margin-horizontal left>
-      <button ion-button icon-only (click)="onClick()">
+    <ion-buttons margin-horizontal left >
+      <button ion-button icon-only >
         <ion-icon name="ios-book-outline" id="question"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-buttons margin-horizontal left>
+    <ion-buttons margin-horizontal left hidden>
       <button ion-button icon-only>
         <ion-icon name="ios-aperture-outline"></ion-icon>
       </button>

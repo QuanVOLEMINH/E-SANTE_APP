@@ -2,39 +2,64 @@ page-hello-ionic {
 
 }
 
-.bg-home{
-	//background: url('../assets/img/b.png') no-repeat fixed center;
-	//background: #2D3D54;
-	background: url('../assets/img/h3_sm.jpg') no-repeat fixed center;
-	background-size: cover;
-	color: #D2D9DF;
+.bg-home {
+  //background: url('../assets/img/b.png') no-repeat fixed center;
+  //background: #2D3D54;
+  background: url('../assets/img/h3_sm.jpg') no-repeat fixed center;
+  background-size: cover;
+  color: #D2D9DF;
 }
 
-#content-maintext{
-	//display: inline-block;
-	margin: 0px 20px;
-	padding: 20px 20px;
-	text-align: justify;
-	background-color: #2D3D54;
-	opacity: 0.75;
-
-
+#content-maintext {
+  //display: inline-block;
+  margin: 0px 10px;
+  padding: 10px 20px;
+  text-align: justify;
+  background-color: #2D3D54;
+  opacity: 0.75;
 }
+
 #idUser {
-   margin : 2px 20px;
-	 padding: 10px 20px;
-   background-color: #2D3D54;
-   opacity: 0.75;
-   text-decoration-color: white;
-	 height: auto;
- }
+  margin: 2px 10px;
+  padding: 10px 20px;
+  background-color: #2D3D54;
+  opacity: 0.75;
+  text-decoration-color: white;
+  height: auto;
+  button{
+	  margin: 5px auto 5px auto;
+  }
+  input{
+	color: black;
+	opacity: 1.0;
+  }
+  form ion-label{
+	  font-size: 85%;
+  }
+  button ion-icon{
+	color: black;
+  }
+  
+}
 
- #userInput{
-	 background-color: white;
-	 color: black;
-	 opacity: 1.0;
- }
- #submitButton{
-	 margin : 5px auto 0px auto;
-	 color: custom_button;
- }
+.lineInput{
+	max-width: 400px;
+	margin: auto;	
+}
+
+.btnInput{
+	width: 30px;
+	color: black;
+}
+
+.error-message{
+	color: white;
+	background-color:#f44336;
+	opacity: 1;
+	max-width: 400px;
+	margin: 3px auto;
+	padding: 0px 20px;
+	border: 2px red solid;
+	border-radius: 5px;
+	height: 44px;
+}

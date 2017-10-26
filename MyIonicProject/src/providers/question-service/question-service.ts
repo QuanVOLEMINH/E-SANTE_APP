@@ -44,18 +44,6 @@ export class QuestionServiceProvider {
       });
   };
 
- /* toListQuestionsById(patientId: string) {
-    let headers = new Headers({'Content-Type': 'application/json'});
-    let body = JSON.stringify(patientId);
-    return this.http.post(this.apiUrl + 'patients', body, {headers: headers})
-      .map(function (response) {
-        return response.json();
-      })
-      .catch(function (error) {
-        return Observable.throw(error);
-      });
-  };
-*/
   toListResponses(responses) {
     //console.log('response is '+ responses);
     let body = JSON.stringify(responses);
@@ -73,15 +61,17 @@ export class QuestionServiceProvider {
 
   };
 
-/*  addListQuestions(questions) {
-    let body = JSON.stringify(questions);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    return this.http.post(this.apiUrl + 'questions', body, headers)
+  getPasswordById(idPatient){
+    let headers = new Headers({'Content-Type': 'application/json', 'Accept': 'application/json'});
+    let myParams = new URLSearchParams();
+    myParams.set('idPatient', idPatient);
+    let options = new RequestOptions({headers: headers, search: myParams});
+    return this.http.get(this.apiUrl + 'patients/' + idPatient, options)
       .map(function (response) {
-        return response;
+        return response.json();
       })
       .catch(function (error) {
         return Observable.throw(error);
       });
-  }*/
+  }
 }

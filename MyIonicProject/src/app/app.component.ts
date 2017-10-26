@@ -44,15 +44,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-
-      //add keyboard class
-      /*this.keyboard.onKeyboardShow().subscribe(() => {
-      document.body.classList.add('keyboard-is-open');
-      this.keyboard.disableScroll(true);
-    });
-    this.keyboard.onKeyboardHide().subscribe(() => {
-    document.body.classList.remove('keyboard-is-open');
-  })*/
+      /*
       let app = 'com.google.android.apps.fitness';
       this.appAvailability.check(app)
       .then(
@@ -62,14 +54,14 @@ export class MyApp {
         () => {
         setTimeout(
           () => {
-            if (confirm('To use this app more efficiently, do you agree to install GoogleFit?'))
+            if (confirm('Pour utiliser cette application plus efficacement, acceptez-vous d\'installer le GoogleFit?'))
             {
               this.googlefitData.installationRequirements();
             }
           },
           3000);
         }
-      );
+      );*/
     });
   }
 
