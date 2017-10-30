@@ -35,6 +35,103 @@ app.get('/patients/:idPatient', function (req, res) {
   console.log('XXXXXXXXXXXXXX');
 });
 
+
+app.post('/profilPatient', function (req,  res) {
+    var indexName = 'profilcatalog';
+    var indexName2 = 'responsecatalog';
+    var typeName = 'profilpatient';
+    var typeName2 = 'response';
+    client.indices.exists({ index: indexName }, function (err, resp) {
+        if (err) {
+            errorHandler(err);
+        } else {
+            if (resp) {
+                console.log('createData');
+                createData(indexName,typeName);
+                console.log(req.body);
+            } else {
+                createIndex(indexName);
+            }
+        }
+    });
+
+    client.indices.exists({ index: indexName2 }, function (err, resp) {
+        if (err) {
+            errorHandler(err);
+        } else {
+            if (resp) {
+                console.log('createDataResponses');
+                createData(indexName2,typeName2);
+                console.log(req.body);
+            } else {
+                createIndexResponses(indexName2);
+            }
+        }
+    });
+
+    function createIndex(index) {
+        console.log('createIndex');
+        client.indices.create({
+            index: index
+        }, function (err, resp) {
+            if (err) {
+                errorHandler(err);
+            } else {
+                createData(indexName,typeName);
+                console.log('createData');
+            }
+        });
+    }
+
+    function createData(index, type) {
+        console.log(index + '------' + type);
+        console.log('YYYYYYYYYYYYYYYYYYYY');
+        console.log(req.body);
+        console.log('ZZZZZZZZZZZZZZZZZZZZZ');
+        client.index({
+            index: index,
+            type: type,
+            id: req.body.id,
+            body: req.body
+        }, function (error, response) {
+            console.log(error);
+            console.log(response);
+        });
+    }
+
+    function createIndexResponses(index) {
+        console.log('createIndexResponses');
+        client.indices.create({
+            index: index
+        }, function (err, resp) {
+            if (err) {
+                errorHandler(err);
+            } else {
+                createDataResponses(indexName2, typeName2);
+                console.log('createData');
+            }
+        });
+    }
+
+    function createDataResponses(index, type) {
+        console.log(index + '------' + type);
+        console.log('YYYYYYYYYYYYYYYYYYYY');
+        console.log(req.body);
+        console.log('ZZZZZZZZZZZZZZZZZZZZZ');
+        client.index({
+            index: index,
+            type: type,
+            id: req.body.id,
+            body: {}
+        }, function (error, response) {
+            console.log(error);
+            console.log(response);
+        });
+    }
+
+    res.status(201).send({ "msg": 'Success! New information has been created' });
+
+});
 //POST
 app.post('/responses', function (req,  res) {
     var indexName = 'responsescatalog';
@@ -90,9 +187,9 @@ app.post('/responses', function (req,  res) {
 //googlefit
 app.post('/ggfit', function (req,  res) {
       var indexName = 'responsescatalog';
-      var typeName = 'responses';
-      console.log('req of gg fit \n:');
-      console.log(req.body);
+      var typeName = 'response';
+      //console.log('req of gg fit \n:');
+      //console.log(req.body);
       /*this.x = req.body;
       delete this.x.id;
       console.log(this.x);
