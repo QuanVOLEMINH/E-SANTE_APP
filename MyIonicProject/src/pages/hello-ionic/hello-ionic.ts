@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ItemDetailsPage } from '../item-details/item-details';
-import { Http } from "@angular/http";
+//import { Http } from "@angular/http";
 import { QuestionServiceProvider } from "../../providers/question-service/question-service";
 import { NavController } from "ionic-angular";
 import { GoogleFitDataProvider } from "../../providers/googlefit-data/googlefit-data";
@@ -30,9 +30,11 @@ export class HelloIonicPage {
   }
 
   onLogin() {
-    this._questionService.getPasswordById(this.user.id)
+    //console.log(this.user.id);
+    this._questionService.getPatientInfoById(this.user.id)
       .subscribe(
       response => {
+        console.log(response);
         if (response.password == this.user.password) {
           this.loginFailed = false;
           this.onClick();
@@ -66,7 +68,7 @@ export class HelloIonicPage {
       data['id'] = this.user.id;
       this.googlefitData.sendDataToServer(data).subscribe(
         response => {
-          //console.log(response);
+          console.log(response);
         },
         error => {
           console.log(error);

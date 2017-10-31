@@ -5,10 +5,10 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content id="menu_content">
-    <ion-list>
+  <ion-content>
+    <ion-list id="menu_content">
       <button ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
+        {{ p.title }}
       </button>
     </ion-list>
   </ion-content>

@@ -3,9 +3,11 @@ import { Health } from '@ionic-native/health';
 //import { Keyboard } from '@ionic-native/keyboard';
 import { Platform, MenuController, Nav } from 'ionic-angular';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
+import { ItemDetailsPage } from '../pages/item-details/item-details';
+import { LoginPage } from '../pages/login/login'
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { ItemDetailsPage } from "../pages/item-details/item-details";
+
 import { GoogleFitDataProvider } from "../providers/googlefit-data/googlefit-data";
 import { Events } from 'ionic-angular';
 import { AppAvailability } from '@ionic-native/app-availability';
@@ -34,7 +36,8 @@ export class MyApp {
     // set our app's pages
     this.pages = [
       { title: 'Accueil', component: HelloIonicPage },
-      { title: 'Questionnaires', component: ItemDetailsPage }
+      { title: 'Questionnaires', component: ItemDetailsPage },
+      { title: 'Login', component: LoginPage}
     ];
   }
 
@@ -44,7 +47,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      /*
+      /*/
       let app = 'com.google.android.apps.fitness';
       this.appAvailability.check(app)
       .then(

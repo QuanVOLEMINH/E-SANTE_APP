@@ -39,7 +39,7 @@ export class GoogleFitDataProvider {
       .then(res => {
         console.log(res);
         console.log('can authorize');
-        var startDate = new Date(new Date().getTime() - 10 * 24 * 60 * 60 * 1000);
+        var startDate = new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000);
         var endDate = new Date();
         return this.health.queryAggregated({startDate, endDate, dataType: 'distance', bucket: 'day'})
         .then((data) => {

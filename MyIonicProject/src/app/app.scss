@@ -14,9 +14,6 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
-html{
-	//font-family: "Open Sans";
-}
 
 .button{
 	color: custom_button;
@@ -35,9 +32,11 @@ html{
 	color: #D2D9DF;
 }
 
+/*
 body.keyboard-is-open ion-footer {
 //	display: none;
 }
+*/
 
 #menu_header{
 	background: url('../assets/img/bs7_sm.jpg');
@@ -54,6 +53,7 @@ body.keyboard-is-open ion-footer {
 	bottom: 0;
 
 }
+
 
 #menu_logo{
 	width: 60%;

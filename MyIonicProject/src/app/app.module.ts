@@ -5,31 +5,31 @@ import { MyApp } from './app.component';
 
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { ItemDetailsPage } from '../pages/item-details/item-details';
-import { ListPage } from '../pages/list/list';
+import { LoginPage } from '../pages/login/login';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { QuestionServiceProvider } from '../providers/question-service/question-service';
 
 import { DynamicFormsCoreModule } from "@ng-dynamic-forms/core";
-  import { DynamicFormsIonicUIModule } from "@ng-dynamic-forms/ui-ionic";
+import { DynamicFormsIonicUIModule } from "@ng-dynamic-forms/ui-ionic";
 import { AppSettingsProvider } from '../providers/app-settings/app-settings';
-import {DynamicFormService} from "@ng-dynamic-forms/core/src/service/dynamic-form.service";
-import {DynamicFormValidationService} from "@ng-dynamic-forms/core/src/service/dynamic-form-validation.service";
-import {HttpModule} from "@angular/http";
-import {NG_VALIDATORS} from "@angular/forms";
-import {customValidator} from "./app.validators";
-import {ComponentsModule} from "../components/components.module";
-import {CommonModule} from "@angular/common";
-import {MyDynamicIonicFormComponent} from "../components/my-dynamic-ionic-form/my-dynamic-ionic-form";
-import {MyDynamicIonicFormControlComponent} from "../components/my-dynamic-ionic-form-control/my-dynamic-ionic-form-control";
+import { DynamicFormService } from "@ng-dynamic-forms/core/src/service/dynamic-form.service";
+import { DynamicFormValidationService } from "@ng-dynamic-forms/core/src/service/dynamic-form-validation.service";
+import { HttpModule } from "@angular/http";
+import { NG_VALIDATORS } from "@angular/forms";
+import { customValidator } from "./app.validators";
+import { ComponentsModule } from "../components/components.module";
+import { CommonModule } from "@angular/common";
+import { MyDynamicIonicFormComponent } from "../components/my-dynamic-ionic-form/my-dynamic-ionic-form";
+import { MyDynamicIonicFormControlComponent } from "../components/my-dynamic-ionic-form-control/my-dynamic-ionic-form-control";
 
 @NgModule({
   declarations: [
     MyApp,
     HelloIonicPage,
     ItemDetailsPage,
-    ListPage
+    LoginPage
   ],
   imports: [
     HttpModule,
@@ -37,7 +37,8 @@ import {MyDynamicIonicFormControlComponent} from "../components/my-dynamic-ionic
     IonicModule.forRoot(MyApp, {
       scrollPadding: false,
       scrollAssist: true,
-      autoFocusAssist: true}),
+      autoFocusAssist: true
+    }),
     DynamicFormsCoreModule.forRoot(),
     ComponentsModule,
     CommonModule
@@ -47,17 +48,17 @@ import {MyDynamicIonicFormControlComponent} from "../components/my-dynamic-ionic
     MyApp,
     HelloIonicPage,
     ItemDetailsPage,
-    ListPage
+    LoginPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     QuestionServiceProvider,
     AppSettingsProvider,
     DynamicFormService,
     DynamicFormValidationService,
-    {provide: NG_VALIDATORS, useValue: customValidator, multi: true }
+    { provide: NG_VALIDATORS, useValue: customValidator, multi: true }
   ]
 })
-export class AppModule {}
+export class AppModule { }
