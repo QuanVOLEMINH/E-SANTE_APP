@@ -27,6 +27,9 @@ export class HelloIonicPage {
       id: ["", Validators.compose([Validators.maxLength(30), Validators.pattern('[a-zA-Z0-9_-]*'), Validators.required])],
       password: ["", Validators.compose([Validators.maxLength(30), Validators.pattern('[a-zA-Z0-9_-]*'), Validators.required])]
     });
+
+
+
   }
 
   onLogin() {
@@ -34,10 +37,13 @@ export class HelloIonicPage {
     this._questionService.getPatientInfoById(this.user.id)
       .subscribe(
       response => {
-        console.log(response);
+        //console.log(response);
         if (response.password == this.user.password) {
           this.loginFailed = false;
-          this.onClick();
+          let idPath = response.pathology.charAt(response.pathology.length - 1);
+          //console.log(idPath);
+          this.onClick(idPath);
+
         } else {
           this.loginFailed = true;
         }
@@ -49,18 +55,18 @@ export class HelloIonicPage {
       });
   }
 
-  onClick() {
+  onClick(idPath) {
     //console.log(this.user);
 
-    this._questionService.getListQuestionsById(this.user.id)
+    /*this._questionService.getListQuestionsById(idPath)
       .subscribe(
       response => {
         //console.log(response);
       },
       error => {
         console.log(error);
-      });
-    this.navController.push(ItemDetailsPage, { param1: this.user.id });
+      });*/
+    this.navController.setRoot(ItemDetailsPage, { param1: idPath });
 
     let data = this.events.publish('myEvent');
     //console.log('data is ');

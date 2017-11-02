@@ -4,7 +4,9 @@ import { Health } from '@ionic-native/health';
 import { Platform, MenuController, Nav } from 'ionic-angular';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { ItemDetailsPage } from '../pages/item-details/item-details';
-import { LoginPage } from '../pages/login/login'
+import { LoginPage } from '../pages/login/login';
+import { TabsPage } from '../pages/tabs/tabs';
+
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -19,9 +21,10 @@ import { AppAvailability } from '@ionic-native/app-availability';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  // make HelloIonicPage the root (or first) page
-  rootPage = HelloIonicPage;
-  pages: Array<{title: string, component: any}>;
+  // make login page the root (or first) page
+  rootPage = LoginPage;
+
+  pages: Array<{ title: string, component: any }>;
   constructor(
     public platform: Platform,
     public menu: MenuController,
@@ -37,7 +40,7 @@ export class MyApp {
     this.pages = [
       { title: 'Accueil', component: HelloIonicPage },
       { title: 'Questionnaires', component: ItemDetailsPage },
-      { title: 'Login', component: LoginPage}
+      { title: 'Login', component: LoginPage }
     ];
   }
 
@@ -47,52 +50,51 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      /*/
+      /*
       let app = 'com.google.android.apps.fitness';
       this.appAvailability.check(app)
-      .then(
+        .then(
         () => {
           this.googlefitAccess();
         },
         () => {
-        setTimeout(
-          () => {
-            if (confirm('Pour utiliser cette application plus efficacement, acceptez-vous d\'installer le GoogleFit?'))
-            {
-              this.googlefitData.installationRequirements();
-            }
-          },
-          3000);
+          setTimeout(
+            () => {
+              if (confirm('Pour utiliser cette application plus efficacement, acceptez-vous d\'installer le GoogleFit?')) {
+                this.googlefitData.installationRequirements();
+              }
+            },
+            3000);
         }
-      );*/
+        );*/
     });
   }
 
-googlefitAccess(){
-  let temp = this.googlefitData.getData().then(function(res){
-    return res;
-  });
-  console.log('temp in app ts is ok ');
-  //console.log(temp);
-  temp.then(
-    res =>
-    {
-      if (res == 'cordova_not_available'){
-        throw 'error not found googlefit';
-      } else {
-        this.events.subscribe('myEvent', function(){
-          return res;
-        });
+  googlefitAccess() {
+    let temp = this.googlefitData.getData().then(function (res) {
+      return res;
+    });
+    console.log('temp in app ts is ok ');
+    //console.log(temp);
+    temp.then(
+      res => {
+        if (res == 'cordova_not_available') {
+          throw 'error not found googlefit';
+        } else {
+          this.events.subscribe('myEvent', function () {
+            return res;
+          });
+        }
       }
-    }
-  ).catch(e => console.log(e));
-}
+    ).catch(e => console.log(e));
+  }
 
-
-openPage(page) {
-  // close the menu when clicking a link from the menu
-  this.menu.close();
-  // navigate to the new page if it is not the current page
-  this.nav.setRoot(page.component);
-}
+  /*
+  openPage(page) {
+    // close the menu when clicking a link from the menu
+    this.menu.close();
+    // navigate to the new page if it is not the current page
+    this.nav.setRoot(page.component);
+  }
+  */
 }

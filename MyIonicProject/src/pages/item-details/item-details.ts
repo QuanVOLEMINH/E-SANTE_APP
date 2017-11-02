@@ -35,13 +35,13 @@ export class ItemDetailsPage implements OnInit {
                 
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
-    this.id = this.navParams.get('param1');
+    this.id = this.navParams.data;  //this.navParams.get('param1');
     this.formGroupList = [];
 
   }
 
   ngOnInit() {
-    console.log(this.id);
+    //console.log(this.id);
     this._questionService.getListQuestionsById(this.id)
       .subscribe(
         response => {
@@ -186,7 +186,7 @@ export class ItemDetailsPage implements OnInit {
     let arr = [];
     let arrTotal = [];
     for (let response of arrayData) {
-      console.log('Response key', response[Object.keys(response)[0]]);
+      //console.log('Response key', response[Object.keys(response)[0]]);
       //Convert obj to array for checking null values
       arr[Object.keys(response)[0]] = Object.keys(response[Object.keys(response)[0]]).map(function(key) {
         return response[Object.keys(response)[0]][key];
@@ -194,11 +194,11 @@ export class ItemDetailsPage implements OnInit {
       //Convert array to obj for storing data
       responses[Object.keys(response)[0]] = response[Object.keys(response)[0]]
     }
-    console.log('Array', arr);
-    //console.log(responses);
+    //console.log('Array', arr);
+    
     let k =  0;
     for (let index in arr) {
-      //console.log('INdexxxxxxxxx',typeof(arr[index][0]));
+      //console.log('Indexxxxxxxxx',typeof(arr[index][0]));
       for (let i = 0 ; i < index.length; i++) {
         arrTotal[k] = arr[index][i];
         if (arr[index][i] === null ) {
@@ -208,6 +208,7 @@ export class ItemDetailsPage implements OnInit {
     }
     responses['id'] = this.id;
 
+    console.log(responses);
 
    const alert = this.alertCtrl.create({
       title: 'Confirmation',

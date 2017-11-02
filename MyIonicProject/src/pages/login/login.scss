@@ -3,15 +3,36 @@ page-login {}
 .login-content {
 }
 .logo-row{
-    margin: auto;
-    max-width: 600px;
+    margin: 0px auto;
+    max-width: 500px;
+
     display: block;
 
 }
 .login-box{
     max-width: 400px;
-    margin: auto;
+    margin: 0px auto;
     button{
         margin: auto;
     }
+    ion-label{
+        font-size: 14px;
+    }
+}
+
+.btnInput{
+	width: 30px;
+	color: black;
+}
+
+.error-message{
+	color: white;
+	background-color:#f44336;
+	opacity: 1;
+	max-width: 400px;
+	margin: 2px auto;
+	padding: 0px 20px;
+	border: 2px red solid;
+	border-radius: 5px;
+	height: 45px;
 }

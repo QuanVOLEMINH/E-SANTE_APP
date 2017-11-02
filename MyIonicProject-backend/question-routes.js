@@ -10,18 +10,19 @@ var client = elasticsearch.Client({
     log: 'info',
 });
 
-//GET PATIENT BY ID
-app.get('/patients/:idPatient', function (req, res) {
-    console.log('++++++++++++++++++++++++++++++++++');
-    var id = req.params.idPatient;
-    var indexName = 'patientscatalog';
+//GET QUESTIONS BY ID PATHOLOGY
+app.get('/pathologies/:idPath', function (req, res) {
+    //console.log('++++++++++++++++++++++++++++++++++');
+    var id = req.params.idPath;
+    var indexName = 'questionscatalog';
+    var typeName = 'questions';
     client.search({
         index: indexName,
-        type: 'patients',
-        q: 'idPatient:' + id,
+        type: typeName,
+        q: 'idPath:' + id,
     }).then(function (resp) {
-        console.log(resp.hits.hits);
-        console.log('---------------------------------');
+        //console.log(resp.hits.hits);
+        //console.log('---------------------------------');
         var hits = {};
         for (var oneCatalog of resp.hits.hits) {
             hits = oneCatalog._source;
@@ -34,7 +35,7 @@ app.get('/patients/:idPatient', function (req, res) {
     console.log('XXXXXXXXXXXXXX');
 });
 
-//new
+//GET PROFIL PATIENT BY ID
 app.get('/profilpatients/:patientID', function (req, res) {
     //console.log('++++++++++++++++++++++++++++++++++');
     var id = req.params.patientID;
@@ -45,8 +46,8 @@ app.get('/profilpatients/:patientID', function (req, res) {
         type: 'profilpatient',
         q: 'id:' + id,
     }).then(function (resp) {
-        console.log(resp.hits.hits);
-        console.log('---------------------------------');
+        //console.log(resp.hits.hits);
+        //console.log('---------------------------------');
         var hits = {};
         for (var oneCatalog of resp.hits.hits) {
             hits = oneCatalog._source;
@@ -58,7 +59,6 @@ app.get('/profilpatients/:patientID', function (req, res) {
     });
     console.log('XXXXXXXXXXXXXX');
 });
-
 
 
 //initialize profil + response
@@ -197,56 +197,31 @@ app.post('/profilPatient', function (req, res) {
 
 //send response to server
 app.post('/responses', function (req, res) {
-    var indexName = 'responsescatalog';
-    var typeName = 'responses';
-    client.indices.exists({
-        index: indexName
-    }, function (err, resp) {
-        if (err) {
-            errorHandler(err);
-        } else {
-            if (resp) {
-                console.log('createData');
-                createData();
-                console.log(req.body);
-            } else {
-                createIndex();
-            }
-        }
-    });
+    var indexName = 'responsecatalog';
+    var typeName = 'response';
+    updateData();
 
-    function createIndex() {
-        console.log('createIndex');
-        client.indices.create({
-            index: indexName,
-        }, function (err, resp) {
-            if (err) {
-                errorHandler(err);
-            } else {
-                createData();
-                console.log('createData');
-            }
-        });
-    }
-
-    function createData() {
-        console.log('createData');
-        console.log('YYYYYYYYYYYYYYYYYYYY');
-        console.log(req.body);
-        console.log('ZZZZZZZZZZZZZZZZZZZZZ');
-        client.index({
+    function updateData() {
+        client.update({
             index: indexName,
             type: typeName,
             id: req.body.id,
-            body: req.body,
+            body: {
+                // put the partial document under the `doc` key
+                doc: {
+                    response: req.body,
+                }
+            }
         }, function (error, response) {
-            console.log(error);
-            console.log(response);
+            if (error) {
+                errorHandler(error);
+            } else {
+                //console.log(response);
+            }
         });
     }
-
     res.status(201).send({
-        "msg": 'Success! New question has been created'
+        "msg": "Success!"
     });
 
 });

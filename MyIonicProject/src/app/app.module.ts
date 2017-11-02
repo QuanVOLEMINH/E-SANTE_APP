@@ -6,6 +6,7 @@ import { MyApp } from './app.component';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { ItemDetailsPage } from '../pages/item-details/item-details';
 import { LoginPage } from '../pages/login/login';
+import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -29,7 +30,8 @@ import { MyDynamicIonicFormControlComponent } from "../components/my-dynamic-ion
     MyApp,
     HelloIonicPage,
     ItemDetailsPage,
-    LoginPage
+    LoginPage,
+    TabsPage
   ],
   imports: [
     HttpModule,
@@ -48,7 +50,8 @@ import { MyDynamicIonicFormControlComponent } from "../components/my-dynamic-ion
     MyApp,
     HelloIonicPage,
     ItemDetailsPage,
-    LoginPage
+    LoginPage,
+    TabsPage
   ],
   providers: [
     StatusBar,

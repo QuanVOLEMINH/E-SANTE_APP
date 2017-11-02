@@ -1,7 +1,8 @@
 var elasticsearch = require('elasticsearch');
 
-//Database: Patient
-var indexName = 'patientcatalog';
+//Database: question
+var indexName = 'questionscatalog';
+var typeName = 'questions';
 var client = elasticsearch.Client({
     host: 'localhost:9200',
     log: 'info'
@@ -41,7 +42,7 @@ client.indices.exists({
 });
 
 function createIndex() {
-    console.log('createIndex');
+    //console.log('createIndex');
     client.indices.create({
         index: indexName
     }, function (err, resp) {
@@ -56,11 +57,10 @@ function createIndex() {
 function createData() {
     client.create({
         index: indexName,
-        type: 'patients',
+        type: typeName,
         id: 1,
         body: {
-            idPatient: '1',
-            password: 'abc',
+            idPath: '1',
             questioncatalog: {
                 info: {
                     legend: "INFORMATIONS DEMOGRAPHIQUES",
@@ -305,11 +305,10 @@ function createData() {
 
     client.create({
         index: indexName,
-        type: 'patients',
+        type: typeName,
         id: 2,
         body: {
-            idPatient: '2',
-            password: 'cde',
+            idPath: '2',
             questioncatalog: {
                 info: {
                     legend: "INFORMATIONS DEMOGRAPHIQUES",
@@ -350,16 +349,6 @@ function createData() {
                                 required: "{{label}} is required."
                             }
                         },
-                            /*validators: {
-                                customValidator: null,
-                                minLength: 5,
-                                maxLength: 10
-                            },
-                            errorMessages: {
-                                required: "{{ label }} is required",
-                                maxLength: "Max character count is 5"
-                            }
-                        },*/
                         age: {
                             label: "Age",
                             maxLength: 10,
@@ -607,11 +596,10 @@ function createData() {
 
     client.create({
         index: indexName,
-        type: 'patients',
+        type: typeName,
         id: 3,
         body: {
             idPatient: '3',
-            password: 'fgh',
             questioncatalog: {
                 info: {
                     legend: "INFORMATIONS DEMOGRAPHIQUES",
@@ -962,6 +950,6 @@ function createData() {
 
 function errorHandler(err) {
     console.error('elasticsearch cluster has error: ' + err);
-    console.error('Exit here!');
+    //console.error('Exit here!');
     process.exit();
 }

@@ -1,6 +1,6 @@
 <ion-content class="login-content" padding>
   <ion-row class="logo-row">
-      <img src="../../assets/img/berexia_logo.jpg" />
+    <img src="../../assets/img/berexia_logo.jpg" />
   </ion-row>
   <div class="login-box">
     <form (ngSubmit)="login()" [formGroup]="loginForm">
@@ -8,19 +8,39 @@
         <ion-col>
           <ion-list inset>
             <ion-item>
+              <ion-label col-4>Identifiant</ion-label>
               <ion-input type="text" placeholder="ID" name="id" [(ngModel)]="user.id" formControlName="id" required></ion-input>
+              <button item-right class="btnInput" [style.visibility]="'hidden'"> </button>
             </ion-item>
-            <ion-item> 
-              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="user.password" formControlName="password"
-                required></ion-input>
+            <ion-row class="error-message" [hidden]="loginForm.controls.id.valid">
+              <p>
+                <strong>ID is required</strong>
+              </p>
+            </ion-row>
+            <ion-item>
+              <ion-label col-4>Password</ion-label>
+              <ion-input type="{{ showpass ? 'text' : 'password' }}" placeholder="Password" name="password" [(ngModel)]="user.password"
+                formControlName="password" required></ion-input>
+              <button ion-button clear icon-only item-right type="button" class="btnInput" (click)="showPassword()">
+                <ion-icon name="ios-eye"></ion-icon>
+              </button>
             </ion-item>
-
+            <ion-row class="error-message" [hidden]="loginForm.controls.password.valid">
+              <p>
+                <strong>Password is required</strong>
+              </p>
+            </ion-row>
+            <ion-row class="error-message" *ngIf="loginFailed">
+              <p>
+                <strong> ID or password is incorrect</strong>
+              </p>
+            </ion-row>
           </ion-list>
         </ion-col>
       </ion-row>
 
       <ion-row>
-          <button ion-button class="submit-btn" full type="submit" [disabled]="!loginForm.valid">Login</button>
+        <button ion-button class="submit-btn" full type="submit" [disabled]="!loginForm.valid">Login</button>
       </ion-row>
 
     </form>
