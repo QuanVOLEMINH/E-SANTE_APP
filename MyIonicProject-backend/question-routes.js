@@ -32,7 +32,7 @@ app.get('/pathologies/:idPath', function (req, res) {
     }, function (err) {
         console.trace(err.message);
     });
-    console.log('XXXXXXXXXXXXXX');
+    //console.log('XXXXXXXXXXXXXX');
 });
 
 //GET PROFIL PATIENT BY ID
