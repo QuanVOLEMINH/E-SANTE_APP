@@ -15,15 +15,20 @@ export class TabsPage {
   questionPage = ItemDetailsPage; 
   contactPage = AboutPage;
 
-  idPath = 2;
+  data: any;
+  idPath : number;
+  idPatient: number;
+
   tab1Root = this.homePage;
   tab2Root = this.questionPage;
   tab3Root = this.contactPage;
   //tab3Root = ContactPage;
 
   constructor(public navParams: NavParams, public navController: NavController) {
-    this.idPath = this.navParams.get('param1');
-    console.log('param at tab ' + this.idPath);
+    this.data = this.navParams.get('param1');
+    this.idPath = this.data.idPath;
+    this.idPatient = this.data.idPatient;
+    //console.log(this.idPath + ' ' + this.idPatient);
     //this.viewQuestion(this.idPath);
   }
 

@@ -33,9 +33,9 @@ export class ItemDetailsPage implements OnInit {
               public _questionService: QuestionServiceProvider,
               public toastCtrl: ToastController) {
                 
-    // If we navigated to this page, we will have an item available as a nav param
-    this.selectedItem = navParams.get('item');
+    //idPath
     this.id = this.navParams.data;  //this.navParams.get('param1');
+    console.log(this.navParams.data);
     this.formGroupList = [];
 
   }

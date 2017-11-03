@@ -1,90 +1,74 @@
 import { Component } from '@angular/core';
-import { ItemDetailsPage } from '../item-details/item-details';
 //import { Http } from "@angular/http";
 import { QuestionServiceProvider } from "../../providers/question-service/question-service";
 import { NavController } from "ionic-angular";
 import { GoogleFitDataProvider } from "../../providers/googlefit-data/googlefit-data";
-import { Events } from 'ionic-angular';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Events, NavParams } from 'ionic-angular';
+import { AppAvailability } from '@ionic-native/app-availability';
+import { Health } from '@ionic-native/health';
 
 @Component({
   selector: 'page-hello-ionic',
-  templateUrl: 'hello-ionic.html'
+  templateUrl: 'hello-ionic.html',
+  providers: [Health, GoogleFitDataProvider, AppAvailability]
 })
 export class HelloIonicPage {
-  questionPage = ItemDetailsPage;
-  loginForm: FormGroup;
-  loginFailed: boolean = false;
-  user = {
-    id: '',
-    password: ''
-  };
 
-  showpass: boolean = false;
+  selectedItem: any;
+  idPatient: number;
 
-  constructor(public navController: NavController, public _questionService: QuestionServiceProvider, public events: Events, public googlefitData: GoogleFitDataProvider, public formBuilder: FormBuilder) {
-    this.loginForm = this.formBuilder.group({
-      id: ["", Validators.compose([Validators.maxLength(30), Validators.pattern('[a-zA-Z0-9_-]*'), Validators.required])],
-      password: ["", Validators.compose([Validators.maxLength(30), Validators.pattern('[a-zA-Z0-9_-]*'), Validators.required])]
-    });
+  constructor(public navController: NavController, public _questionService: QuestionServiceProvider, public events: Events, public googlefitData: GoogleFitDataProvider, public appAvailability: AppAvailability, public navParams: NavParams) {
 
+    this.idPatient = this.navParams.data;
+    //console.log(this.idPatient);
 
+    let app = 'com.google.android.apps.fitness';
+    this.appAvailability.check(app)
+      .then(
+      () => {
+        this.googlefitAccess();
+      },
+      () => {
+        setTimeout(
+          () => {
+            if (confirm('Pour utiliser cette application plus efficacement, acceptez-vous d\'installer le GoogleFit?')) {
+              this.googlefitData.installationRequirements();
+            }
+          },
+          2000);
+      });
 
   }
 
-  onLogin() {
-    //console.log(this.user.id);
-    this._questionService.getPatientInfoById(this.user.id)
-      .subscribe(
-      response => {
-        //console.log(response);
-        if (response.password == this.user.password) {
-          this.loginFailed = false;
-          let idPath = response.pathology.charAt(response.pathology.length - 1);
-          //console.log(idPath);
-          this.onClick(idPath);
+
+  googlefitAccess() {
+    let temp = this.googlefitData.getData().then(function (res) {
+      return res;
+    });
+    console.log('temp in app ts is ok ');
+    console.log(temp);
+    temp.then(
+      res => {
+        if (res == 'cordova_not_available') {
+          throw 'error not found googlefit';
 
         } else {
-          this.loginFailed = true;
+          if (res != null) {
+            res['id'] = this.idPatient;
+            console.log('res is ');
+            console.log(res);
+            this.googlefitData.sendDataToServer(res).subscribe(
+              response => {
+                console.log(response);
+              },
+              error => {
+                console.log(error);
+              });
+          }
         }
-        ;
-      },
-      error => {
-        console.log('Error' + error);
-        this.loginFailed = true;
-      });
+      }
+    ).catch(e => console.log(e));
   }
 
-  onClick(idPath) {
-    //console.log(this.user);
-
-    /*this._questionService.getListQuestionsById(idPath)
-      .subscribe(
-      response => {
-        //console.log(response);
-      },
-      error => {
-        console.log(error);
-      });*/
-    this.navController.setRoot(ItemDetailsPage, { param1: idPath });
-
-    let data = this.events.publish('myEvent');
-    //console.log('data is ');
-    if (data != null) {
-      data['id'] = this.user.id;
-      this.googlefitData.sendDataToServer(data).subscribe(
-        response => {
-          console.log(response);
-        },
-        error => {
-          console.log(error);
-        });
-    }
-    //console.log(data);
-  }
-
-  showPassword() {
-    this.showpass = !this.showpass;
-  }
 }
 

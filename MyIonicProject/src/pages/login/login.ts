@@ -37,7 +37,7 @@ export class LoginPage {
     }
 
     login() {
-        
+
         //console.log(this.user.id);
         this._questionService.getPatientInfoById(this.user.id)
             .subscribe(
@@ -46,9 +46,7 @@ export class LoginPage {
                 if (response.password == this.user.password) {
                     this.loginFailed = false;
                     let idPath = response.pathology.charAt(response.pathology.length - 1);
-                    this.nav.setRoot(this.tabPages, { param1: idPath });
-                    //console.log(idPath);
-                    //this.onClick(idPath);
+                    this.nav.setRoot(this.tabPages, { param1: { 'idPath': idPath, 'idPatient': this.user.id } });
 
                 } else {
                     this.loginFailed = true;

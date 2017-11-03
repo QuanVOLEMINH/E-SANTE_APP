@@ -66,7 +66,8 @@ export class GoogleFitDataProvider {
     console.log('data to send');
     console.log(data);
     let temp = new Object();
-    for (let i = 0; i < Object.keys(data).length; i++) {
+    console.log(Object.keys(data).length);
+    for (let i = 0; i < Object.keys(data).length - 1; i++) {
       temp[i] = data[i];
     }
     temp['id'] = data['id'];
