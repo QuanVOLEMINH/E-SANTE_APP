@@ -23,7 +23,8 @@ export class ItemDetailsPage implements OnInit {
   public questions: any;
   public models;
   public formGroupList;
-  public id: string;
+  public idPath: string;
+  public idPatient: string;
   public message: string;
 
   constructor(public navCtrl: NavController,
@@ -34,18 +35,19 @@ export class ItemDetailsPage implements OnInit {
               public toastCtrl: ToastController) {
                 
     //idPath
-    this.id = this.navParams.data;  //this.navParams.get('param1');
-    console.log(this.navParams.data);
+    this.idPath = this.navParams.data.idPath;
+    this.idPatient = this.navParams.data.idPatient;
+    console.log(this.idPath + ' ' + this.idPatient);
     this.formGroupList = [];
 
   }
 
   ngOnInit() {
-    //console.log(this.id);
-    this._questionService.getListQuestionsById(this.id)
+    //console.log(this.idPath);
+    this._questionService.getListQuestionsById(this.idPath)
       .subscribe(
         response => {
-          console.log(response);
+          //console.log(response);
           this.models = this.modelGenerator(response.questioncatalog);
           for (let _i = 0; _i < this.models.length; _i++) {
             let formModel = this.models[_i];
@@ -206,7 +208,8 @@ export class ItemDetailsPage implements OnInit {
         }
       }
     }
-    responses['id'] = this.id;
+    responses['idPatient'] = this.idPatient;
+    responses['idPath'] = this.idPath;
 
     console.log(responses);
 

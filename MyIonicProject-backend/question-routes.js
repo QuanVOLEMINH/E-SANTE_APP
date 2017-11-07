@@ -10,6 +10,16 @@ var client = elasticsearch.Client({
     log: 'info',
 });
 
+//get date with format dd/MM/yyyy
+function getStringDate() {
+    var d = new Date();
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth();
+    curr_month++;
+    var curr_year = d.getFullYear();
+    return curr_date + '/' + curr_month + '/' + curr_year;
+}
+
 //GET QUESTIONS BY ID PATHOLOGY
 app.get('/pathologies/:idPath', function (req, res) {
     //console.log('++++++++++++++++++++++++++++++++++');
@@ -36,9 +46,9 @@ app.get('/pathologies/:idPath', function (req, res) {
 });
 
 //GET PROFIL PATIENT BY ID
-app.get('/profilpatients/:patientID', function (req, res) {
+app.get('/profilpatients/:idPatient', function (req, res) {
     //console.log('++++++++++++++++++++++++++++++++++');
-    var id = req.params.patientID;
+    var id = req.params.idPatient;
     //console.log('id is ' + id);
     var indexName = 'profilcatalog';
     client.search({
@@ -57,9 +67,34 @@ app.get('/profilpatients/:patientID', function (req, res) {
     }, function (err) {
         console.trace(err.message);
     });
-    console.log('XXXXXXXXXXXXXX');
+    //console.log('XXXXXXXXXXXXXX');
 });
 
+//GET RESPONSES
+app.get('/patientresponses/:idPatient/:date', function (req, res) {
+    //console.log('++++++++++++++++++++++++++++++++++');
+    var idPatient = req.params.idPatient;
+    
+    //console.log('id is ' + id);
+    var indexName = 'profilcatalog';
+    client.search({
+        index: indexName,
+        type: 'profilpatient',
+        q: 'id:' + id,
+    }).then(function (resp) {
+        //console.log(resp.hits.hits);
+        //console.log('---------------------------------');
+        var hits = {};
+        for (var oneCatalog of resp.hits.hits) {
+            hits = oneCatalog._source;
+            break;
+        }
+        res.status(200).json(hits);
+    }, function (err) {
+        console.trace(err.message);
+    });
+    //console.log('XXXXXXXXXXXXXX');
+});
 
 //initialize profil + response
 app.post('/profilPatient', function (req, res) {
@@ -199,19 +234,21 @@ app.post('/profilPatient', function (req, res) {
 app.post('/responses', function (req, res) {
     var indexName = 'responsecatalog';
     var typeName = 'response';
+    console.log('request body is ');
+    console.log(req.body);
     updateData();
-
     function updateData() {
         client.update({
             index: indexName,
             type: typeName,
-            id: req.body.id,
+            id: req.body.idPatient,
             body: {
                 // put the partial document under the `doc` key
-                doc: {
-                    response: req.body,
-                }
-            }
+                doc: addDate(req.body),
+                /*script: {
+                    inline: "ctx._source.remove('new')",
+                },*/
+            },
         }, function (error, response) {
             if (error) {
                 errorHandler(error);
@@ -220,6 +257,13 @@ app.post('/responses', function (req, res) {
             }
         });
     }
+    function addDate(data){
+        var key = 'response ' + getStringDate();
+        return x = {
+            [key]: data,
+        };
+    }
+
     res.status(201).send({
         "msg": "Success!"
     });
