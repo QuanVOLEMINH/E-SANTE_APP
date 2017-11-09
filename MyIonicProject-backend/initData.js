@@ -599,7 +599,7 @@ function createData() {
         type: typeName,
         id: 3,
         body: {
-            idPatient: '3',
+            idPath: '3',
             questioncatalog: {
                 info: {
                     legend: "INFORMATIONS DEMOGRAPHIQUES",

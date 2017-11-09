@@ -23,9 +23,12 @@
     "@angular/router": "^4.2.4",
     "angular2-text-mask": "^8.0.4",
     "bootstrap": "^3.3.7",
+    "chart.js": "file:node_modules/chart.js",
+    "chart.js-scatter": "^1.1.4",
     "core-js": "^2.4.1",
     "jquery": "^3.2.1",
     "mydatepicker": "^2.0.32",
+    "ng2-order-pipe": "^0.1.5",
     "ngx-bootstrap": "^1.9.3",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"

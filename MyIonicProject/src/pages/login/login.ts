@@ -39,8 +39,7 @@ export class LoginPage {
     login() {
 
         //console.log(this.user.id);
-        this._questionService.getPatientInfoById(this.user.id)
-            .subscribe(
+        this._questionService.getPatientInfoById(this.user.id).subscribe(
             response => {
                 //console.log(response);
                 if (response.password == this.user.password) {
@@ -51,12 +50,12 @@ export class LoginPage {
                 } else {
                     this.loginFailed = true;
                 }
-                ;
             },
             error => {
                 console.log('Error' + error);
                 this.loginFailed = true;
-            });
+            }
+        );
 
     }
 

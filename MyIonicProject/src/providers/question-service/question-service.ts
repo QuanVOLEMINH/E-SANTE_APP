@@ -73,7 +73,7 @@ export class QuestionServiceProvider {
       });
   }
 
-  getResponsesById(idPatient, date: String){
+  /*getResponsesById(idPatient, date: String){
     let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
     let myParams = new URLSearchParams();
     myParams.set('idPatient', idPatient);
@@ -85,5 +85,5 @@ export class QuestionServiceProvider {
       .catch(function (error) {
         return Observable.throw(error);
       });
-  }
+  }*/
 }

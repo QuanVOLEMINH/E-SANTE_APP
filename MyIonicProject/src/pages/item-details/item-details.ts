@@ -33,8 +33,7 @@ export class ItemDetailsPage implements OnInit {
               private _formService: DynamicFormService,
               public _questionService: QuestionServiceProvider,
               public toastCtrl: ToastController) {
-                
-    //idPath
+
     this.idPath = this.navParams.data.idPath;
     this.idPatient = this.navParams.data.idPatient;
     console.log(this.idPath + ' ' + this.idPatient);

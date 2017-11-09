@@ -1,0 +1,30 @@
+<div>
+  <h2>Where we can to watch something interesting</h2>
+</div>
+<div class="container">
+  <form>
+    <div class="row">
+      <div class="form-inline col-lg-3">
+        <label for="id">ID</label>
+        <input type="text" class="form-control" name="id" [(ngModel)]="input.id" required>
+      </div>
+      <div class="form-inline col-lg-3">
+        <label for="datatype">Data to view</label>
+        <select class="form-control " id="type" [(ngModel)]="input.type" name="type" required>
+          <option *ngFor="let type of types" [value]="type">{{type}}</option>
+        </select>
+      </div>
+      <div class="form-inline col-lg-2">
+        <button type="submit" class="btn btn-success" (click)="onClick()">View</button>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="graph">
+  <canvas id="myChart" width="400" height="400"></canvas>
+</div>
+
+<!--div class="graph">
+  <canvas id="testChart" width="400" height="400"></canvas>
+</div>
+-->

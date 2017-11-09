@@ -11,7 +11,29 @@ export class PatientService {
   constructor(public http: Http,
               public appSettings: AppSettingsService) { }
 
-  toListResponses(responses) {
+  //GET
+  //retrieve data from patient's profile
+  public getListPatients() {
+    return this.http.get(this.apiUrl + 'profilPatient')
+      .map(function (response) {
+        return response.json();
+      })
+      .catch(function (error) {
+        return Observable.throw(error);
+      });
+  };
+  public getListPatientById(id) {
+    return this.http.get(this.apiUrl+ 'profilPatient/' + id)
+      .map (function (response) {
+        return response.json();
+      })
+      .catch (function (error) {
+        return Observable.throw(error);
+      })
+  };
+  //POST
+  //send info Patient to Back End
+  public toListPatients(responses) {
     let body = JSON.stringify(responses);
     console.log('body response is' + body);
     let headers = new Headers({'Content-Type': 'application/json'});
@@ -23,7 +45,17 @@ export class PatientService {
       .catch (function (error) {
         return Observable.throw(error);
       })
+  };
 
-
+  //DELETE
+  //remove a patient by ID
+  public deletePatientById(id) {
+    return this.http.delete(this.apiUrl+ 'profilPatient/' + id)
+      .map (function (response) {
+        return response.json();
+      })
+      .catch (function (error) {
+        return Observable.throw(error);
+      })
   };
 }

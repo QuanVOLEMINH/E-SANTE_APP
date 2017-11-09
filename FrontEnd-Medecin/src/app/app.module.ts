@@ -11,21 +11,27 @@ import {PatientService} from "./services/patient.service";
 import {AppSettingsService} from "./services/app-settings.service";
 import {Http, HttpModule} from "@angular/http";
 import {TextMaskModule} from "angular2-text-mask";
+import {Ng2OrderModule} from "ng2-order-pipe";
+import {PatientDetailComponent} from "./components/patient-detail/patient-detail.component";
+import { ChartComponent } from './components/chart/chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    PatientComponent
+    PatientComponent,
+    PatientDetailComponent,
+    ChartComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule,
     MyDatePickerModule,
     TextMaskModule,
-    HttpModule
+    HttpModule,
+    Ng2OrderModule,
+    AppRoutingModule
   ],
   providers: [
     PatientService,

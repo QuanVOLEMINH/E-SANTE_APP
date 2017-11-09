@@ -1,13 +1,14 @@
-
-
 <div class="tab-content container-fluid">
   <ul class="nav nav-pills">
-    <li class="active"><a data-toggle="pill" href="#new">New</a></li>
-    <li><a data-toggle="pill" href="#modify">Modify</a></li>
-    <li><a data-toggle="pill" href="#delete">Delete</a></li>
+    <li class="active"><a data-toggle="pill" href="#new"><i class="glyphicon glyphicon-user"></i> New</a></li>
+    <li><a data-toggle="pill" href="#modify"><i class="glyphicon glyphicon-list"></i> List</a></li>
+    <li><a data-toggle="pill" href="#delete"><i class="glyphicon glyphicon-remove-sign"></i> Delete</a></li>
   </ul>
   <!--Create new patients-->
   <div id="new" class="tab-pane fade in active">
+    <div class="page-header">
+      <h3>CREATE NEW PATIENT</h3>
+    </div>
     <form [formGroup]="myForm"
           (ngSubmit)="onSubmit(myForm.value)"
           class="well"
@@ -19,12 +20,13 @@
                  id="first"
                  formControlName="first"
                  class="form-control">
-            <div *ngIf="myForm.controls['first'].invalid && (myForm.controls['first'].dirty || myForm.controls['first'].touched)"
-                 class="alert alert-danger">
-              <div *ngIf="myForm.controls['first'].errors.required">
-                 {{titleAlert}}
-              </div>
+          <div
+            *ngIf="myForm.controls['first'].invalid && (myForm.controls['first'].dirty || myForm.controls['first'].touched)"
+            class="alert alert-danger">
+            <div *ngIf="myForm.controls['first'].errors.required">
+              {{titleAlert}}
             </div>
+          </div>
         </div>
 
         <div class="form-group col-lg-4">
@@ -33,31 +35,26 @@
                  id="last_name"
                  formControlName="last"
                  class="form-control">
-          <div *ngIf="myForm.controls['last'].invalid && (myForm.controls['last'].dirty || myForm.controls['last'].touched)"
-               class="alert alert-danger fade in">
+          <div
+            *ngIf="myForm.controls['last'].invalid && (myForm.controls['last'].dirty || myForm.controls['last'].touched)"
+            class="alert alert-danger fade in">
             <div *ngIf="myForm.controls['last'].errors.required">
               {{titleAlert}}
             </div>
           </div>
         </div>
-        <div class="form-group col-lg-4">
-          <label>Age</label>
-          <input type="text"
-                 id="age"
-                 formControlName="age"
-                 class="form-control" [(ngModel)]="this.age" disabled>
-        </div>
       </div>
       <div class="row">
         <div class="form-group col-lg-4">
           <label>Sex</label>
-          <select formControlName="sexe"
+          <select formControlName="gender"
                   class="form-control">
-            <option *ngFor="let sexe of sexes" [value]="sexe">{{sexe}}</option>
+            <option *ngFor="let gender of genders" [value]="gender">{{gender}}</option>
           </select>
-          <div *ngIf="myForm.controls['sexe'].invalid && (myForm.controls['sexe'].dirty || myForm.controls['sexe'].touched)"
-               class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['sexe'].errors.required">
+          <div
+            *ngIf="myForm.controls['gender'].invalid && (myForm.controls['gender'].dirty || myForm.controls['gender'].touched)"
+            class="alert alert-danger fade in">
+            <div *ngIf="myForm.controls['gender'].errors.required">
               {{titleAlert}}
             </div>
           </div>
@@ -68,8 +65,9 @@
                           [options]="myDatePickerOptions"
                           formControlName="myDate"
                           (inputFocusBlur)="calculateAge()"></my-date-picker>
-          <div *ngIf="myForm.controls['myDate'].invalid && (myForm.controls['myDate'].dirty || myForm.controls['myDate'].touched)"
-               class="alert alert-danger fade in">
+          <div
+            *ngIf="myForm.controls['myDate'].invalid && (myForm.controls['myDate'].dirty || myForm.controls['myDate'].touched)"
+            class="alert alert-danger fade in">
             <div *ngIf="myForm.controls['myDate'].errors.required">
               {{titleAlert}}
             </div>
@@ -78,27 +76,77 @@
       </div>
       <div class="row">
         <div class="form-group col-lg-4">
-          <label for="email">Email</label>
-          <input type="email"
-                 id="email"
-                 formControlName="email"
-                 class="form-control" email="true">
-          <div *ngIf="myForm.controls['email'].invalid && (myForm.controls['email'].dirty || myForm.controls['email'].touched)"
-               class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['email'].errors.required">
-              {{titleAlert}}
-            </div>
-            <div *ngIf="myForm.controls['email'].errors.email">Please input a valid email.</div>
-          </div>
-        </div>
-        <div class="form-group col-lg-4">
           <label>Phone Number</label>
           <input type="text"
                  formControlName="phone"
                  class="form-control" placeholder="+33 12 34 56 78 90" [textMask]="{mask: mask}">
-          <div *ngIf="myForm.controls['phone'].invalid && (myForm.controls['phone'].dirty || myForm.controls['phone'].touched)"
-               class="alert alert-danger fade in">
+          <div
+            *ngIf="myForm.controls['phone'].invalid && (myForm.controls['phone'].dirty || myForm.controls['phone'].touched)"
+            class="alert alert-danger fade in">
             <div *ngIf="myForm.controls['phone'].errors.required">
+              {{titleAlert}}
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-lg-4">
+          <label>Age</label>
+          <input type="text"
+                 id="age"
+                 formControlName="age"
+                 class="form-control" [(ngModel)]="this.age">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email"
+               id="email"
+               formControlName="email"
+               class="form-control" email="true">
+        <div
+          *ngIf="myForm.controls['email'].invalid && (myForm.controls['email'].dirty || myForm.controls['email'].touched)"
+          class="alert alert-danger fade in">
+          <div *ngIf="myForm.controls['email'].errors.required">
+            {{titleAlert}}
+          </div>
+          <div *ngIf="myForm.controls['email'].errors.email">Please input a valid email.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Address</label>
+        <input type="text"
+               formControlName="address"
+               class="form-control">
+        <div
+          *ngIf="myForm.controls['address'].invalid && (myForm.controls['address'].dirty || myForm.controls['address'].touched)"
+          class="alert alert-danger fade in">
+          <div *ngIf="myForm.controls['address'].errors.required">
+            {{titleAlert}}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-6">
+          <label>City</label>
+          <input type="text"
+                 formControlName="city"
+                 class="form-control">
+          <div
+            *ngIf="myForm.controls['city'].invalid && (myForm.controls['city'].dirty || myForm.controls['city'].touched)"
+            class="alert alert-danger fade in">
+            <div *ngIf="myForm.controls['city'].errors.required">
+              {{titleAlert}}
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-lg-6">
+          <label>Zip</label>
+          <input type="text"
+                 class="form-control"
+                 formControlName="zip"/>
+          <div
+            *ngIf="myForm.controls['zip'].invalid && (myForm.controls['zip'].dirty || myForm.controls['zip'].touched)"
+            class="alert alert-danger fade in">
+            <div *ngIf="myForm.controls['zip'].errors.required">
               {{titleAlert}}
             </div>
           </div>
@@ -106,42 +154,6 @@
       </div>
 
       <div class="form-group">
-        <label>Address</label>
-        <input type="text"
-               formControlName="address"
-               class="form-control">
-        <div *ngIf="myForm.controls['address'].invalid && (myForm.controls['address'].dirty || myForm.controls['address'].touched)"
-             class="alert alert-danger fade in">
-          <div *ngIf="myForm.controls['address'].errors.required">
-            {{titleAlert}}
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <div>
-          <label>City</label>
-          <input type="text"
-                 formControlName="city"
-                 class="form-control">
-          <div *ngIf="myForm.controls['city'].invalid && (myForm.controls['city'].dirty || myForm.controls['city'].touched)"
-               class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['city'].errors.required">
-              {{titleAlert}}
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Zip</label>
-          <input type="text"
-                 class="form-control"
-                 formControlName="zip"/>
-          <div *ngIf="myForm.controls['zip'].invalid && (myForm.controls['zip'].dirty || myForm.controls['zip'].touched)"
-               class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['zip'].errors.required">
-              {{titleAlert}}
-            </div>
-          </div>
-        </div>
         <div class="form-group">
           <label>ID Reference</label>
           <input type="text"
@@ -159,19 +171,15 @@
           <select class="form-control" formControlName="pathology">
             <option *ngFor="let pathology of pathologies" [value]="pathology">{{pathology}}</option>
           </select>
-          <div *ngIf="myForm.controls['pathology'].invalid && (myForm.controls['pathology'].dirty || myForm.controls['pathology'].touched)"
-               class="alert alert-danger fade in">
+          <div
+            *ngIf="myForm.controls['pathology'].invalid && (myForm.controls['pathology'].dirty || myForm.controls['pathology'].touched)"
+            class="alert alert-danger fade in">
             <div *ngIf="myForm.controls['pathology'].errors.required">
               {{titleAlert}}
             </div>
           </div>
         </div>
       </div>
-      <p>Date of birth: {{myForm.controls['myDate'].value | json}}</p>
-      <p>Email value: {{myForm.get('email').value | json}}</p>
-      <p>Email value: {{myForm.get('email').status | json}}</p>
-      <p>Form value: {{ myForm.value | json }}</p>
-      <p>Form status: {{ myForm.status | json }}</p>
       <div class="input-group-btn">
         <button class="btn btn-danger" type="button" id="reset" (click)="reset()">Reset
           <i class="glyphicon glyphicon-erase"></i>
@@ -182,13 +190,127 @@
       </div>
     </form>
   </div>
+
+  <!--Modify a patient-->
   <div id="modify" class="tab-pane fade">
-    <h3>MODIFY</h3>
-    <p>Some content in menu 1.</p>
+    <div class="page-header">
+      <h3>LIST PATIENT</h3>
+    </div>
+    <form [formGroup]="modifyForm"
+          (ngSubmit)="onGetListById(modifyForm.value.id)"
+          class="well"
+          novalidate>
+      <div class="form-group">
+        <label>ID Reference</label>
+        <input type="text"
+               formControlName="id"
+               class="form-control">
+        <div
+          *ngIf="modifyForm.controls['id'].invalid && (modifyForm.controls['id'].dirty || modifyForm.controls['id'].touched)"
+          class="alert alert-danger fade in">
+          <div *ngIf="modifyForm.controls['id'].errors.required">
+            {{titleAlert}}
+          </div>
+        </div>
+      </div>
+      <div class="input-group-btn">
+        <button class="btn btn-primary" type="submit" [disabled]="!modifyForm.valid">Find
+          <i class="glyphicon glyphicon-search"></i>
+        </button>
+      </div>
+    </form>
+    <div class="table-responsive" *ngIf="currentPatient != null && isDeleted === false">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Age</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>{{currentPatient._source.id }}</th>
+          <th>{{currentPatient._source.first}}</th>
+          <th>{{currentPatient._source.last}}</th>
+          <th>{{currentPatient._source.age}}</th>
+          <th>{{currentPatient._source.email}}</th>
+          <th>{{currentPatient._source.phone}}</th>
+          <th>
+            <a class="router-link btn btn-info" [routerLink]="['/patient-detail', currentPatient._source.id]" routerLinkActive="active" type="button">
+              <i class="glyphicon glyphicon-edit"></i>
+            </a>
+            <button class="btn btn-danger" type="button" (click)="onDelete(currentPatient._source.id)">
+              <i class="glyphicon glyphicon-trash"></i>
+            </button>
+          </th>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive" *ngIf="currentPatient == null">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Age</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let patient of patientList | orderBy: '_id'">
+          <th>{{patient._source.id }}</th>
+          <th>{{patient._source.first}}</th>
+          <th>{{patient._source.last}}</th>
+          <th>{{patient._source.age}}</th>
+          <th>{{patient._source.email}}</th>
+          <th>{{patient._source.phone}}</th>
+          <th>
+            <a class="router-link btn btn-info" [routerLink]="['/patient-detail', patient._source.id]" routerLinkActive="active" type="button"><i class="glyphicon glyphicon-edit"></i></a>
+
+            <button class="btn btn-danger" type="button" (click)="onDelete(patient._source.id)">
+              <i class="glyphicon glyphicon-trash"></i>
+            </button>
+          </th>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
+  <!--Delete a patient-->
   <div id="delete" class="tab-pane fade">
-    <h3>DELETE</h3>
-    <p>Some content in menu 2.</p>
+    <div class="page-header">
+      <h3>DELETE PATIENT</h3>
+    </div>
+    <form [formGroup]="deleteForm"
+          (ngSubmit)="onDelete(deleteForm.value.id)"
+          class="well"
+          novalidate>
+      <div class="form-group">
+        <label>ID Reference</label>
+        <input type="text"
+               formControlName="id"
+               class="form-control">
+        <div
+          *ngIf="deleteForm.controls['id'].invalid && (deleteForm.controls['id'].dirty || deleteForm.controls['id'].touched)"
+          class="alert alert-danger fade in">
+          <div *ngIf="deleteForm.controls['id'].errors.required">
+            {{titleAlert}}
+          </div>
+        </div>
+      </div>
+      <div class="input-group-btn">
+        <button class="btn btn-danger" type="submit" [disabled]="!deleteForm.valid">Delete
+          <i class="glyphicon glyphicon-remove"></i>
+        </button>
+      </div>
+    </form>
   </div>
 </div>

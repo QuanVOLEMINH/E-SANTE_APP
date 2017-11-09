@@ -24,6 +24,7 @@ function getStringDate() {
 app.get('/pathologies/:idPath', function (req, res) {
     //console.log('++++++++++++++++++++++++++++++++++');
     var id = req.params.idPath;
+    //console.log(id);
     var indexName = 'questionscatalog';
     var typeName = 'questions';
     client.search({
@@ -31,7 +32,7 @@ app.get('/pathologies/:idPath', function (req, res) {
         type: typeName,
         q: 'idPath:' + id,
     }).then(function (resp) {
-        //console.log(resp.hits.hits);
+        console.log(resp.hits.hits);
         //console.log('---------------------------------');
         var hits = {};
         for (var oneCatalog of resp.hits.hits) {
@@ -71,19 +72,18 @@ app.get('/profilpatients/:idPatient', function (req, res) {
 });
 
 //GET RESPONSES
-app.get('/patientresponses/:idPatient/:date', function (req, res) {
+app.get('/patientresponses/:idPatient', function (req, res) {
     //console.log('++++++++++++++++++++++++++++++++++');
     var idPatient = req.params.idPatient;
-    
-    //console.log('id is ' + id);
-    var indexName = 'profilcatalog';
+    //console.log('id is ' + idPatient);
+    var indexName = 'responsecatalog';
+    var typeName = 'response';
     client.search({
         index: indexName,
-        type: 'profilpatient',
-        q: 'id:' + id,
+        type: typeName,
+        q: '_id:' + idPatient,
     }).then(function (resp) {
-        //console.log(resp.hits.hits);
-        //console.log('---------------------------------');
+        console.log(resp);
         var hits = {};
         for (var oneCatalog of resp.hits.hits) {
             hits = oneCatalog._source;
@@ -91,9 +91,8 @@ app.get('/patientresponses/:idPatient/:date', function (req, res) {
         }
         res.status(200).json(hits);
     }, function (err) {
-        console.trace(err.message);
+        //console.trace(err.message);
     });
-    //console.log('XXXXXXXXXXXXXX');
 });
 
 //initialize profil + response
@@ -237,6 +236,7 @@ app.post('/responses', function (req, res) {
     console.log('request body is ');
     console.log(req.body);
     updateData();
+
     function updateData() {
         client.update({
             index: indexName,
@@ -245,9 +245,9 @@ app.post('/responses', function (req, res) {
             body: {
                 // put the partial document under the `doc` key
                 doc: addDate(req.body),
-                /*script: {
-                    inline: "ctx._source.remove('new')",
-                },*/
+                /* script: {
+                     inline: "ctx._source.remove('field')",
+                 },*/
             },
         }, function (error, response) {
             if (error) {
@@ -257,7 +257,8 @@ app.post('/responses', function (req, res) {
             }
         });
     }
-    function addDate(data){
+
+    function addDate(data) {
         var key = 'response ' + getStringDate();
         return x = {
             [key]: data,
