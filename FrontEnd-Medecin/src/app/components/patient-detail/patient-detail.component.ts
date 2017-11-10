@@ -14,7 +14,7 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
   public myForm: FormGroup;
   patient: any;
   first: string;
-  id: number;
+  idPatient: number;
   genders = ['Homme', 'Femme'];
   pathologies = ['Pathologie 1', 'Pathologie 2', 'Pathologie 3'];
   public myDatePickerOptions: IMyDpOptions = {
@@ -31,18 +31,16 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.id = +params['id'];
-      console.log(this.id);
+      this.idPatient = +params['id'];
+      console.log(this.idPatient);
     });
-    this._patientService.getListPatientById(this.id)
+    this._patientService.getListPatientById(this.idPatient)
       .subscribe(
         response => {
           console.log(response);
           this.patient = response;
           this.first = this.patient._source.first;
           this.setValue();
-          console.log(this.patient._source);
-          console.log(this.first);
         },
         error => {
           console.log(error);
