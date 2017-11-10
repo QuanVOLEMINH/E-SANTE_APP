@@ -71,7 +71,7 @@ app.get('/profilpatients/:idPatient', function (req, res) {
     //console.log('XXXXXXXXXXXXXX');
 });
 
-//GET RESPONSES
+//GET RESPONSES     
 app.get('/patientresponses/:idPatient', function (req, res) {
     //console.log('++++++++++++++++++++++++++++++++++');
     var idPatient = req.params.idPatient;

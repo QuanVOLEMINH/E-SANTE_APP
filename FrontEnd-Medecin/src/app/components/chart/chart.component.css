@@ -1,7 +1,8 @@
 .graph{
     border: 1px solid;
     margin: 20px auto;
-    width: 700px;
+    max-width: 700px;
+    max-height: 500px;
 }
 #myChart{
     margin: 10px auto;

@@ -16,8 +16,10 @@ export class ChartComponent implements OnInit {
   };
   private types = [];
   private data = {};
+  private allData = {};
   canvas: any;
   ctx: any;
+  myChart: any;
 
   constructor(private _responseService: ResponseService) {
     this._responseService.getResponsesById('1').subscribe(
@@ -34,32 +36,38 @@ export class ChartComponent implements OnInit {
 
   ngOnInit() {
   }
+  // Get list of types
+  getTypes() {
+  }
 
-  viewChart() {
-    let x = this.data[this.input.type];
-    let labels = [], data = [];
-    // tslint:disable-next-line:forin
+  formatDataToSketch(dataSource: object, type: string) {
+    const x = dataSource[type];
+    const labels = [], data = [];
     for (const item in x) {
-      console.log(x[item]);
+      // console.log(x[item]);
       // tslint:disable-next-line:forin
       for (const date in x[item]) {
         labels.push(date);
         data.push(x[item][date]);
       }
     }
-    console.log('labels is '); console.log(labels);
-    console.log('data is '); console.log(data);
+    return { 'labels': labels, 'data': data };
+  }
 
+  sketch1Line(labels, data) {
+    if (this.myChart) {
+      this.myChart.destroy();
+    }
     this.canvas = document.getElementById('myChart');
     this.ctx = this.canvas.getContext('2d');
-    const myChart = new Chart(this.ctx, {
+    this.myChart = new Chart(this.ctx, {
       type: 'line',
       data: {
         labels: labels,
         datasets: [{
           data: data,
           label: this.input.type,
-          borderColor: '#3e95cd',
+          borderColor: '#' + Math.random().toString(16).slice(-6),
           fill: false
         }
         ]
@@ -73,6 +81,62 @@ export class ChartComponent implements OnInit {
         display: true,
       }
     });
+  }
+
+  sketch3Lines(labels, data1, data2, data3) {
+    this.canvas = document.getElementById('myChart');
+    this.ctx = this.canvas.getContext('2d');
+    const data = {
+      labels: labels,
+      datasets: [
+        {
+          data: data1,
+          //label: this.input.type,
+          borderColor: '#3e95cd',
+          fill: false
+        },
+        {
+          data: data2,
+          //label: this.input.type,
+          borderColor: '#3e95cd',
+          fill: false
+        },
+        {
+          data: data3,
+          //label: this.input.type,
+          borderColor: '#3e95cd',
+          fill: false
+        }
+      ]
+    };
+    const options = {
+      title: {
+        display: true,
+        text: 'Graph'
+      },
+      responsive: false,
+      display: true,
+    };
+
+    const myChart = new Chart(this.ctx, {
+      type: 'line',
+      data: data,
+      options: options
+    });
+  }
+
+  viewChart() {
+    const dataToSketch = this.formatDataToSketch(this.data, this.input.type);
+    console.log(dataToSketch);
+    this.sketch1Line(dataToSketch.labels, dataToSketch.data);
+
+    /*let x = [];
+    for (let i = 0; i < this.types.length; i++) {
+      x[i] = this.formatDataToSketch(this.allData, this.types[i]);
+    }*/
+
+    // this.sketch3Lines(x[0].labels, x[0].data, x[1].data, x[2].data);
+
     /*s
     let canvas2, ctx2: any;
     canvas2 = document.getElementById("testChart");
@@ -141,6 +205,7 @@ export class ChartComponent implements OnInit {
             }
           }
           this.data[this.input.type] = valuesArray;
+          // this.allData[this.input.type] = valuesArray;
           console.log(this.data);
           this.viewChart();
         } else {
