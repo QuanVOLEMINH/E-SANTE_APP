@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers} from "@angular/http";
-import {AppSettingsService} from "./app-settings.service";
-import {Observable} from "rxjs/Observable";
+import {Http, Headers} from '@angular/http';
+import {AppSettingsService} from './app-settings.service';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
@@ -21,16 +21,18 @@ export class PatientService {
       .catch(function (error) {
         return Observable.throw(error);
       });
-  };
+  }
+
   public getListPatientById(id) {
-    return this.http.get(this.apiUrl+ 'profilPatient/' + id)
+    return this.http.get(this.apiUrl + 'profilPatient/' + id)
       .map (function (response) {
         return response.json();
       })
       .catch (function (error) {
         return Observable.throw(error);
-      })
-  };
+      });
+  }
+
   //POST
   //send info Patient to Back End
   public toListPatients(responses) {
@@ -50,12 +52,13 @@ export class PatientService {
   //DELETE
   //remove a patient by ID
   public deletePatientById(id) {
-    return this.http.delete(this.apiUrl+ 'profilPatient/' + id)
+    return this.http.delete(this.apiUrl + 'profilPatient/' + id)
       .map (function (response) {
         return response.json();
       })
       .catch (function (error) {
         return Observable.throw(error);
-      })
-  };
+      });
+  }
 }
+

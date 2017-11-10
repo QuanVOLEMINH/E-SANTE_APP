@@ -68,7 +68,7 @@ export class PatientComponent implements OnInit {
     this.refreshData();
     this.interval = setInterval(() => {
       this.refreshData();
-    }, 5000)
+    }, 5000);
   }
 
   refreshData() {
@@ -77,13 +77,14 @@ export class PatientComponent implements OnInit {
         response => {
           console.log(response.length);
           this.patientList = response;
-          console.log(this.patientList)
+          console.log(this.patientList);
         },
         error => {
           console.log(error);
         }
       );
   }
+
   setDate(): void {
     // Set today date using the patchValue function
     let date = new Date();
