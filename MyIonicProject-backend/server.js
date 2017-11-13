@@ -1,3 +1,4 @@
+'use strict';
 var logger = require('morgan'),
     cors = require('cors'),
     http = require('http'),
@@ -19,7 +20,7 @@ app.use(cors());
 
 if (process.env.NODE_ENV === 'development') {
     app.use(logger('dev'));
-    app.use(errorhandler())
+    app.use(errorhandler());
 }
 
 var port = process.env.PORT || 3001;
@@ -27,7 +28,8 @@ var port = process.env.PORT || 3001;
 mongoose.Promise = global.Promise;
 // mongoose.connect(config.database, {useMongoClient: true});
 
-app.use(require('./question-routes'));
+app.use(require('./routes/question-routes'));
+app.use(require('./routes/patient-routes'));
 
 http.createServer(app).listen(port, function (err) {
     console.log('listening in http://localhost:' + port);

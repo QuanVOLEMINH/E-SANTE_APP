@@ -23,7 +23,7 @@
     "@angular/router": "^4.2.4",
     "angular2-text-mask": "^8.0.4",
     "bootstrap": "^3.3.7",
-    "chart.js": "file:node_modules/chart.js",
+    "chart.js": "^2.7.1",
     "chart.js-scatter": "^1.1.4",
     "core-js": "^2.4.1",
     "jquery": "^3.2.1",
@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@angular/cli": "1.4.9",
-    "@angular/compiler-cli": "^4.2.4",
+    "@angular/compiler-cli": "^4.4.6",
     "@angular/language-service": "^4.2.4",
     "@types/jasmine": "~2.5.53",
     "@types/jasminewd2": "~2.0.2",
