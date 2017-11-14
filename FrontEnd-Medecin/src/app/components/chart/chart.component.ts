@@ -1,133 +1,167 @@
-import { Component, OnInit } from '@angular/core';
-import { ResponseService } from '../../services/response.service';
-import Chart from 'chart.js';
-import ChartScatter from 'chart.js-scatter';
+// tslint:disable:quotemark
+// tslint:disable:forin
+import { Component, OnInit } from "@angular/core";
+import { ResponseService } from "../../services/response.service";
+import Chart from "chart.js";
+import ChartScatter from "chart.js-scatter";
+import jsPDF from "jspdf";
 
 @Component({
-  selector: 'app-chart',
-  templateUrl: './chart.component.html',
-  styleUrls: ['./chart.component.css'],
+  selector: "app-chart",
+  templateUrl: "./chart.component.html",
+
+  styleUrls: ["./chart.component.css"],
   providers: [ResponseService]
 })
 export class ChartComponent implements OnInit {
   private input = {
-    id: '',
-    type: ''
+    id: "",
+    type: ""
   };
+  private report = {
+    id: "",
+    date: ""
+  };
+  private dates = [];
   private types = [];
   private data = {};
-  private allData = {};
+  private reportData = {};
   canvas: any;
   ctx: any;
   myChart: any;
+  showDate = false;
+  showTypes = false;
 
-  constructor(private _responseService: ResponseService) {
-    this._responseService.getResponsesById('1').subscribe(
+  constructor(private _responseService: ResponseService) {}
+
+  ngOnInit() {}
+  // Get list of types
+  getTypes(id) {}
+
+  pushUnique(arr: Array<any>, item) {
+    if (arr.indexOf(item) === -1) {
+      arr.push(item);
+      return true;
+    }
+    return false;
+  }
+  onClick() {
+    const responseCollection = {};
+    this._responseService.getResponsesById(this.input.id).subscribe(
       res => {
-        this.types = Object.keys(res['response']['biochimie']);
-      }
-      ,
+        // console.log(res);
+        for (const item in res) {
+          if (item.match(/^response.+/i)) {
+            responseCollection[item] = res[item];
+          }
+        }
+        for (const item in responseCollection) {
+          for (const key in responseCollection[item]["biochimie"]) {
+            // console.log("key is " + key);
+            if (!isNaN(responseCollection[item]["biochimie"][key])) {
+              this.pushUnique(this.types, key);
+            }
+          }
+          for (const key in responseCollection[item]["physique"]) {
+            if (!isNaN(responseCollection[item]["physique"][key])) {
+              this.pushUnique(this.types, key);
+            }
+          }
+        }
+        this.showTypes = true;
+        // console.log(this.types);
+        if (
+          Object.keys(responseCollection).length > 0 &&
+          this.input.type !== ""
+        ) {
+          this.data = {};
+          const valuesArray = [];
+          for (const item in responseCollection) {
+            // console.log(this.types[i]);
+            const date = item.substring(9);
+            const biochimieContent =
+              responseCollection[item]["biochimie"][this.input.type];
+              const physiqueContent =
+              responseCollection[item]["physique"][this.input.type];
+            if (biochimieContent !== undefined) {
+              const value = {};
+              value[date] = biochimieContent;
+              valuesArray.push(value);
+            }
+            if (physiqueContent !== undefined) {
+              const value = {};
+              value[date] = physiqueContent;
+              valuesArray.push(value);
+            }
+          }
+          this.data[this.input.type] = valuesArray;
+          console.log(this.data);
+          this.viewChart();
+        } else {
+          console.log("There is no responses.");
+        }
+      },
       err => {
-        // console.log(err);
+        console.log(err);
       }
     );
-
   }
 
-  ngOnInit() {
-  }
-  // Get list of types
-  getTypes() {
-  }
-
-  formatDataToSketch(dataSource: object, type: string) {
-    const x = dataSource[type];
-    const labels = [], data = [];
-    for (const item in x) {
-      // console.log(x[item]);
-      // tslint:disable-next-line:forin
-      for (const date in x[item]) {
-        labels.push(date);
-        data.push(x[item][date]);
-      }
-    }
-    return { 'labels': labels, 'data': data };
-  }
-
-  sketch1Line(labels, data) {
-    if (this.myChart) {
-      this.myChart.destroy();
-    }
-    this.canvas = document.getElementById('myChart');
-    this.ctx = this.canvas.getContext('2d');
-    this.myChart = new Chart(this.ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          data: data,
-          label: this.input.type,
-          borderColor: '#' + Math.random().toString(16).slice(-6),
-          fill: false
+  onExport() {
+    const responseCollection = {};
+    this._responseService.getResponsesById(this.report.id).subscribe(
+      res => {
+        // console.log(res);
+        for (const item in res) {
+          if (item.match(/^response.+/i)) {
+            responseCollection[item] = res[item];
+          }
         }
-        ]
-      },
-      options: {
-        title: {
-          display: true,
-          text: 'Graph'
-        },
-        responsive: false,
-        display: true,
-      }
-    });
-  }
-
-  sketch3Lines(labels, data1, data2, data3) {
-    this.canvas = document.getElementById('myChart');
-    this.ctx = this.canvas.getContext('2d');
-    const data = {
-      labels: labels,
-      datasets: [
-        {
-          data: data1,
-          //label: this.input.type,
-          borderColor: '#3e95cd',
-          fill: false
-        },
-        {
-          data: data2,
-          //label: this.input.type,
-          borderColor: '#3e95cd',
-          fill: false
-        },
-        {
-          data: data3,
-          //label: this.input.type,
-          borderColor: '#3e95cd',
-          fill: false
+        // tslint:disable:forin
+        if (Object.keys(responseCollection).length <= 0) {
+          console.log("There is no responses.");
+        } else {
+          this.reportData = {};
+          this.dates = [];
+          for (const item in responseCollection) {
+            // console.log(this.types[i]);
+            const date = item.substring(9);
+            // console.log(x);
+            this.dates.push(date);
+            this.reportData[date] = responseCollection[item];
+          }
+          this.showDate = true;
+          // console.log(this.dates);
+          console.log(this.reportData);
         }
-      ]
-    };
-    const options = {
-      title: {
-        display: true,
-        text: 'Graph'
       },
-      responsive: false,
-      display: true,
-    };
+      err => {
+        console.log(err);
+      }
+    );
+    if (this.report.date !== "") {
+      this._responseService
+        .getListQuestionsById(this.reportData[this.report.date]["idPath"])
+        .subscribe(
+          res => {
+            console.log(res);
+            const doc = new jsPDF();
+            let cols = ["Days", "Response"];
+            let rows = [];
 
-    const myChart = new Chart(this.ctx, {
-      type: 'line',
-      data: data,
-      options: options
-    });
+            // doc.autoTable(cols, rows);
+            // doc.save('Report[' + this.report.date + '].pdf');
+            // window.open('report.html', '_blank');
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    }
   }
-
   viewChart() {
     const dataToSketch = this.formatDataToSketch(this.data, this.input.type);
-    console.log(dataToSketch);
+    // console.log(dataToSketch);
     this.sketch1Line(dataToSketch.labels, dataToSketch.data);
 
     /*let x = [];
@@ -178,44 +212,92 @@ export class ChartComponent implements OnInit {
 */
   }
 
-  onClick() {
-    const responseCollection = {};
-    this._responseService.getResponsesById(this.input.id).subscribe(
-      res => {
-        // console.log(res);
-        for (const item in res) {
-          if (item.match(/^response.+/i)) {
-            responseCollection[item] = res[item];
-          }
-        }
-        // tslint:disable:forin
-        if (Object.keys(responseCollection).length > 0) {
-          this.data = {};
-          const valuesArray = [];
-          for (const item in responseCollection) {
-            // console.log(this.types[i]);
-            const date = item.substring(9);
-            const x = responseCollection[item]['biochimie'][this.input.type];
-            // console.log(x);
-            const value = {};
-            if (x !== -1) {
-              value[date] = x;
-              // console.log(value);
-              valuesArray.push(value);
-            }
-          }
-          this.data[this.input.type] = valuesArray;
-          // this.allData[this.input.type] = valuesArray;
-          console.log(this.data);
-          this.viewChart();
-        } else {
-          console.log('There is no responses.');
-        }
-      },
-      err => {
-        console.log(err);
+  formatDataToSketch(dataSource: object, type: string) {
+    const x = dataSource[type];
+    const labels = [];
+    const data = [];
+    for (const item in x) {
+      for (const date in x[item]) {
+        labels.push(date);
+        data.push(x[item][date]);
       }
-    );
+    }
+    return { labels: labels, data: data };
+  }
 
+  sketch1Line(labels, data) {
+    if (this.myChart) {
+      this.myChart.destroy();
+    }
+    this.canvas = document.getElementById("myChart");
+    this.ctx = this.canvas.getContext("2d");
+    this.myChart = new Chart(this.ctx, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            data: data,
+            label: this.input.type,
+            borderColor:
+              "#" +
+              Math.random()
+                .toString(16)
+                .slice(-6),
+            fill: false
+          }
+        ]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Graph"
+        },
+        responsive: false,
+        display: true
+      }
+    });
+  }
+
+  sketch3Lines(labels, data1, data2, data3) {
+    this.canvas = document.getElementById("myChart");
+    this.ctx = this.canvas.getContext("2d");
+    const data = {
+      labels: labels,
+      datasets: [
+        {
+          data: data1,
+          // label: this.input.type,
+          borderColor: "#3e95cd",
+          fill: false
+        },
+        {
+          data: data2,
+          // label: this.input.type,
+          borderColor: "#3e95cd",
+          fill: false
+        },
+        {
+          data: data3,
+          // label: this.input.type,
+          borderColor: "#3e95cd",
+          fill: false
+        }
+      ]
+    };
+    const options = {
+      title: {
+        display: true,
+        text: "Graph"
+      },
+      responsive: false,
+      display: true
+    };
+
+    const myChart = new Chart(this.ctx, {
+      type: "line",
+      data: data,
+      options: options
+    });
   }
 }

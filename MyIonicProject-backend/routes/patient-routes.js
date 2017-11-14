@@ -239,7 +239,7 @@ app.post('/profilPatient', function (req, res) {
             attachments: [
                 {
                     filename: 'ver0311.apk',
-                    path: '/home/huy/Downloads/ver0311.apk'
+                    path: 'D:/PROGRAMMING/Projects/E-SANTE_APP/ReleasedApp/ver0311.apk'
                 }
             ]
         };

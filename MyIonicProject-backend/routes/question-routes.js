@@ -132,9 +132,10 @@ app.post('/responses', function (req, res) {
 
     function addDate(data) {
         var key = 'response ' + getStringDate();
-        return x = {
+        var x = {
             [key]: data,
         };
+        return x;
     }
 
     res.status(201).send({
