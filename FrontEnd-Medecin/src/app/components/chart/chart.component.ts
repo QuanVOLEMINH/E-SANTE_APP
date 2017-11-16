@@ -31,12 +31,12 @@ export class ChartComponent implements OnInit {
   myChart: any;
   showDate = false;
   showTypes = false;
-  reset: boolean;
-  constructor(private _responseService: ResponseService) {}
 
-  ngOnInit() {}
+  constructor(private _responseService: ResponseService) { }
+
+  ngOnInit() { }
   // Get list of types
-  getTypes(id) {}
+  getTypes(id) { }
 
   clearTypes() {
     this.types = [];
@@ -156,91 +156,123 @@ export class ChartComponent implements OnInit {
       this._responseService
         .getListQuestionsById(this.reportData[this.report.date]["idPath"])
         .subscribe(
-          res => {
-            // console.log(res);
-            const data = this.reportData[this.report.date];
-            // console.log(data);
-            const labels = res["questioncatalog"];
-            const newData = {};
-            // console.log(labels);
-            const qna = {};
+        res => {
+          // console.log(res);
+          const data = this.reportData[this.report.date];
+          // console.log(data);
+          const labels = res["questioncatalog"];
+          const newData = {};
+          // console.log(labels);
+          const qna = {};
 
-            for (const item in labels) {
-              if (data[item] !== undefined) {
-                newData[item] = data[item];
-              }
-              for (const val in labels[item]["questions"]) {
-                qna[labels[item]["questions"][val]["label"]] =
-                  newData[item][val];
-              }
+          for (const item in labels) {
+            if (data[item] !== undefined) {
+              newData[item] = data[item];
             }
-            // console.log(newData);
-            console.log(qna);
-            const doc = new jsPDF();
-            const cols = ["Questions", "Responses"];
-            const rows = [];
-            const response = this.reportData[this.report.date];
-            for (const item in qna) {
-              const temp = [item, qna[item]];
-              rows.push(temp);
+            for (const val in labels[item]["questions"]) {
+              qna[labels[item]["questions"][val]["label"]] =
+                newData[item][val];
             }
-            // console.log(rows);
-            // doc.text(20, 20, );
-            const idForRp = this.report.id;
-            const dateForRp = this.report.date;
-            const header = function(s) {
-              doc.setFontSize(18);
-              doc.setTextColor(40);
-              doc.setFontStyle("bold");
-              doc.text(
-                "Rapport du patient numéro " + idForRp + " le " + dateForRp,
-                s.settings.margin.left,
-                30
-              );
-            };
-
-            const options = {
-              addPageContent: header,
-              margin: {
-                top: 10
-              },
-              startY: doc.autoTableEndPosY() + 40
-            };
-
-            doc.autoTable(cols, rows, options);
-
-            // open pdf in a newtab
-            const string = doc.output("datauristring");
-            const iframe =
-              "<iframe width='100%' height='100%' src='" +
-              string +
-              "'></iframe>";
-            const x = window.open();
-            x.document.open();
-            x.document.write(iframe);
-            x.document.close();
-            // doc.save('Report[' + this.report.id + '][' + this.report.date + '].pdf');
-            // window.open('report.html', '_blank');
-          },
-          err => {
-            console.log(err);
           }
+          // console.log(newData);
+          // console.log(qna);
+          this.exportReport(qna, this.report.id, this.report.date);
+
+        },
+        err => {
+          console.log(err);
+        }
         );
     }
   }
+
+  exportReport(questions_answers, id, date) {
+    const doc = new jsPDF();
+    const cols = ["Questions", "Responses"];
+    const rows = [];
+    const response = this.reportData[date];
+    let spacing = 40;
+    let numericalOrder = 1;
+    const pageHeight = doc.internal.pageSize.height;
+    const pageWidth = doc.internal.pageSize.width;
+    doc.setFont("courier");
+    // for title
+    doc.setFontSize(20);
+    doc.setFontStyle("bold");
+    doc.setTextColor(255, 0, 0);
+    const title = "Rapport du patient numéro " + id + " le " + date;
+    // console.log(doc.getTextDimensions(title));
+    const textWidth = doc.getStringUnitWidth(title) * 20 * 0.352778;
+    // console.log(pageWidth);
+    console.log((pageWidth - textWidth) / 2);
+    doc.text((pageWidth - textWidth) / 2, spacing - 20, title);
+
+    // for content - questions & answers
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(12);
+    for (const item in questions_answers) {
+      const temp = [item, questions_answers[item]];
+      rows.push(temp);
+      if (spacing > pageHeight - 20) {
+        doc.addPage();
+        spacing = 20;
+      }
+      doc.setFontStyle("bold");
+      doc.text(20, spacing, String(numericalOrder++) + '. ' + item);
+      doc.setFontStyle("normal");
+      doc.text(30, spacing + 10, questions_answers[item]);
+      spacing += 20;
+    }
+
+
+    /*
+    const header = function (s) {
+      doc.setFontSize(18);
+      doc.setTextColor(40);
+      doc.setFontStyle("bold");
+      doc.text(
+        "Rapport du patient numéro " + id + " le " + date,
+        s.settings.margin.left,
+        30
+      );
+    };
+    
+    const options = {
+      addPageContent: header,
+      margin: {
+        top: 10
+      },
+      startY: doc.autoTableEndPosY() + 40
+    };
+    */
+
+    //doc.autoTable(cols, rows, options);
+
+    // open pdf in a newtab
+    const string = doc.output("datauristring");
+    const iframe =
+      "<iframe width='100%' height='100%' src='" +
+      string +
+      "'></iframe>";
+    const x = window.open();
+    x.document.open();
+    x.document.write(iframe);
+    x.document.close();
+    // doc.save('Report[' + this.report.id + '][' + this.report.date + '].pdf');
+  }
+
   viewChart() {
     const dataToSketch = this.formatDataToSketch(this.data, this.input.type);
     // console.log(dataToSketch);
     this.sketch1Line(dataToSketch.labels, dataToSketch.data);
 
-    /*let x = [];
+    /* 
+    let x = [];
     for (let i = 0; i < this.types.length; i++) {
       x[i] = this.formatDataToSketch(this.allData, this.types[i]);
-    }*/
+    }
 
     // this.sketch3Lines(x[0].labels, x[0].data, x[1].data, x[2].data);
-
-    /*s
     let canvas2, ctx2: any;
     canvas2 = document.getElementById("testChart");
     ctx2 = canvas2.getContext("2d");
@@ -277,8 +309,8 @@ export class ChartComponent implements OnInit {
     let options = {
       scaleLabel: '<%=value%>',
     };
-    //const testChart = new Chart(ctx2).Scatter(data2, options);
-*/
+    const testChart = new Chart(ctx2).Scatter(data2, options);
+    */
   }
 
   formatDataToSketch(dataSource: object, type: string) {
