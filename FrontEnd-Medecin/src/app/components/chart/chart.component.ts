@@ -164,6 +164,7 @@ export class ChartComponent implements OnInit {
           const newData = {};
           // console.log(labels);
           const qna = {};
+          const rawData = {};
 
           for (const item in labels) {
             if (data[item] !== undefined) {
@@ -172,11 +173,12 @@ export class ChartComponent implements OnInit {
             for (const val in labels[item]["questions"]) {
               qna[labels[item]["questions"][val]["label"]] =
                 newData[item][val];
+              rawData[labels[item]["questions"][val]["label"]] = val;
             }
           }
-          // console.log(newData);
-          // console.log(qna);
-          this.exportReport(qna, this.report.id, this.report.date);
+          //console.log(newData);
+          console.log(rawData);
+          this.exportReport(rawData, qna, this.report.id, this.report.date);
 
         },
         err => {
@@ -186,44 +188,87 @@ export class ChartComponent implements OnInit {
     }
   }
 
-  exportReport(questions_answers, id, date) {
-    const doc = new jsPDF();
+  exportReport(rawData, questions_answers, id, date) {
+    const warning = {
+      'glycemie': {
+        'level1': 600,
+        'level2': 1000,
+        'level3': 2000
+      },
+      'cholesterol': {
+        'level1': 1000,
+        'level2': 2000,
+        'level3': 3000
+      },
+      'triglycerides': {
+        'level1': 1000,
+        'level2': 1500,
+        'level3': 2000
+      }
+    };
+    /*
     const cols = ["Questions", "Responses"];
     const rows = [];
+    */
     const response = this.reportData[date];
+
+    const doc = new jsPDF();
     let spacing = 40;
     let numericalOrder = 1;
+    // size of page, here is A4
     const pageHeight = doc.internal.pageSize.height;
     const pageWidth = doc.internal.pageSize.width;
     doc.setFont("courier");
+
     // for title
     doc.setFontSize(20);
     doc.setFontStyle("bold");
     doc.setTextColor(255, 0, 0);
     const title = "Rapport du patient numéro " + id + " le " + date;
-    // console.log(doc.getTextDimensions(title));
+
+    // textWidth in millimetre
     const textWidth = doc.getStringUnitWidth(title) * 20 * 0.352778;
-    // console.log(pageWidth);
-    console.log((pageWidth - textWidth) / 2);
+    // center align
     doc.text((pageWidth - textWidth) / 2, spacing - 20, title);
+
 
     // for content - questions & answers
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(12);
     for (const item in questions_answers) {
+      /*
       const temp = [item, questions_answers[item]];
       rows.push(temp);
-      if (spacing > pageHeight - 20) {
+      */
+      if (spacing > pageHeight - 30) {
         doc.addPage();
         spacing = 20;
       }
       doc.setFontStyle("bold");
       doc.text(20, spacing, String(numericalOrder++) + '. ' + item);
       doc.setFontStyle("normal");
-      doc.text(30, spacing + 10, questions_answers[item]);
-      spacing += 20;
-    }
+      doc.text(30, spacing += 10, String(questions_answers[item]));
+      // console.log(questions_answers[item]);
 
+      // add warnings
+      doc.setTextColor(255, 0, 0);
+      doc.setFontStyle("bold");
+      if (warning[rawData[item]] !== undefined) {
+        console.log(warning[rawData[item]]['level1']);
+        let annonce = '';
+        if (questions_answers[item] >= warning[rawData[item]]['level1'] && questions_answers[item] < warning[rawData[item]]['level2']) {
+          annonce = '* Higher than normal *';
+        } else if (questions_answers[item] >= warning[rawData[item]]['level2'] && questions_answers[item] < warning[rawData[item]]['level3']) {
+          annonce = '** Dangerous **';
+        } else if (questions_answers[item] >= warning[rawData[item]]['level3']) {
+          annonce = '*** Emergency ***';
+        }
+        if (annonce != '') doc.text(30, spacing += 10, annonce);
+      }
+      doc.setFontStyle("normal");
+      doc.setTextColor(0, 0, 0);
+      spacing += 15;
+    }
 
     /*
     const header = function (s) {
@@ -257,7 +302,7 @@ export class ChartComponent implements OnInit {
     const x = window.open();
     x.document.open();
     x.document.write(iframe);
-    x.document.close();
+    // x.document.close();
     // doc.save('Report[' + this.report.id + '][' + this.report.date + '].pdf');
   }
 
