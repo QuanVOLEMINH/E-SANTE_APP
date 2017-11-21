@@ -1,0 +1,14 @@
+form{
+    margin: 20px auto;
+}
+button{
+    width: 100px;
+}
+
+#report{
+    border: 1px solid grey;
+    background-color: lightgrey;
+    width: 700px;
+    margin: 10px auto;
+    padding: 20px 40px 10px;
+}

@@ -14,6 +14,7 @@ import {TextMaskModule} from "angular2-text-mask";
 import {Ng2OrderModule} from "ng2-order-pipe";
 import {PatientDetailComponent} from "./components/patient-detail/patient-detail.component";
 import { ChartComponent } from './components/chart/chart.component';
+import { ReportComponent } from './components/report/report.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ChartComponent } from './components/chart/chart.component';
     DashboardComponent,
     PatientComponent,
     PatientDetailComponent,
-    ChartComponent
+    ChartComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,
