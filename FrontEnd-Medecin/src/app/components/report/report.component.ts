@@ -14,9 +14,12 @@ export class ReportComponent implements OnInit {
         id: "",
         date: ""
     };
+    private remark = '';
     private dates = [];
     private reportData = {};
     private displayData = [];
+    private rawData = {};
+    private qna = {};
     showDate = false;
     showList = false;
     constructor(private _responseService: ResponseService) { }
@@ -28,6 +31,11 @@ export class ReportComponent implements OnInit {
         this.showDate = false;
         this.showList = false;
         this.report.date = "";
+    }
+
+    export() {
+        // console.log(this.remark);
+        this.exportToPDF(this.rawData, this.qna, this.report.id, this.report.date, this.remark);
     }
     onExport() {
         const responseCollection = {};
@@ -87,9 +95,12 @@ export class ReportComponent implements OnInit {
                         this.displayData.push({ key: key, value: qna[key] });
                     }
                     this.showList = true;
+
+                    this.qna = qna;
+                    this.rawData = rawData;
                     // console.log(newData);
                     // console.log(qna);
-                    // this.exportReport(rawData, qna, this.report.id, this.report.date);
+                    // this.exportToPDF(rawData, qna, this.report.id, this.report.date);
 
                 },
                 err => {
@@ -99,7 +110,7 @@ export class ReportComponent implements OnInit {
         }
     }
 
-    exportReport(rawData, questions_answers, id, date) {
+    exportToPDF(rawData, questions_answers, id, date, remark) {
         const warning = {
             'glycemie': {
                 'level1': 600,
@@ -129,7 +140,7 @@ export class ReportComponent implements OnInit {
         // size of page, here is A4
         const pageHeight = doc.internal.pageSize.height;
         const pageWidth = doc.internal.pageSize.width;
-        doc.setFont("courier");
+        doc.setFont("times");
 
         // for title
         doc.setFontSize(20);
@@ -138,9 +149,9 @@ export class ReportComponent implements OnInit {
         const title = "Rapport du patient numéro " + id + " le " + date;
 
         // textWidth in millimetre
-        const textWidth = doc.getStringUnitWidth(title) * 20 * 0.352778;
+        const titleWidth = doc.getStringUnitWidth(title) * 20 * 0.352778;
         // center align
-        doc.text((pageWidth - textWidth) / 2, spacing - 20, title);
+        doc.text((pageWidth - titleWidth) / 2, spacing - 20, title);
 
 
         // for content - questions & answers
@@ -179,7 +190,14 @@ export class ReportComponent implements OnInit {
             doc.setTextColor(0, 0, 0);
             spacing += 15;
         }
-
+        // remark
+        doc.setFontStyle("bold");
+        doc.setFontSize(16);
+        doc.text(20, spacing, 'Remarque');
+        // remark body
+        doc.setFontStyle("normal");
+        doc.setFontSize(12);
+        doc.text(20, spacing+=10, doc.splitTextToSize(remark, pageWidth - 40));
         /*
         const header = function (s) {
           doc.setFontSize(18);

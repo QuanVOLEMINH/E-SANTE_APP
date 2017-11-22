@@ -6,9 +6,47 @@ button{
 }
 
 #report{
-    border: 1px solid grey;
-    background-color: lightgrey;
+    border: 3px solid grey;
     width: 700px;
     margin: 10px auto;
-    padding: 20px 40px 10px;
+    padding: 10px 20px 10px;
+    color: blue;
 }
+#report li{
+    margin: 10px 0px;
+}
+#report h3{
+    text-align: center;
+    color: red;
+    margin-bottom: 40px;
+}
+
+#remark {
+    width: 800px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+#remark button {
+    margin: 10px auto;
+}
+
+#remark textarea {
+    width: 700px;
+    height: 150px;
+    margin: 10px auto;
+    white-space: pre-line;
+}
+
+#inlineRemark{
+    background-color: #f2f2f2;
+    border: 1px solid grey; 
+    padding: 5px 20px;    
+    word-break: break-all;
+}
+
+#inlineRemark p{
+    white-space: pre-line;
+}
+
+    

@@ -17,12 +17,38 @@
       </div>
     </div>
   </form>
-  <div *ngIf="report.id && showList" id="report">
-    <ol>
-      <li *ngFor="let data of displayData; let i = index ">
-        <strong>{{ data.key }} </strong> <br>
-        {{ data.value }}
-      </li>
-    </ol>
+  <div *ngIf="report.id && showList">
+    <div id="report">
+      <h3>
+        <strong> Rapport du patient numéro {{report.id}} le {{report.date}}</strong>
+      </h3>
+      <hr>
+      <div>
+        <ol>
+          <li *ngFor="let data of displayData; let i = index ">
+            <strong>{{ data.key }} </strong>
+            <br> &nbsp; &nbsp; {{ data.value }}
+          </li>
+        </ol>
+      </div>
+      <div id="inlineRemark" *ngIf="remark">
+        <h4>
+          <strong>
+            <u>Remarque</u>
+          </strong>
+        </h4>
+        <p>{{remark}}</p>
+
+      </div>
+    </div>
+    <div id="remark">
+      <h4>
+        <strong>
+          <u>Remarque</u>
+        </strong>
+      </h4>
+      <textarea type="text" class="form-control" name="remark" [(ngModel)]="remark"></textarea>
+      <button type="submit" class="btn btn-success" (click)="export()"> Export </button>
+    </div>
   </div>
 </div>

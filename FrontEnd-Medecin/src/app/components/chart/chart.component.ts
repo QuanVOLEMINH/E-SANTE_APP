@@ -202,7 +202,25 @@ export class ChartComponent implements OnInit {
           text: "Graph"
         },
         responsive: false,
-        display: true
+        display: true,
+        /*animation: {
+          onComplete: function () {
+            let ctx = this.ctx;
+            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontFamily, 'normal', Chart.defaults.global.defaultFontFamily);
+            ctx.fillStyle = "black";
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+
+            this.data.datasets.forEach(function (dataset) {
+              for (let i = 0; i < dataset.data.length; i++) {
+                for (let key in dataset._meta) {
+                  var model = dataset._meta[key].data[i]._model;
+                  ctx.fillText(dataset.data[i], model.x, model.y - 5);
+                }
+              }
+            });
+          }
+        }*/
       }
     });
   }
