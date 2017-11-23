@@ -1,201 +1,15 @@
 <div class="tab-content container-fluid">
-  <ul class="nav nav-pills">
-    <li class="active"><a data-toggle="pill" href="#new"><i class="glyphicon glyphicon-user"></i> New</a></li>
-    <li><a data-toggle="pill" href="#modify"><i class="glyphicon glyphicon-list"></i> List</a></li>
-    <li><a data-toggle="pill" href="#delete"><i class="glyphicon glyphicon-remove-sign"></i> Delete</a></li>
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="pill" href="#list"><i class="glyphicon glyphicon-list"></i> LIST</a></li>
+    <li><a data-toggle="pill" href="#new"><i class="glyphicon glyphicon-user"></i> NEW</a></li>
+    <li><a data-toggle="pill" href="#delete"><i class="glyphicon glyphicon-remove-sign"></i> DELETE</a></li>
   </ul>
-  <!--Create new patients-->
-  <div id="new" class="tab-pane fade in active">
-    <div class="page-header">
-      <h3>CREATE NEW PATIENT</h3>
-    </div>
-    <form [formGroup]="myForm"
-          (ngSubmit)="onSubmit(myForm.value)"
-          class="well"
-          novalidate>
-      <div class="row">
-        <div class="form-group col-lg-4">
-          <label for="first">First Name</label>
-          <input type="text"
-                 id="first"
-                 formControlName="first"
-                 class="form-control">
-          <div
-            *ngIf="myForm.controls['first'].invalid && (myForm.controls['first'].dirty || myForm.controls['first'].touched)"
-            class="alert alert-danger">
-            <div *ngIf="myForm.controls['first'].errors.required">
-              {{titleAlert}}
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group col-lg-4">
-          <label>Last Name</label>
-          <input type="text"
-                 id="last_name"
-                 formControlName="last"
-                 class="form-control">
-          <div
-            *ngIf="myForm.controls['last'].invalid && (myForm.controls['last'].dirty || myForm.controls['last'].touched)"
-            class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['last'].errors.required">
-              {{titleAlert}}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-lg-4">
-          <label>Sex</label>
-          <select formControlName="gender"
-                  class="form-control">
-            <option *ngFor="let gender of genders" [value]="gender">{{gender}}</option>
-          </select>
-          <div
-            *ngIf="myForm.controls['gender'].invalid && (myForm.controls['gender'].dirty || myForm.controls['gender'].touched)"
-            class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['gender'].errors.required">
-              {{titleAlert}}
-            </div>
-          </div>
-        </div>
-        <div class="form-group col-lg-4">
-          <label>Date of Birth</label>
-          <my-date-picker name="mydate"
-                          [options]="myDatePickerOptions"
-                          formControlName="myDate"
-                          (inputFocusBlur)="calculateAge()"></my-date-picker>
-          <div
-            *ngIf="myForm.controls['myDate'].invalid && (myForm.controls['myDate'].dirty || myForm.controls['myDate'].touched)"
-            class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['myDate'].errors.required">
-              {{titleAlert}}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-lg-4">
-          <label>Phone Number</label>
-          <input type="text"
-                 formControlName="phone"
-                 class="form-control" placeholder="+33 12 34 56 78 90" [textMask]="{mask: mask}">
-          <div
-            *ngIf="myForm.controls['phone'].invalid && (myForm.controls['phone'].dirty || myForm.controls['phone'].touched)"
-            class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['phone'].errors.required">
-              {{titleAlert}}
-            </div>
-          </div>
-        </div>
-        <div class="form-group col-lg-4">
-          <label>Age</label>
-          <input type="text"
-                 id="age"
-                 formControlName="age"
-                 class="form-control" [(ngModel)]="this.age">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email"
-               id="email"
-               formControlName="email"
-               class="form-control" email="true">
-        <div
-          *ngIf="myForm.controls['email'].invalid && (myForm.controls['email'].dirty || myForm.controls['email'].touched)"
-          class="alert alert-danger fade in">
-          <div *ngIf="myForm.controls['email'].errors.required">
-            {{titleAlert}}
-          </div>
-          <div *ngIf="myForm.controls['email'].errors.email">Please input a valid email.</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Address</label>
-        <input type="text"
-               formControlName="address"
-               class="form-control">
-        <div
-          *ngIf="myForm.controls['address'].invalid && (myForm.controls['address'].dirty || myForm.controls['address'].touched)"
-          class="alert alert-danger fade in">
-          <div *ngIf="myForm.controls['address'].errors.required">
-            {{titleAlert}}
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-lg-6">
-          <label>City</label>
-          <input type="text"
-                 formControlName="city"
-                 class="form-control">
-          <div
-            *ngIf="myForm.controls['city'].invalid && (myForm.controls['city'].dirty || myForm.controls['city'].touched)"
-            class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['city'].errors.required">
-              {{titleAlert}}
-            </div>
-          </div>
-        </div>
-        <div class="form-group col-lg-6">
-          <label>Zip</label>
-          <input type="text"
-                 class="form-control"
-                 formControlName="zip"/>
-          <div
-            *ngIf="myForm.controls['zip'].invalid && (myForm.controls['zip'].dirty || myForm.controls['zip'].touched)"
-            class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['zip'].errors.required">
-              {{titleAlert}}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="form-group">
-          <label>ID Reference</label>
-          <input type="text"
-                 formControlName="id"
-                 class="form-control">
-          <div *ngIf="myForm.controls['id'].invalid && (myForm.controls['id'].dirty || myForm.controls['id'].touched)"
-               class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['id'].errors.required">
-              {{titleAlert}}
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Pathology</label>
-          <select class="form-control" formControlName="pathology">
-            <option *ngFor="let pathology of pathologies" [value]="pathology">{{pathology}}</option>
-          </select>
-          <div
-            *ngIf="myForm.controls['pathology'].invalid && (myForm.controls['pathology'].dirty || myForm.controls['pathology'].touched)"
-            class="alert alert-danger fade in">
-            <div *ngIf="myForm.controls['pathology'].errors.required">
-              {{titleAlert}}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="input-group-btn">
-        <button class="btn btn-danger" type="button" id="reset" (click)="reset()">Reset
-          <i class="glyphicon glyphicon-erase"></i>
-        </button>
-        <button class="btn btn-success" type="submit" id="submit" [disabled]="!myForm.valid">Submit
-          <i class="glyphicon glyphicon-ok"></i>
-        </button>
-      </div>
-    </form>
-  </div>
-
   <!--Modify a patient-->
-  <div id="modify" class="tab-pane fade">
+  <div id="list" class="tab-pane fade in active">
     <div class="page-header">
-      <h3>LIST PATIENT</h3>
+      <h3>SEARCH A PATIENT</h3>
     </div>
+    <!--Search Bar-->
     <form [formGroup]="modifyForm"
           (ngSubmit)="onGetListById(modifyForm.value.id)"
           class="well"
@@ -209,16 +23,19 @@
           *ngIf="modifyForm.controls['id'].invalid && (modifyForm.controls['id'].dirty || modifyForm.controls['id'].touched)"
           class="alert alert-danger fade in">
           <div *ngIf="modifyForm.controls['id'].errors.required">
-            {{titleAlert}}
+            {{titleRequire}}
           </div>
         </div>
       </div>
       <div class="input-group-btn">
-        <button class="btn btn-primary" type="submit" [disabled]="!modifyForm.valid">Find
+        <button class="btn btn-primary" type="submit" [disabled]="!modifyForm.valid" id="find">Find
           <i class="glyphicon glyphicon-search"></i>
         </button>
       </div>
     </form>
+    <div class="page-header">
+      <h3>LIST PATIENT</h3>
+    </div>
     <div class="table-responsive" *ngIf="currentPatient != null && isDeleted === false">
       <table class="table table-hover">
         <thead>
@@ -240,7 +57,11 @@
           <th>{{currentPatient._source.email}}</th>
           <th>{{currentPatient._source.phone}}</th>
           <th>
-            <a class="router-link btn btn-info" [routerLink]="['/patient-detail', currentPatient._source.id]" routerLinkActive="active" type="button">
+            <button class="btn btn-warning" type="button" id="backtolist" (click)="onBacktoList()">
+              <i class="glyphicon glyphicon-arrow-left"></i>
+            </button>
+            <a class="router-link btn btn-info" [routerLink]="['/patient-detail', currentPatient._source.id]"
+               routerLinkActive="active" type="button">
               <i class="glyphicon glyphicon-edit"></i>
             </a>
             <button class="btn btn-danger" type="button" (click)="onDelete(currentPatient._source.id)">
@@ -251,7 +72,7 @@
         </tbody>
       </table>
     </div>
-    <div class="table-responsive" *ngIf="currentPatient == null">
+    <div class="table-responsive container-fluid well" *ngIf="currentPatient == null">
       <table class="table table-hover">
         <thead>
         <tr>
@@ -272,8 +93,12 @@
           <th>{{patient._source.email}}</th>
           <th>{{patient._source.phone}}</th>
           <th>
-            <a class="router-link btn btn-info" [routerLink]="['/patient-detail', patient._source.id]" routerLinkActive="active" type="button"><i class="glyphicon glyphicon-edit"></i></a>
-
+            <a class="router-link btn btn-info"
+               [routerLink]="['/patient-detail', patient._source.id]"
+               routerLinkActive="active"
+               type="button">
+              <i class="glyphicon glyphicon-edit"></i>
+            </a>
             <button class="btn btn-danger" type="button" (click)="onDelete(patient._source.id)">
               <i class="glyphicon glyphicon-trash"></i>
             </button>
@@ -283,7 +108,351 @@
       </table>
     </div>
   </div>
+  <!--Create new patients-->
+  <div id="new" class="tab-pane fade">
+    <form [formGroup]="myForm"
+          (ngSubmit)="onCreate(myForm.value)"
+          novalidate>
+      <div class="container">
+        <h2>CREATE NEW PATIENT</h2>
+        <div class="panel-group">
+          <!--Patient Information-->
+          <div class="panel panel-primary">
+            <div class="panel-heading"><strong>PATIENT INFORMATION</strong></div>
+            <div class="panel-body">
+              <!--FIRST - LAST - ID-->
+              <div class="row">
+                <div class="form-group col-sm-4">
+                  <label for="first">First Name</label>
+                  <input type="text"
+                         id="first"
+                         formControlName="first"
+                         class="form-control">
+                  <div
+                    *ngIf="myForm.controls['first'].invalid && (myForm.controls['first'].dirty || myForm.controls['first'].touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="myForm.controls['first'].errors.required">
+                      {{validationMessages.first.required}}
+                    </div>
+                    <div *ngIf="myForm.controls['first'].errors.pattern">
+                      {{validationMessages.first.pattern}}
+                    </div>
+                  </div>
+                </div>
 
+                <div class="form-group col-sm-4">
+                  <label>Last Name</label>
+                  <input type="text"
+                         id="last_name"
+                         formControlName="last"
+                         class="form-control">
+                  <div
+                    *ngIf="myForm.controls['last'].invalid && (myForm.controls['last'].dirty || myForm.controls['last'].touched)"
+                    class="alert alert-danger fade in">
+                    <div *ngIf="myForm.controls['last'].errors.required">
+                      {{validationMessages.last.required}}
+                    </div>
+                    <div *ngIf="myForm.controls['last'].errors.pattern">
+                      {{validationMessages.last.pattern}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                  <label>ID Reference</label>
+                  <input type="text"
+                         formControlName="id"
+                         class="form-control">
+                  <div
+                    *ngIf="myForm.controls['id'].invalid && (myForm.controls['id'].dirty || myForm.controls['id'].touched)"
+                    class="alert alert-danger fade in">
+                    <div *ngIf="myForm.controls['id'].errors.required">
+                      {{validationMessages.id.required}}
+                    </div>
+                    <div *ngIf="myForm.controls['id'].errors.pattern">
+                      {{validationMessages.id.pattern}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--GENDER - DATE OF BIRTH - AGE-->
+              <div class="row">
+                <div class="form-group col-sm-4">
+                  <label>Gender</label>
+                  <select formControlName="gender"
+                          class="form-control">
+                    <option *ngFor="let gender of genders" [value]="gender">{{gender}}</option>
+                  </select>
+                  <div
+                    *ngIf="myForm.controls['gender'].invalid && (myForm.controls['gender'].dirty || myForm.controls['gender'].touched)"
+                    class="alert alert-danger fade in">
+                    <div *ngIf="myForm.controls['gender'].errors.required">
+                      {{validationMessages.gender.required}}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-4">
+                  <label>Date of Birth</label>
+                  <my-date-picker name="mydate"
+                                  [options]="myDatePickerOptions"
+                                  formControlName="myDate"
+                                  (inputFocusBlur)="calculateAge()"></my-date-picker>
+                </div>
+                <div class="form-group col-sm-4">
+                  <label>Age</label>
+                  <input type="text"
+                         id="age"
+                         formControlName="age"
+                         class="form-control" [(ngModel)]="this.age">
+                </div>
+              </div>
+              <!--PHONE NUMBER - EMAIL - MARITAL STATUS-->
+              <div class="row">
+                <div class="form-group col-sm-4">
+                  <label>Phone Number</label>
+                  <input type="text"
+                         formControlName="phone"
+                         class="form-control" placeholder="+33 12 34 56 78 90" [textMask]="{mask: mask}">
+                  <div
+                    *ngIf="myForm.controls['phone'].invalid && (myForm.controls['phone'].dirty || myForm.controls['phone'].touched)"
+                    class="alert alert-danger fade in">
+                    <div *ngIf="myForm.controls['phone'].errors.required">
+                      {{validationMessages.phone.required}}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-4">
+                  <label for="email">Email</label>
+                  <input type="email"
+                         id="email"
+                         formControlName="email"
+                         class="form-control" email="true">
+                  <div
+                    *ngIf="myForm.controls['email'].invalid && (myForm.controls['email'].dirty || myForm.controls['email'].touched)"
+                    class="alert alert-danger fade in">
+                    <div *ngIf="myForm.controls['email'].errors.email">{{validationMessages.email.email}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-4">
+                  <label>Marital status</label>
+                  <select formControlName="maritalStatus"
+                          class="form-control">
+                    <option *ngFor="let marital of maritals" [value]="marital">{{marital}}</option>
+                  </select>
+                  <div
+                    *ngIf="myForm.controls['maritalStatus'].invalid && (myForm.controls['maritalStatus'].dirty || myForm.controls['maritalStatus'].touched)"
+                    class="alert alert-danger fade in">
+                    <div *ngIf="myForm.controls['maritalStatus'].errors.required">
+                      {{validationMessages.maritalStatus.required}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--ADDRESS-->
+              <div class="form-group">
+                <label>Address</label>
+                <input type="text"
+                       formControlName="address"
+                       class="form-control">
+                <div
+                  *ngIf="myForm.controls['address'].invalid && (myForm.controls['address'].dirty || myForm.controls['address'].touched)"
+                  class="alert alert-danger fade in">
+                  <div *ngIf="myForm.controls['address'].errors.required">
+                    {{validationMessages.address.required}}
+                  </div>
+                </div>
+              </div>
+              <!--CITY - ZIP-->
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label>City</label>
+                  <input type="text"
+                         formControlName="city"
+                         class="form-control">
+                  <div
+                    *ngIf="myForm.controls['city'].invalid && (myForm.controls['city'].dirty || myForm.controls['city'].touched)"
+                    class="alert alert-danger fade in">
+                    <div *ngIf="myForm.controls['city'].errors.pattern">
+                      {{validationMessages.city.pattern}}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label>Zip Code</label>
+                  <input type="text"
+                         class="form-control"
+                         formControlName="zip"/>
+                  <div
+                    *ngIf="myForm.controls['zip'].invalid && (myForm.controls['zip'].dirty || myForm.controls['zip'].touched)"
+                    class="alert alert-danger fade in">
+                    <div *ngIf="myForm.controls['zip'].errors.pattern">
+                      {{validationMessages.zip.pattern}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--Pathology - Social Security Number-->
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label>Pathology</label>
+                  <select class="form-control" formControlName="pathology">
+                    <option *ngFor="let pathology of pathologies" [value]="pathology">{{pathology}}</option>
+                  </select>
+                  <div
+                    *ngIf="myForm.controls['pathology'].invalid && (myForm.controls['pathology'].dirty || myForm.controls['pathology'].touched)"
+                    class="alert alert-danger fade in">
+                    <div *ngIf="myForm.controls['pathology'].errors.required">
+                      {{validationMessages.pathology.required}}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label>Social Security Number</label>
+                  <input type="text"
+                         formControlName="socialSecurityNumber"
+                         class="form-control">
+                  <div
+                    *ngIf="myForm.controls['socialSecurityNumber'].invalid && (myForm.controls['socialSecurityNumber'].dirty || myForm.controls['socialSecurityNumber'].touched)"
+                    class="alert alert-danger fade in">
+                    <div *ngIf="myForm.controls['socialSecurityNumber'].errors.required">
+                      {{validationMessages.socialSecurityNumber.required}}
+                    </div>
+                    <div *ngIf="myForm.controls['socialSecurityNumber'].errors.pattern">
+                      {{validationMessages.socialSecurityNumber.pattern}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--Occupation - Employer - Employer phone no-->
+              <div class="row">
+                <div class="form-group col-sm-4">
+                  <label>Occupation</label>
+                  <input type="text"
+                         formControlName="occupation"
+                         class="form-control">
+                </div>
+                <div class="form-group col-sm-4">
+                  <label>Employer</label>
+                  <input type="text"
+                         formControlName="employer"
+                         class="form-control">
+                </div>
+                <div class="form-group col-sm-4">
+                  <label>Employer Phone Number</label>
+                  <input type="text"
+                         formControlName="employerPhoneNumber"
+                         class="form-control">
+                </div>
+              </div>
+              <!--Medical Doctor - Phone-->
+              <div class="row">
+                <div class="form-group col-sm-4">
+                  <label for="medicalDoctor">Doctor</label>
+                  <input type="text"
+                         id="medicalDoctor"
+                         formControlName="medicalDoctor"
+                         class="form-control">
+                  <div
+                    *ngIf="myForm.controls['medicalDoctor'].invalid && (myForm.controls['medicalDoctor'].dirty || myForm.controls['medicalDoctor'].touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="myForm.controls['medicalDoctor'].errors.required">
+                      {{validationMessages.medicalDoctor.required}}
+                    </div>
+                    <div *ngIf="myForm.controls['medicalDoctor'].errors.pattern">
+                      {{validationMessages.medicalDoctor.pattern}}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-4">
+                  <label>Phone Number of Doctor</label>
+                  <input type="text"
+                         formControlName="phoneDoctor"
+                         class="form-control" placeholder="+33 12 34 56 78 90" [textMask]="{mask: mask}">
+                  <div
+                    *ngIf="myForm.controls['phoneDoctor'].invalid && (myForm.controls['phoneDoctor'].dirty || myForm.controls['phoneDoctor'].touched)"
+                    class="alert alert-danger fade in">
+                    <div *ngIf="myForm.controls['phoneDoctor'].errors.required">
+                      {{validationMessages.phoneDoctor.required}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-primary">
+            <div class="panel-heading">INSURANCE INFORMATION</div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label for="insuredName">Name of insured</label>
+                  <input type="text"
+                         id="insuredName"
+                         formControlName="insuredName"
+                         class="form-control">
+                  <div
+                    *ngIf="myForm.controls['insuredName'].invalid && (myForm.controls['insuredName'].dirty || myForm.controls['insuredName'].touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="myForm.controls['insuredName'].errors.required">
+                      {{validationMessages.insuredName.required}}
+                    </div>
+                    <div *ngIf="myForm.controls['insuredName'].errors.pattern">
+                      {{validationMessages.insuredName.pattern}}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="relationWithPatient">Relationship to patient</label>
+                  <input type="text"
+                         id="relationWithPatient"
+                         formControlName="relationWithPatient"
+                         class="form-control">
+                </div>
+              </div>
+              <!--INSURANCE COMPANY-->
+              <div class="form-group">
+                <label for="insCompany">Insurance Company</label>
+                <input type="text"
+                       id="insCompany"
+                       formControlName="insCompany"
+                       class="form-control">
+              </div>
+              <!--INS CO ADDRESS-->
+              <div class="form-group">
+                <label>Insurance Company Address</label>
+                <input type="text"
+                       formControlName="insCompanyAddress"
+                       class="form-control">
+              </div>
+              <!--INS CO CITY - ZIP CODE-->
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label>City</label>
+                  <input type="text"
+                         formControlName="insCompanyCity"
+                         class="form-control">
+                </div>
+                <div class="form-group col-sm-6">
+                  <label>Zip Code</label>
+                  <input type="text"
+                         class="form-control"
+                         formControlName="insCompanyZip"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--BUTTON RESET - SUBMIT-->
+        <div class="input-group-btn">
+          <button class="btn btn-danger" type="button" id="reset" (click)="reset()">Reset
+            <i class="glyphicon glyphicon-erase"></i>
+          </button>
+          <button class="btn btn-success" type="submit" id="submit" [disabled]="!myForm.valid">Submit
+            <i class="glyphicon glyphicon-ok"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
   <!--Delete a patient-->
   <div id="delete" class="tab-pane fade">
     <div class="page-header">
@@ -302,7 +471,7 @@
           *ngIf="deleteForm.controls['id'].invalid && (deleteForm.controls['id'].dirty || deleteForm.controls['id'].touched)"
           class="alert alert-danger fade in">
           <div *ngIf="deleteForm.controls['id'].errors.required">
-            {{titleAlert}}
+            {{titleRequire}}
           </div>
         </div>
       </div>
@@ -313,4 +482,7 @@
       </div>
     </form>
   </div>
+  <ng2-toasty [position]="'center-center'"></ng2-toasty>
 </div>
+
+<ng-progress></ng-progress>

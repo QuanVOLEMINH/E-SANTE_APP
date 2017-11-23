@@ -52,11 +52,11 @@ app.get('/profilPatient/:id', function (req, res) {
         if (error) {
             console.log(error);
         } else {
-            console.log(response);
+            // console.log(response);
             res.status(200).json(response);
         }
     });
-    console.log('Successsssss');
+    // console.log('Successsssss');
 });
 
 //--------------------------------------------------------------------------------------------
@@ -89,26 +89,26 @@ app.post('/profilPatient', function (req, res) {
     var indexName2 = 'responsecatalog';
     var typeName = 'profilpatient';
     var typeName2 = 'response';
-    client.indices.exists({index: indexName}, function (err, resp) {
+    client.indices.exists({ index: indexName }, function (err, resp) {
         if (err) {
             errorHandler(err);
         } else {
             if (resp) {
-                //console.log('createData');
+                // console.log('createData');
                 createData(indexName, typeName);
-                //console.log(req.body);
+                // console.log(req.body);
             } else {
                 createIndex(indexName);
             }
         }
     });
 
-    client.indices.exists({index: indexName2}, function (err, resp) {
+    client.indices.exists({ index: indexName2 }, function (err, resp) {
         if (err) {
             errorHandler(err);
         } else {
             if (resp) {
-                console.log('createDataResponses');
+                // console.log('createDataResponses');
                 createDataResponses(indexName2, typeName2);
             } else {
                 createIndexResponses(indexName2);
@@ -117,7 +117,7 @@ app.post('/profilPatient', function (req, res) {
     });
 
     function createIndex(index) {
-        console.log('createIndex');
+        // console.log('createIndex');
         client.indices.create({
             index: index
         }, function (err, resp) {
@@ -125,16 +125,16 @@ app.post('/profilPatient', function (req, res) {
                 errorHandler(err);
             } else {
                 createData(indexName, typeName);
-                console.log('createData');
+                // console.log('createData');
             }
         });
     }
 
     function createData(index, type) {
-        console.log(index + '------' + type);
-        console.log('YYYYYYYYYYYYYYYYYYYY');
-        //console.log(req.body);
-        console.log('ZZZZZZZZZZZZZZZZZZZZZ');
+        // console.log(index + '------' + type);
+        // console.log('YYYYYYYYYYYYYYYYYYYY');
+        // console.log(req.body);
+        // console.log('ZZZZZZZZZZZZZZZZZZZZZ');
         client.index({
             index: index,
             type: type,
@@ -143,16 +143,17 @@ app.post('/profilPatient', function (req, res) {
         }, function (error, response) {
             if (error) {
                 console.log(error);
+                res.status(500).send({ 'msg': 'There was a problem adding the data to the database' });
             }
             else {
-                //console.log(response);
-                console.log('Generate password!!!!!!!!!!!');
+                // console.log(response);
+                // console.log('Generate password!!!!!!!!!!!');
                 //Generator Password for each Patient
                 var password = generator.generate({
                     length: 10,
                     numbers: true
                 });
-                console.log('Create password!!!!!!!!!!!');
+                // console.log('Create password!!!!!!!!!!!');
                 client.update({
                     index: index,
                     type: type,
@@ -167,7 +168,7 @@ app.post('/profilPatient', function (req, res) {
                     if (error) {
                         errorHandler(error);
                     } else {
-                        console.log(response);
+                        // console.log(response);
                         //send();
                         var content = 'ID: ' + req.body.id + '\nPassword: ' + password;
                         /*transporter.sendMail(inputmail(req.body.email, content), function (err, success) {
@@ -180,15 +181,16 @@ app.post('/profilPatient', function (req, res) {
                         });*/
                         send(req.body.email, content);
                     }
-                });
 
-                console.log('-_-___-_----_-');
+                });
+                res.status(200).send({ 'msg': 'New information has been created' });
+                // console.log('-_-___-_----_-');
             }
         });
     }
 
     function createIndexResponses(index) {
-        console.log('createIndexResponses');
+        // console.log('createIndexResponses');
         client.indices.create({
             index: index
         }, function (err, resp) {
@@ -196,24 +198,31 @@ app.post('/profilPatient', function (req, res) {
                 errorHandler(err);
             } else {
                 createDataResponses(indexName2, typeName2);
-                console.log('createData');
+                // console.log('createData');
             }
         });
     }
 
     function createDataResponses(index, type) {
-        console.log(index + '------' + type);
-        console.log('YYYYYYYYYYYYYYYYYYYY');
-        //console.log(req.body);
-        console.log('ZZZZZZZZZZZZZZZZZZZZZ');
+        // console.log(index + '------' + type);
+        // console.log('YYYYYYYYYYYYYYYYYYYY');
+        // console.log(req.body);
+        // console.log('ZZZZZZZZZZZZZZZZZZZZZ');
         client.index({
             index: index,
             type: type,
             id: req.body.id,
             body: {}
         }, function (error, response) {
-            console.log(error);
-            console.log(response);
+            if (error) {
+                console.log(error);
+                //res.status(500).send({'msg': 'There was a problem adding the data to the database'});
+            }
+            else {
+                // console.log(response);
+                //res.status(200).send({'msg': 'New information has been created'});
+            }
+
         });
     }
 
@@ -245,12 +254,13 @@ app.post('/profilPatient', function (req, res) {
         };
         return mailOption;
     }
+
     function send(receiver, content) {
         transporter.sendMail(inputmail(receiver, content), function (err, success) {
             if (err) {
                 console.log(err);
                 events.emit('error', err);
-                if (check<3) {
+                if (check < 3) {
                     send(receiver, content);
                 }
             }
@@ -261,9 +271,32 @@ app.post('/profilPatient', function (req, res) {
         });
     }
 
-    res.status(201).send({"msg": 'Success! New information has been created'});
+    //res.status(201).send({"msg": 'Success! New information has been created'});
 
 });
+
+//---------------------------------------------------------------------------------------------
+//PUT METHOD- Doctor Interface
+app.put('/profilPatient/:id', function (req, res) {
+    var indexName = 'profilcatalog';
+    var typeName = 'profilpatient';
+    console.log(req.body);
+    client.index({
+        index: indexName,
+        type: typeName,
+        id: req.body.id,
+        body: req.body
+    }, function (error, response) {
+        if (error) {
+            console.log(error);
+            res.status(500).send({ 'msg': 'There was a problem upgrading the data to the database' });
+        } else {
+            console.log(response);
+            res.status(200).send({ "msg": 'Success! Information has been updated!' });
+        }
+    });
+});
+
 
 //---------------------------------------------------------------------------------------------
 //DELETE METHOD- Doctor Interface
@@ -289,16 +322,19 @@ app.delete('/profilPatient/:id', function (req, res) {
             }, function (error, response) {
                 if (error) {
                     console.log(error);
-                    console.log('ERRORRRRR!!!')
+                    console.log('ERRORRRRR!!!');
+                    res.status(500).send({ 'msg': 'There was a problem deleting the user.' });
                 } else {
+                    res.status(200).send({ "msg": 'Deleted!!!' });
                     console.log(response);
                     console.log('Delete!!!!');
                 }
             });
         } else {
+            res.status(404).send('Sorry we cannot find this ID');
             console.log('error from server ' + error);
         }
     });
 
-    res.status(200).send({"msg": 'Deleted!!!'});
+    // res.status(200).send({"msg": 'Deleted!!!'});
 });

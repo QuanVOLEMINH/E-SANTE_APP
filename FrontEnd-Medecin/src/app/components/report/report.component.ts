@@ -10,29 +10,35 @@ import "jspdf-autotable";
     providers: [ResponseService]
 })
 export class ReportComponent implements OnInit {
-    private report = {
+    report = {
         id: "",
         date: ""
     };
-    private remark = '';
-    private dates = [];
-    private reportData = {};
-    private displayData = [];
-    private rawData = {};
-    private qna = {};
+    remark = '';
+    dates = [];
+    reportData = {};
+    displayData: any[];
+    rawData = {};
+    qna = {};
     showDate = false;
     showList = false;
     constructor(private _responseService: ResponseService) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        // this.displayData = [];
+    }
 
-    clearDates() {
+    clearData () {
         this.dates = [];
         this.showDate = false;
         this.showList = false;
         this.report.date = "";
+        this.remark = '';
     }
-
+    clearRemarkOnChangeDate () {
+        // console.log(this.report.date);
+        this.remark = '';
+    }
     export() {
         // console.log(this.remark);
         this.exportToPDF(this.rawData, this.qna, this.report.id, this.report.date, this.remark);
@@ -197,7 +203,7 @@ export class ReportComponent implements OnInit {
         // remark body
         doc.setFontStyle("normal");
         doc.setFontSize(12);
-        doc.text(20, spacing+=10, doc.splitTextToSize(remark, pageWidth - 40));
+        doc.text(20, spacing += 10, doc.splitTextToSize(remark, pageWidth - 40));
         /*
         const header = function (s) {
           doc.setFontSize(18);

@@ -4,11 +4,11 @@
     <div class="row">
       <div class="form-inline col-lg-3">
         <label for="id">ID</label>
-        <input type="text" class="form-control" name="id" [(ngModel)]="report.id" (ngModelChange)="clearDates()" required>
+        <input type="text" class="form-control" name="id" [(ngModel)]="report.id" (ngModelChange)="clearData()" required>
       </div>
       <div class="form-inline col-lg-3" *ngIf="report.id && showDate">
         <label for="reportDate">Date to export</label>
-        <select class="form-control " id="date" [(ngModel)]="report.date" name="report" required>
+        <select class="form-control " id="date" [(ngModel)]="report.date" name="report" (ngModelChange)="clearRemarkOnChangeDate()" required>
           <option *ngFor="let date of dates" [value]="date">{{date}}</option>
         </select>
       </div>

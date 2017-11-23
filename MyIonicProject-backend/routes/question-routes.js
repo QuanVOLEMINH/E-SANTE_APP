@@ -23,9 +23,9 @@ function getStringDate() {
 
 //GET QUESTIONS BY ID PATHOLOGY - APP
 app.get('/pathologies/:idPath', function (req, res) {
-    //console.log('++++++++++++++++++++++++++++++++++');
+    // console.log('++++++++++++++++++++++++++++++++++');
     var id = req.params.idPath;
-    //console.log(id);
+    // console.log(id);
     var indexName = 'questionscatalog';
     var typeName = 'questions';
     client.search({
@@ -33,8 +33,8 @@ app.get('/pathologies/:idPath', function (req, res) {
         type: typeName,
         q: 'idPath:' + id
     }).then(function (resp) {
-        console.log(resp.hits.hits);
-        //console.log('---------------------------------');
+        // console.log(resp.hits.hits);
+        // console.log('---------------------------------');
         var hits = {};
         for (var oneCatalog of resp.hits.hits) {
             hits = oneCatalog._source;
@@ -44,15 +44,15 @@ app.get('/pathologies/:idPath', function (req, res) {
     }, function (err) {
         console.trace(err.message);
     });
-    //console.log('XXXXXXXXXXXXXX');
+    // console.log('XXXXXXXXXXXXXX');
 });
 
 
 //GET PROFIL PATIENT BY ID - APP - LOGIN
 app.get('/profilpatients/:idPatient', function (req, res) {
-    //console.log('++++++++++++++++++++++++++++++++++');
+    // console.log('++++++++++++++++++++++++++++++++++');
     var id = req.params.idPatient;
-    //console.log('id is ' + id);
+    // console.log('id is ' + id);
     var indexName = 'profilcatalog';
     var typeName = 'profilpatient';
     client.search({
@@ -60,8 +60,8 @@ app.get('/profilpatients/:idPatient', function (req, res) {
         type: typeName,
         q: 'id:' + id
     }).then(function (resp) {
-        //console.log(resp.hits.hits);
-        //console.log('---------------------------------');
+        // console.log(resp.hits.hits);
+        // console.log('---------------------------------');
         var hits = {};
         for (var oneCatalog of resp.hits.hits) {
             hits = oneCatalog._source;
@@ -71,14 +71,14 @@ app.get('/profilpatients/:idPatient', function (req, res) {
     }, function (err) {
         console.trace(err.message);
     });
-    //console.log('XXXXXXXXXXXXXX');
+    // console.log('XXXXXXXXXXXXXX');
 });
 
 //GET RESPONSES - medecin
 app.get('/patientresponses/:idPatient', function (req, res) {
-    //console.log('++++++++++++++++++++++++++++++++++');
+    // console.log('++++++++++++++++++++++++++++++++++');
     var idPatient = req.params.idPatient;
-    //console.log('id is ' + idPatient);
+    // console.log('id is ' + idPatient);
     var indexName = 'responsecatalog';
     var typeName = 'response';
     client.search({
@@ -86,7 +86,7 @@ app.get('/patientresponses/:idPatient', function (req, res) {
         type: typeName,
         q: '_id:' + idPatient
     }).then(function (resp) {
-        console.log(resp);
+        // console.log(resp);
         var hits = {};
         for (var oneCatalog of resp.hits.hits) {
             hits = oneCatalog._source;
@@ -105,7 +105,7 @@ app.get('/patientresponses/:idPatient', function (req, res) {
 app.post('/responses', function (req, res) {
     var indexName = 'responsecatalog';
     var typeName = 'response';
-    console.log('request body is ');
+    // console.log('request body is ');
     console.log(req.body);
     updateData();
 
@@ -166,7 +166,7 @@ app.post('/ggfit', function (req, res) {
             if (error) {
                 errorHandler(error);
             } else {
-                console.log(response);
+                // console.log(response);
             }
         });
     }

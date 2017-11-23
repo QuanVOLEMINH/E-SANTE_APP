@@ -31,7 +31,10 @@
     "jspdf-autotable": "^2.3.2",
     "mydatepicker": "^2.0.32",
     "ng2-order-pipe": "^0.1.5",
+    "ng2-toasty": "^4.0.3",
     "ngx-bootstrap": "^1.9.3",
+    "ngx-progress-bar": "0.0.10",
+    "ngx-progressbar": "^2.1.1",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"
   },

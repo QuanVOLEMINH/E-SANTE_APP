@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {PatientService} from "../../services/patient.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {IMyDpOptions} from "mydatepicker";
+import {ActivatedRoute, Router} from '@angular/router';
+import {PatientService} from '../../services/patient.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {IMyDpOptions} from 'mydatepicker';
+import {ToastyService, ToastyConfig, ToastOptions, ToastData} from "ng2-toasty";
 
 @Component({
   selector: 'app-patient-detail',
@@ -16,6 +17,7 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
   first: string;
   idPatient: number;
   genders = ['Homme', 'Femme'];
+  maritals = ['Single', 'Married', 'Divorced', 'Separated', 'Widowed'];
   pathologies = ['Pathologie 1', 'Pathologie 2', 'Pathologie 3'];
   public myDatePickerOptions: IMyDpOptions = {
     // other options...
@@ -23,10 +25,65 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
   };
   mask: any[] = ['+', '3', '3', ' ', /\d/, /\d/, ' ', /\d/, /\d/, ' ', /\d/, /\d/, ' ', /\d/, /\d/, ' ', /\d/, /\d/];
 
+  validationMessages: any = {
+    'first': {
+      'required': 'First name is required.',
+      'pattern': 'First name is invalid'
+    },
+    'last': {
+      'required': 'Last name is required.',
+      'pattern': 'Last name is invalid'
+    },
+    'gender': {
+      'required': 'Gender is required.'
+    },
+    'email': {
+      'email': 'Please input a valid email.'
+    },
+    'phone': {
+      'required': 'Phone number is required.'
+    },
+    'maritalStatus': {
+      'required': 'Marital Status is required.'
+    },
+    'address': {
+      'required': 'Address is required.'
+    },
+    'city': {
+      'pattern': 'Name of this city is invalid'
+    },
+    'zip': {
+      'pattern': 'Zip code is invalid'
+    },
+    'id': {
+      'required': 'ID is required.',
+      'pattern': 'ID is invalid'
+    },
+    'pathology': {
+      'required': 'Pathology is required.'
+    },
+    'socialSecurityNumber': {
+      'required': 'Social Security Number is required',
+      'pattern': 'Social Security Number is invalid'
+    },
+    'medicalDoctor': {
+      'required': 'Medical Doctor is required.',
+      'pattern': 'Name is invalid'
+    },
+    'phoneDoctor': {
+      'required': 'Phone number is required.'
+    },
+    'insuredName': {
+      'required': 'Name is required.',
+      'pattern': 'Name is invalid'
+    }
+  };
   private sub: any;
   constructor(private route: ActivatedRoute,
               private router: Router,
               public formBuilder: FormBuilder,
+              private _toastyService: ToastyService,
+              private _toastyConfig: ToastyConfig,
               private _patientService: PatientService) { }
 
   ngOnInit() {
@@ -47,24 +104,37 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
         }
       );
     this.myForm = this.formBuilder.group({
-      first: [null, [Validators.required]],
-      last: [null, [Validators.required]],
+      first: [null, [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
+      last: [null, [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
       age: null,
       gender: [null, [Validators.required]],
-      myDate: [null, Validators.required],
+      myDate: [null],
       email: [
         null,
         [
-          Validators.required,
-          Validators.pattern('^[a-z0-9!#$%&\'*+\\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$')
+          Validators.email
+          // Validators.pattern('^[a-z0-9!#$%&\'*+\\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$')
         ]
       ],
       phone: [null, [Validators.required]],
+      maritalStatus: [null, [Validators.required]],
       address: [null, [Validators.required]],
-      city: [null, [Validators.required]],
-      zip: [null, [Validators.required]],
-      id: [null, [Validators.required]],
-      pathology: [null, [Validators.required]]
+      city: [null, [Validators.pattern(/^[a-zA-Z ]+$/)]],
+      zip: [null, [Validators.pattern(/^\d+$/)]],
+      id: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
+      pathology: [null, [Validators.required]],
+      socialSecurityNumber: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
+      occupation: [null],
+      employer: [null],
+      employerPhoneNumber: [null],
+      medicalDoctor: [null, [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
+      phoneDoctor: [null, [Validators.required]],
+      insuredName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
+      insCompany: [null],
+      relationWithPatient: [null],
+      insCompanyAddress: [null],
+      insCompanyCity: [null],
+      insCompanyZip: [null]
     });
 
   }
@@ -78,15 +148,70 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
       myDate: this.patient['_source']['myDate'],
       email: this.patient['_source']['email'],
       phone: this.patient['_source']['phone'],
+      maritalStatus: this.patient['_source']['maritalStatus'],
       address: this.patient['_source']['address'],
       city: this.patient['_source']['city'],
       zip: this.patient['_source']['zip'],
       id: this.patient['_source']['id'],
-      pathology: this.patient['_source']['pathology']
-    })
+      pathology: this.patient['_source']['pathology'],
+      socialSecurityNumber: this.patient['_source']['socialSecurityNumber'],
+      occupation: this.patient['_source']['occupation'],
+      employer: this.patient['_source']['employer'],
+      employerPhoneNumber: this.patient['_source']['employerPhoneNumber'],
+      medicalDoctor: this.patient['_source']['medicalDoctor'],
+      phoneDoctor: this.patient['_source']['phoneDoctor'],
+      insuredName: this.patient['_source']['insuredName'],
+      insCompany: this.patient['_source']['insCompany'],
+      relationWithPatient: this.patient['_source']['relationWithPatient'],
+      insCompanyAddress: this.patient['_source']['insCompanyAddress'],
+      insCompanyCity: this.patient['_source']['insCompanyCity'],
+      insCompanyZip: this.patient['_source']['insCompanyZip']
+    });
   }
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
+  onSave(data) {
+    // Update the new information of an user
+    console.log(data);
+    this._patientService.updatePatientById(data)
+      .subscribe(
+        response => {
+          this.addToast('SUCCESS', response.msg, 'success');
+          console.log(response.msg);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    // this.refreshData();
+  }
+
+  addToast(title, msg, type) {
+    // Create the instance of ToastOptions
+    const toastOptions: ToastOptions = {
+      title: title,
+      msg: msg,
+      showClose: true,
+      timeout: 5000,
+      theme: 'default',
+      onAdd: (toast: ToastData) => {
+        console.log('Toast ' + toast.id + ' has been added!');
+      },
+      onRemove: function(toast: ToastData) {
+        console.log('Toast ' + toast.id + ' has been removed!');
+      }
+    };
+    // Add see all possible types in one shot
+    switch (type) {
+      case 'default': this._toastyService.default(toastOptions); break;
+      case 'info': this._toastyService.info(toastOptions); break;
+      case 'success': this._toastyService.success(toastOptions); break;
+      case 'wait': this._toastyService.wait(toastOptions); break;
+      case 'error': this._toastyService.error(toastOptions); break;
+      case 'warning': this._toastyService.warning(toastOptions); break;
+    }
+    // this._toastyService.error(toastOptions);
+  }
 }
