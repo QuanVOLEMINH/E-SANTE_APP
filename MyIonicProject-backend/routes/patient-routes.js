@@ -153,7 +153,7 @@ app.post('/profilPatient', function (req, res) {
                     length: 10,
                     numbers: true
                 });
-                // console.log('Create password!!!!!!!!!!!');
+                console.log('Create password!!!!!!!!!!!');
                 client.update({
                     index: index,
                     type: type,
@@ -168,7 +168,7 @@ app.post('/profilPatient', function (req, res) {
                     if (error) {
                         errorHandler(error);
                     } else {
-                        // console.log(response);
+                        console.log(response);
                         //send();
                         var content = 'ID: ' + req.body.id + '\nPassword: ' + password;
                         /*transporter.sendMail(inputmail(req.body.email, content), function (err, success) {
