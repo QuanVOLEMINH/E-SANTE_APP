@@ -30,12 +30,8 @@ export class QuestionServiceProvider {
   };
 
   //GET QUESTIONS BY ID PATHOLOGY
-  getListQuestionsById(idPath) {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' });
-    let myParams = new URLSearchParams();
-    myParams.set('idPath', idPath);
-    let options = new RequestOptions({ headers: headers, search: myParams });
-    return this.http.get(this.apiUrl + 'pathologies/' + idPath, options)
+  getListQuestionsByIdPath(idPath) {
+    return this.http.get(this.apiUrl + 'pathologies/' + idPath)
       .map(function (response) {
         return response.json();
       })

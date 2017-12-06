@@ -62,63 +62,6 @@ function createData() {
         body: {
             idPath: '1',
             questioncatalog: {
-                info: {
-                    legend: "INFORMATIONS DEMOGRAPHIQUES",
-                    questions: {
-                        sexe: {
-                            label: "Sexe",
-                            maxLength: 0,
-                            placeholder: "",
-                            type: "Select",
-                            options: [
-                                {
-                                    label: "Homme",
-                                    value: "homme"
-                                },
-                                {
-                                    label: "Femme",
-                                    value: "femme"
-                                }
-                            ],
-                            answer: "",
-                            validators: {
-                                required: null
-                            },
-                            errorMessages: {
-                                required: "{{label}} is required."
-                            }
-                        },
-                        dateDeNaissance: {
-                            label: "Date de naissance",
-                            inline: false,
-                            placeholder: "",
-                            type: "DateTime",
-                            answer: "",
-                            validators: {
-                                required: null
-                            },
-                            errorMessages: {
-                                required: "{{label}} is required."
-                            }
-                        },
-                        age: {
-                            label: "Age",
-                            maxLength: 10,
-                            placeholder: "",
-                            type: "Input",
-                            answer: "",
-                            validators: {
-                                required: null,
-                                maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-4][0-9]|150)$"
-                            },
-                            errorMessages: {
-                                required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 150"
-                            }
-                        }
-                    }
-                },
                 comportement: {
                     legend: "MESURES COMPORTEMENTALES",
                     questions: {
@@ -145,22 +88,6 @@ function createData() {
                                 required: "{{label}} is required."
                             }
                         },
-                        ageFumer: {
-                            label: "Age",
-                            maxLength: 10,
-                            placeholder: "",
-                            type: "Input",
-                            answer: "",
-                            validators: {
-                                required: null,
-                                maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-4][0-9]|150)$"
-                            },
-                            errorMessages: {
-                                required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 150"
-                            }
-                        },
                         consommeTabac: {
                             label: "Dans le passé, avez-vous fumé?",
                             maxLength: 0,
@@ -182,6 +109,22 @@ function createData() {
                             },
                             errorMessages: {
                                 required: "{{label}} is required."
+                            }
+                        },
+                        ageFumer: {
+                            label: "Age à commencer de fumer",
+                            maxLength: 10,
+                            placeholder: "",
+                            type: "Input",
+                            answer: "",
+                            validators: {
+                                required: null,
+                                maxLength: 3,
+                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-4][0-9]|150)$"
+                            },
+                            errorMessages: {
+                                required: "{{label}} is required",
+                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 150"
                             }
                         }
                     }
@@ -310,63 +253,6 @@ function createData() {
         body: {
             idPath: '2',
             questioncatalog: {
-                info: {
-                    legend: "INFORMATIONS DEMOGRAPHIQUES",
-                    questions: {
-                        sexe: {
-                            label: "Sexe",
-                            maxLength: 0,
-                            placeholder: "",
-                            type: "Select",
-                            options: [
-                                {
-                                    label: "Homme",
-                                    value: "homme"
-                                },
-                                {
-                                    label: "Femme",
-                                    value: "femme"
-                                }
-                            ],
-                            answer: "",
-                            validators: {
-                                required: null
-                            },
-                            errorMessages: {
-                                required: "{{label}} is required."
-                            }
-                        },
-                        dateDeNaissance: {
-                            label: "Date de naissance",
-                            inline: false,
-                            placeholder: "",
-                            type: "DateTime",
-                            answer: "",
-                            validators: {
-                                required: null
-                            },
-                            errorMessages: {
-                                required: "{{label}} is required."
-                            }
-                        },
-                        age: {
-                            label: "Age",
-                            maxLength: 10,
-                            placeholder: "",
-                            type: "Input",
-                            answer: "",
-                            validators: {
-                                required: null,
-                                maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-4][0-9]|150)$"
-                            },
-                            errorMessages: {
-                                required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 150"
-                            }
-                        }
-                    }
-                },
                 comportement: {
                     legend: "MESURES COMPORTEMENTALES",
                     questions: {
@@ -393,7 +279,7 @@ function createData() {
                                 required: "{{label}} is required."
                             }
                         },
-                        consommeTabac: {
+                        consommeAlcool: {
                             label: "Consommez-vous des boissons alcoolisées?",
                             maxLength: 0,
                             placeholder: "",
@@ -484,7 +370,7 @@ function createData() {
                     legend: "ACTIVITE PHYSIQUE",
                     questions: {
                         taille: {
-                            label: "Votre taille",
+                            label: "Taille",
                             maxLength: 10,
                             placeholder: "",
                             type: "Input",
@@ -500,7 +386,7 @@ function createData() {
                             }
                         },
                         poid: {
-                            label: "Votre poids",
+                            label: "Poid",
                             maxLength: 10,
                             placeholder: "",
                             type: "Input",
@@ -515,7 +401,7 @@ function createData() {
                             }
                         },
                         exercices: {
-                            label: "Faites vous des exercices Physiques?",
+                            label: "Faites-vous des exercices physiques?",
                             maxLength: 0,
                             placeholder: "",
                             type: "Radio",
@@ -555,7 +441,7 @@ function createData() {
                             }
                         },
                         cholesterol: {
-                            label: "Cholestérol HDL",
+                            label: "Cholestérol total",
                             maxLength: 10,
                             placeholder: "mg/l",
                             type: "Input",
@@ -601,74 +487,6 @@ function createData() {
         body: {
             idPath: '3',
             questioncatalog: {
-                info: {
-                    legend: "INFORMATIONS DEMOGRAPHIQUES",
-                    questions: {
-                        sexe: {
-                            label: "Sexe",
-                            maxLength: 0,
-                            placeholder: "",
-                            type: "Select",
-                            options: [
-                                {
-                                    label: "Homme",
-                                    value: "homme"
-                                },
-                                {
-                                    disabled: true,
-                                    label: "Femme",
-                                    value: "femme"
-                                }
-                            ],
-                            answer: "",
-                            validators: {
-                                required: null
-                            },
-                            errorMessages: {
-                                required: "{{label}} is required."
-                            }
-                        },
-                        dateDeNaissance: {
-                            label: "Date de naissance",
-                            inline: false,
-                            placeholder: "",
-                            type: "DateTime",
-                            answer: "",
-                            validators: {
-                                required: null
-                            },
-                            errorMessages: {
-                                required: "{{label}} is required."
-                            }
-                        },
-                            /*validators: {
-                                customValidator: null,
-                                minLength: 5,
-                                maxLength: 10
-                            },
-                            errorMessages: {
-                                required: "{{ label }} is required",
-                                maxLength: "Max character count is 5"
-                            }*/
-
-                        age: {
-                            label: "Age",
-                            maxLength: 10,
-                            placeholder: "",
-                            type: "Input",
-                            answer: "",
-                            validators: {
-                                required: null,
-                                maxLength: 3,
-                                pattern: "^(0?[1-9]|[1-9][0-9]|[1][0-4][0-9]|150)$"
-                            },
-                            errorMessages: {
-                                required: "{{label}} is required",
-                                pattern: "Seuls des chiffres sont autorisés et {{label}} < 150"
-                            }
-                        }
-                    }
-                },
                 comportement: {
                     legend: "MESURES COMPORTEMENTALES",
                     questions: {
@@ -695,7 +513,7 @@ function createData() {
                                 required: "{{label}} is required."
                             }
                         },
-                        consommeTabac: {
+                        consommeAlcool: {
                             label: "Consommez-vous des boissons alcoolisées?",
                             maxLength: 0,
                             placeholder: "",
@@ -834,7 +652,7 @@ function createData() {
                     legend: "ACTIVITE PHYSIQUE",
                     questions: {
                         taille: {
-                            label: "Votre taille",
+                            label: "Taille",
                             maxLength: 10,
                             placeholder: "",
                             type: "Input",
@@ -850,7 +668,7 @@ function createData() {
                             }
                         },
                         poid: {
-                            label: "Votre poids",
+                            label: "Poid",
                             maxLength: 10,
                             placeholder: "",
                             type: "Input",
@@ -865,7 +683,7 @@ function createData() {
                             }
                         },
                         exercices: {
-                            label: "Faites vous des exercices Physiques?",
+                            label: "Faites vous des exercices physiques?",
                             maxLength: 0,
                             placeholder: "",
                             type: "Radio",
@@ -908,7 +726,7 @@ function createData() {
                             }
                         },
                         cholesterol: {
-                            label: "Cholestérol HDL",
+                            label: "Cholestérol total",
                             maxLength: 10,
                             placeholder: "mg/l",
                             type: "Input",

@@ -183,8 +183,8 @@
             </div>
           </div>
           <!--Pathology - Social Security Number-->
-          <div class="row">
-            <div class="form-group col-sm-6">
+
+            <!--<div class="form-group">
               <label>Pathology</label>
               <select class="form-control" formControlName="pathology">
                 <option *ngFor="let pathology of pathologies" [value]="pathology">{{pathology}}</option>
@@ -196,8 +196,28 @@
                   {{validationMessages.pathology.required}}
                 </div>
               </div>
+            </div>-->
+          <!--Pathology - Social Security Number-->
+          <div class="form-group" formArrayName="pathology">
+            <label>Pathology</label>
+            <!--<select class="form-control" formControlName="pathology">
+              <option *ngFor="let pathology of pathologies" [value]="pathology">{{pathology}}</option>
+            </select>-->
+            <div class="checkbox" *ngFor="let pathology of checks; let i = index">
+              <label><input type="checkbox"
+                            (change)="onChange($event)"
+                            [value]="pathology.value"
+                            [checked]="pathology.value == this.myForm.controls['pathology'][i]">{{pathology.description}}</label>
             </div>
-            <div class="form-group col-sm-6">
+            <div
+              *ngIf="myForm.controls['pathology'].invalid && (myForm.controls['pathology'].dirty || myForm.controls['pathology'].touched)"
+              class="alert alert-danger fade in">
+              <div *ngIf="myForm.controls['pathology'].errors.required">
+                {{validationMessages.pathology.required}}
+              </div>
+            </div>
+          </div>
+            <div class="form-group">
               <label>Social Security Number</label>
               <input type="text"
                      formControlName="socialSecurityNumber"
@@ -213,7 +233,6 @@
                 </div>
               </div>
             </div>
-          </div>
           <!--Occupation - Employer - Employer phone no-->
           <div class="row">
             <div class="form-group col-sm-4">
@@ -333,14 +352,17 @@
       </div>
     </div>
     <!--BUTTON RESET - SUBMIT-->
-    <div class="input-group-btn">
-      <button class="btn btn-danger" type="button" id="reset" (click)="reset()">Reset
-        <i class="glyphicon glyphicon-erase"></i>
-      </button>
-      <button class="btn btn-success" type="submit" id="submit" [disabled]="!myForm.valid">Save
-        <i class="glyphicon glyphicon-ok"></i>
-      </button>
+    <div class="row">
+      <div class="input-group-btn">
+        <button class="btn btn-warning col-sm-3" type="button" id="back" routerLink="/patients">
+          <i class="glyphicon glyphicon-circle-arrow-left"></i> Back
+        </button>
+        <button class="btn btn-success col-sm-3" type="submit" id="submit" [disabled]="!myForm.valid">Save
+          <i class="glyphicon glyphicon-ok"></i>
+        </button>
+      </div>
     </div>
+
   </div>
 </form>
 <ng2-toasty></ng2-toasty>

@@ -85,7 +85,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let patient of patientList | orderBy: '_id'">
+        <tr *ngFor="let patient of patientList | orderBy: '_id'"
+            (dblclick)="onNavigate(['/patient-detail', patient._source.id])">
           <th>{{patient._source.id }}</th>
           <th>{{patient._source.first}}</th>
           <th>{{patient._source.last}}</th>
@@ -113,7 +114,7 @@
     <form [formGroup]="myForm"
           (ngSubmit)="onCreate(myForm.value)"
           novalidate>
-      <div class="container">
+      <div class="container-fluid">
         <h2>CREATE NEW PATIENT</h2>
         <div class="panel-group">
           <!--Patient Information-->
@@ -291,35 +292,20 @@
                   </div>
                 </div>
               </div>
-              <!--Pathology - Social Security Number-->
-              <div class="row">
-                <div class="form-group col-sm-6">
-                  <label>Pathology</label>
-                  <select class="form-control" formControlName="pathology">
-                    <option *ngFor="let pathology of pathologies" [value]="pathology">{{pathology}}</option>
-                  </select>
-                  <div
-                    *ngIf="myForm.controls['pathology'].invalid && (myForm.controls['pathology'].dirty || myForm.controls['pathology'].touched)"
-                    class="alert alert-danger fade in">
-                    <div *ngIf="myForm.controls['pathology'].errors.required">
-                      {{validationMessages.pathology.required}}
-                    </div>
+              <!--SOCIAL-SecurityNumber-->
+              <div class="form-group">
+                <label>Social Security Number</label>
+                <input type="text"
+                       formControlName="socialSecurityNumber"
+                       class="form-control">
+                <div
+                  *ngIf="myForm.controls['socialSecurityNumber'].invalid && (myForm.controls['socialSecurityNumber'].dirty || myForm.controls['socialSecurityNumber'].touched)"
+                  class="alert alert-danger fade in">
+                  <div *ngIf="myForm.controls['socialSecurityNumber'].errors.required">
+                    {{validationMessages.socialSecurityNumber.required}}
                   </div>
-                </div>
-                <div class="form-group col-sm-6">
-                  <label>Social Security Number</label>
-                  <input type="text"
-                         formControlName="socialSecurityNumber"
-                         class="form-control">
-                  <div
-                    *ngIf="myForm.controls['socialSecurityNumber'].invalid && (myForm.controls['socialSecurityNumber'].dirty || myForm.controls['socialSecurityNumber'].touched)"
-                    class="alert alert-danger fade in">
-                    <div *ngIf="myForm.controls['socialSecurityNumber'].errors.required">
-                      {{validationMessages.socialSecurityNumber.required}}
-                    </div>
-                    <div *ngIf="myForm.controls['socialSecurityNumber'].errors.pattern">
-                      {{validationMessages.socialSecurityNumber.pattern}}
-                    </div>
+                  <div *ngIf="myForm.controls['socialSecurityNumber'].errors.pattern">
+                    {{validationMessages.socialSecurityNumber.pattern}}
                   </div>
                 </div>
               </div>
@@ -374,6 +360,23 @@
                     <div *ngIf="myForm.controls['phoneDoctor'].errors.required">
                       {{validationMessages.phoneDoctor.required}}
                     </div>
+                  </div>
+                </div>
+              </div>
+              <!--Pathology-->
+              <div class="form-group" formArrayName="pathology">
+                <label>Pathology</label>
+                <!--<select class="form-control" formControlName="pathology">
+                  <option *ngFor="let pathology of pathologies" [value]="pathology">{{pathology}}</option>
+                </select>-->
+                <div class="checkbox" *ngFor="let pathology of checks; let i = index">
+                  <label><input type="checkbox" (change)="onChange($event)" [value]="pathology.value">{{pathology.description}}</label>
+                </div>
+                <div
+                  *ngIf="myForm.controls['pathology'].invalid && (myForm.controls['pathology'].dirty || myForm.controls['pathology'].touched)"
+                  class="alert alert-danger fade in">
+                  <div *ngIf="myForm.controls['pathology'].errors.required">
+                    {{validationMessages.pathology.required}}
                   </div>
                 </div>
               </div>
@@ -442,14 +445,17 @@
           </div>
         </div>
         <!--BUTTON RESET - SUBMIT-->
-        <div class="input-group-btn">
-          <button class="btn btn-danger" type="button" id="reset" (click)="reset()">Reset
-            <i class="glyphicon glyphicon-erase"></i>
-          </button>
-          <button class="btn btn-success" type="submit" id="submit" [disabled]="!myForm.valid">Submit
-            <i class="glyphicon glyphicon-ok"></i>
-          </button>
+        <div class="row">
+          <div class="input-group-btn">
+            <button class="btn btn-danger col-sm-3" type="button" id="reset" (click)="reset()">Reset
+              <i class="glyphicon glyphicon-erase"></i>
+            </button>
+            <button class="btn btn-success col-sm-3" type="submit" id="submit" [disabled]="!myForm.valid">Submit
+              <i class="glyphicon glyphicon-ok"></i>
+            </button>
+          </div>
         </div>
+
       </div>
     </form>
   </div>

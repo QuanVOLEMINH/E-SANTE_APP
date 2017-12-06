@@ -1,9 +1,9 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {PatientService} from '../../services/patient.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {IMyDpOptions} from 'mydatepicker';
-import {ToastyService, ToastyConfig, ToastOptions, ToastData} from "ng2-toasty";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PatientService } from '../../services/patient.service';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { IMyDpOptions } from 'mydatepicker';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from "ng2-toasty";
 
 @Component({
   selector: 'app-patient-detail',
@@ -16,9 +16,15 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
   patient: any;
   first: string;
   idPatient: number;
+  age: number;
   genders = ['Homme', 'Femme'];
   maritals = ['Single', 'Married', 'Divorced', 'Separated', 'Widowed'];
   pathologies = ['Pathologie 1', 'Pathologie 2', 'Pathologie 3'];
+  public checks = [
+    { description: 'Pathology 1', value: '1' },
+    { description: 'Pathology 2', value: '2' },
+    { description: 'Pathology 3', value: '3' }
+  ];
   public myDatePickerOptions: IMyDpOptions = {
     // other options...
     dateFormat: 'dd.mm.yyyy',
@@ -80,11 +86,11 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
   };
   private sub: any;
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              public formBuilder: FormBuilder,
-              private _toastyService: ToastyService,
-              private _toastyConfig: ToastyConfig,
-              private _patientService: PatientService) { }
+    private router: Router,
+    public formBuilder: FormBuilder,
+    private _toastyService: ToastyService,
+    private _toastyConfig: ToastyConfig,
+    private _patientService: PatientService) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
@@ -93,15 +99,15 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
     });
     this._patientService.getListPatientById(this.idPatient)
       .subscribe(
-        response => {
-          console.log(response);
-          this.patient = response;
-          this.first = this.patient._source.first;
-          this.setValue();
-        },
-        error => {
-          console.log(error);
-        }
+      response => {
+        // console.log(response);
+        this.patient = response;
+        this.first = this.patient._source.first;
+        this.setValue();
+      },
+      error => {
+        console.log(error);
+      }
       );
     this.myForm = this.formBuilder.group({
       first: [null, [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
@@ -122,7 +128,7 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
       city: [null, [Validators.pattern(/^[a-zA-Z ]+$/)]],
       zip: [null, [Validators.pattern(/^\d+$/)]],
       id: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
-      pathology: [null, [Validators.required]],
+      pathology: this.formBuilder.array([]),
       socialSecurityNumber: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
       occupation: [null],
       employer: [null],
@@ -139,6 +145,51 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
 
   }
 
+  calculateAge() {
+    // Convert from date of birth to age
+    if (this.myForm.controls['myDate'].value != null) {
+      const dob = this.myForm.controls['myDate'].value;
+      const year = dob['date']['year'];
+      const month = dob['date']['month'];
+      const day = dob['date']['day'];
+      // The month as an number between 0 and 11 (January to December).
+      const birthday = new Date(year, month - 1, day);
+      const timeDiff = Date.now() - birthday.getTime();
+      const cal = Math.round(timeDiff / (1000 * 24 * 3600));
+      const ageDate = new Date(timeDiff);
+      this.age = Math.abs(ageDate.getFullYear() - 1970);
+      this.myForm.controls['age'].setValue(this.age);
+    }
+    // bind age to View
+    /* this.age = Math.abs(ageDate.getUTCFullYear()-1970);
+    console.log(this.age);*/
+  }
+
+  onChange(event) {
+    console.log(event);
+    const pathologies = <FormArray>this.myForm.get('pathology') as FormArray;
+    const group = [];
+    if (this.myForm.get(event.target.value)) {
+      this.myForm.patchValue({ [event.target.value]: event.target.value });
+    }
+    // console.log(this.myForm);
+    if (event.target.checked) {
+      pathologies.push(new FormControl(event.target.value));
+      // this.myForm.get['pathology'].patchValue(event.target.value);
+    } else {
+      let i = 0;
+      pathologies.controls.forEach((ctrl: FormControl) => {
+        if (ctrl.value === event.target.value) {
+          pathologies.removeAt(i);
+          return;
+        }
+        i++;
+      });
+      /*const i = pathologies.controls.findIndex(x => x.value === event.target.value);
+      pathologies.removeAt(i);*/
+    }
+    console.log(pathologies);
+  }
   setValue() {
     this.myForm.setValue({
       first: this.patient['_source']['first'],
@@ -171,19 +222,18 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
-
   onSave(data) {
     // Update the new information of an user
     console.log(data);
     this._patientService.updatePatientById(data)
       .subscribe(
-        response => {
-          this.addToast('SUCCESS', response.msg, 'success');
-          console.log(response.msg);
-        },
-        error => {
-          console.log(error);
-        }
+      response => {
+        this.addToast('SUCCESS', response.msg, 'success');
+        // console.log(response.msg);
+      },
+      error => {
+        console.log(error);
+      }
       );
     // this.refreshData();
   }
@@ -199,7 +249,7 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
       onAdd: (toast: ToastData) => {
         console.log('Toast ' + toast.id + ' has been added!');
       },
-      onRemove: function(toast: ToastData) {
+      onRemove: function (toast: ToastData) {
         console.log('Toast ' + toast.id + ' has been removed!');
       }
     };

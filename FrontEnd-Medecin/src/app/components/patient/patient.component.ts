@@ -1,10 +1,11 @@
-import {Component, OnInit, Pipe} from '@angular/core';
-import {IMyDpOptions} from 'mydatepicker';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {PatientService} from '../../services/patient.service';
-import {NgProgress} from 'ngx-progressbar';
-import {ToastyService, ToastyConfig, ToastOptions, ToastData} from 'ng2-toasty';
-import {Observable} from "rxjs/Observable";
+import { Component, OnInit, Pipe } from '@angular/core';
+import { IMyDpOptions } from 'mydatepicker';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { PatientService } from '../../services/patient.service';
+import { NgProgress } from 'ngx-progressbar';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+import { Observable } from "rxjs/Observable";
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -26,6 +27,12 @@ export class PatientComponent implements OnInit {
   genders = ['Homme', 'Femme'];
   maritals = ['Single', 'Married', 'Divorced', 'Separated', 'Widowed'];
   pathologies = ['Pathologie 1', 'Pathologie 2', 'Pathologie 3'];
+  // pathologies: any;
+  public checks = [
+    { description: 'Pathology 1', value: '1' },
+    { description: 'Pathology 2', value: '2' },
+    { description: 'Pathology 3', value: '3' }
+  ];
   titleRequire = 'This field is required';
   date: any;
   age: number;
@@ -89,12 +96,16 @@ export class PatientComponent implements OnInit {
   };
 
   constructor(public formBuilder: FormBuilder,
-              public ngProgress: NgProgress,
-              private _toastyService: ToastyService,
-              private _toastyConfig: ToastyConfig,
-              private _patientService: PatientService) {
+    public ngProgress: NgProgress,
+    private _toastyService: ToastyService,
+    private _toastyConfig: ToastyConfig,
+    private _patientService: PatientService,
+    private route: Router) {
     this.isDeleted = false;
     this._toastyConfig.theme = 'material';
+    /*const defaultPathologies = ['Pathologie 1'];
+    this.myForm = this.formBuilder.group(
+      pathology: this.formBuilder.array(this.pathologies.map(x => defaultPathologies.indexOf(x) > -1)));*/
   }
 
   ngOnInit() {
@@ -117,7 +128,7 @@ export class PatientComponent implements OnInit {
       city: [null, [Validators.pattern(/^[a-zA-Z ]+$/)]],
       zip: [null, [Validators.pattern(/^\d+$/)]],
       id: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
-      pathology: [null, [Validators.required]],
+      pathology: this.formBuilder.array([]),
       socialSecurityNumber: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
       occupation: [null],
       employer: [null],
@@ -139,26 +150,50 @@ export class PatientComponent implements OnInit {
     this.deleteForm = this.formBuilder.group({
       id: [null, [Validators.required]]
     });
-
     this.refreshData();
     this.interval = setInterval(() => {
       this.refreshData();
     }, 5000);
-    console.log(this.myForm);
   }
 
   refreshData() {
     this._patientService.getListPatients()
       .subscribe(
-        response => {
-          console.log(response.length);
-          this.patientList = response;
-          console.log(this.patientList);
-        },
-        error => {
-          console.log(error);
-        }
+      response => {
+        // console.log(response.length);
+        this.patientList = response;
+        // console.log(this.patientList);
+      },
+      error => {
+        console.log(error);
+      }
       );
+  }
+
+  onChange(event) {
+    // console.log(event);
+    const pathologies = <FormArray>this.myForm.get('pathology') as FormArray;
+    const group = [];
+    if (this.myForm.get(event.target.value)) {
+      this.myForm.patchValue({ [event.target.value]: event.target.value });
+    }
+    // console.log(this.myForm);
+    if (event.target.checked) {
+      pathologies.push(new FormControl(event.target.value));
+      // this.myForm.get['pathology'].patchValue(event.target.value);
+    } else {
+      let i = 0;
+      pathologies.controls.forEach((ctrl: FormControl) => {
+        if (ctrl.value === event.target.value) {
+          pathologies.removeAt(i);
+          return;
+        }
+        i++;
+      });
+      /*const i = pathologies.controls.findIndex(x => x.value === event.target.value);
+      pathologies.removeAt(i);*/
+    }
+    // console.log(pathologies);
   }
   setDate(): void {
     // Set today date using the patchValue function
@@ -181,10 +216,12 @@ export class PatientComponent implements OnInit {
       const year = dob['date']['year'];
       const month = dob['date']['month'];
       const day = dob['date']['day'];
-      const birthday = new Date(year, month, day);
+      // The month as an number between 0 and 11 (January to December).
+      const birthday = new Date(year, month - 1, day);
       const timeDiff = Date.now() - birthday.getTime();
+      const cal = Math.round(timeDiff / (1000 * 24 * 3600));
       const ageDate = new Date(timeDiff);
-      this.age = Math.abs(ageDate.getUTCFullYear() - 1970);
+      this.age = Math.abs(ageDate.getFullYear() - 1970);
       this.myForm.controls['age'].setValue(this.age);
     }
     // bind age to View
@@ -194,7 +231,7 @@ export class PatientComponent implements OnInit {
 
   clearDate(): void {
     // Clear the date using the patchValue function
-    this.myForm.patchValue({myDate: null});
+    this.myForm.patchValue({ myDate: null });
   }
 
   // Add new patient to database
@@ -202,14 +239,14 @@ export class PatientComponent implements OnInit {
     console.log(data);
     this._patientService.toListPatients(data)
       .subscribe(
-        response => {
-          console.log(response);
-          this.addToast('WAITING', '', 'wait');
-        },
-        error => {
-          console.log(error);
-          this.addToast('ERROR', '', 'error');
-        }
+      response => {
+        // console.log(response);
+        this.addToast('SUCCESS', response.msg, 'success');
+      },
+      error => {
+        console.log(error);
+        this.addToast('ERROR', '', 'error');
+      }
       );
     // this.refreshData();
   }
@@ -221,12 +258,12 @@ export class PatientComponent implements OnInit {
   onBacktoList() {
     this._patientService.getListPatients()
       .subscribe(
-        response => {
-          console.log(response);
-    },
-        error => {
-          console.log(error);
-        }
+      response => {
+        // console.log(response);
+      },
+      error => {
+        console.log(error);
+      }
       );
     this.currentPatient = null;
   }
@@ -234,14 +271,14 @@ export class PatientComponent implements OnInit {
   onGetListById(id) {
     this._patientService.getListPatientById(id)
       .subscribe(
-        response => {
-          console.log(response);
-          this.currentPatient = response;
-        },
-        error => {
-          console.log(error);
-          this.addToast('ERROR', error._body, 'error');
-        }
+      response => {
+        // console.log(response);
+        this.currentPatient = response;
+      },
+      error => {
+        console.log(error);
+        this.addToast('ERROR', error._body, 'error');
+      }
       );
     this.isDeleted = false;
     this.modifyForm.reset();
@@ -253,20 +290,23 @@ export class PatientComponent implements OnInit {
     this.ngProgress.start();
     this._patientService.deletePatientById(id)
       .subscribe(
-        response => {
-          const index = this.patientList.indexOf(this.deleteForm.value, 0);
-          if (index > -1) {
-            this.patientList.splice(index, 1);
-          }
-          this.ngProgress.done();
-          this.addToast('WAITING', '', 'wait');
-          console.log(response);
-        },
-        error => {
-          console.log(error);
-          this.ngProgress.done();
-          this.addToast('ERROR', error._body, 'error');
+      response => {
+        const index = this.patientList.indexOf(this.deleteForm.value, 0);
+        if (index > -1) {
+          this.patientList.splice(index, 1);
         }
+        this.ngProgress.done();
+        setTimeout(() => {
+          this.addToast('SUCCESS', response.msg, 'success');
+        }, 3500);
+
+        // console.log(response);
+      },
+      error => {
+        console.log(error);
+        this.ngProgress.done();
+        this.addToast('ERROR', error._body, 'error');
+      }
       );
     this.deleteForm.reset();
     this.isDeleted = true;
@@ -280,13 +320,13 @@ export class PatientComponent implements OnInit {
       title: title,
       msg: msg,
       showClose: true,
-      timeout: 4000,
+      timeout: 3000,
       theme: 'default',
       onAdd: (toast: ToastData) => {
-        console.log('Toast ' + toast.id + ' has been added!');
+        // console.log('Toast ' + toast.id + ' has been added!');
       },
-      onRemove: function(toast: ToastData) {
-        console.log('Toast ' + toast.id + ' has been removed!');
+      onRemove: function (toast: ToastData) {
+        // console.log('Toast ' + toast.id + ' has been removed!');
       }
     };
     // Add see all possible types in one shot
@@ -299,5 +339,9 @@ export class PatientComponent implements OnInit {
       case 'warning': this._toastyService.warning(toastOptions); break;
     }
     // this._toastyService.error(toastOptions);
+  }
+
+  onNavigate(routeValue) {
+    this.route.navigate(routeValue);
   }
 }

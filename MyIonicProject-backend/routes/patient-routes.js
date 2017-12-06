@@ -192,7 +192,11 @@ app.post('/profilPatient', function (req, res) {
     function createIndexResponses(index) {
         // console.log('createIndexResponses');
         client.indices.create({
-            index: index
+            index: index,
+            settings: {
+                "index.refresh_interval": "5s",
+                "index.mapping.total_fields.limit": 3000
+            }
         }, function (err, resp) {
             if (err) {
                 errorHandler(err);
@@ -213,6 +217,7 @@ app.post('/profilPatient', function (req, res) {
             type: type,
             id: req.body.id,
             body: {}
+            
         }, function (error, response) {
             if (error) {
                 console.log(error);

@@ -32,7 +32,7 @@ export class ResponseService {
       });
   }
 
-  public getListPatientById(id) {
+  getListPatientById(id) {
     return this.http
       .get(this.apiUrl + 'profilPatient/' + id)
       .map(function(response) {
@@ -45,15 +45,15 @@ export class ResponseService {
 
   // GET QUESTIONS BY ID PATHOLOGY
   getListQuestionsById(idPath) {
-    const headers = new Headers({
+    /*const headers = new Headers({
       'Content-Type': 'application/json',
       Accept: 'application/json'
     });
     const myParams = new URLSearchParams();
     myParams.set('idPath', idPath);
-    const options = new RequestOptions({ headers: headers, search: myParams });
+    const options = new RequestOptions({ headers: headers, search: myParams });*/
     return this.http
-      .get(this.apiUrl + 'pathologies/' + idPath, options)
+      .get(this.apiUrl + 'pathologies/' + idPath)
       .map(function(response) {
         return response.json();
       })

@@ -28,23 +28,18 @@ app.get('/pathologies/:idPath', function (req, res) {
     // console.log(id);
     var indexName = 'questionscatalog';
     var typeName = 'questions';
-    client.search({
+    client.get({
         index: indexName,
         type: typeName,
-        q: 'idPath:' + id
-    }).then(function (resp) {
-        // console.log(resp.hits.hits);
-        // console.log('---------------------------------');
-        var hits = {};
-        for (var oneCatalog of resp.hits.hits) {
-            hits = oneCatalog._source;
-            break;
+        id: id
+    }, function (error, response) {
+        if (error) {
+            console.log(error);
+        } else {
+            // console.log(response);
+            res.status(200).json(response);
         }
-        res.status(200).json(hits);
-    }, function (err) {
-        console.trace(err.message);
     });
-    // console.log('XXXXXXXXXXXXXX');
 });
 
 

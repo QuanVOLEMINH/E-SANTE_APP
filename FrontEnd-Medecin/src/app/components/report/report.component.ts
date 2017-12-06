@@ -22,23 +22,25 @@ export class ReportComponent implements OnInit {
     qna = {};
     showDate = false;
     showList = false;
+    q = [];
     constructor(private _responseService: ResponseService) { }
 
     ngOnInit() {
         // this.displayData = [];
     }
 
-    clearData () {
+    clearData() {
         this.dates = [];
         this.showDate = false;
         this.showList = false;
         this.report.date = "";
         this.remark = '';
     }
-    clearRemarkOnChangeDate () {
+    clearRemarkOnChangeDate() {
         // console.log(this.report.date);
         this.remark = '';
     }
+
     export() {
         // console.log(this.remark);
         this.exportToPDF(this.rawData, this.qna, this.report.id, this.report.date, this.remark);
@@ -47,6 +49,7 @@ export class ReportComponent implements OnInit {
         const responseCollection = {};
         this._responseService.getResponsesById(this.report.id).subscribe(
             res => {
+
                 // console.log(res);
                 for (const item in res) {
                     if (item.match(/^response.+/i)) {
@@ -63,6 +66,7 @@ export class ReportComponent implements OnInit {
                         this.dates.push(date);
                         this.reportData[date] = responseCollection[item];
                     }
+                    // console.log(this.reportData);
                     this.showDate = true;
                     // console.log(this.dates);
                     // console.log(this.reportData);
@@ -72,47 +76,42 @@ export class ReportComponent implements OnInit {
                 console.log(err);
             }
         );
+        function addUnique(data, key, value) {
+            if (data[key] == undefined) data[key] = value;
+        }
         if (this.report.date !== "") {
-            this._responseService
-                .getListQuestionsById(this.reportData[this.report.date]["idPath"])
-                .subscribe(
-                res => {
-                    // console.log(res);
-                    const data = this.reportData[this.report.date];
-                    // console.log(data);
-                    const labels = res["questioncatalog"];
-                    const newData = {};
-                    // console.log(labels);
-                    const qna = {};
-                    const rawData = {};
+            // console.log(this.reportData[this.report.date]);
+            const data = this.reportData[this.report.date];
+            console.log(data);
+            let idPath = this.reportData[this.report.date]["idPath"];
+            let qna = {};
+            let rawData = {};
+            for (let i = 0; i < idPath.length; i++) {
+                this._responseService.getListQuestionsById(idPath[i])
+                    .subscribe(
+                    res => {
+                        // console.log(res);
+                        for (const key in res['_source']['questioncatalog']) {
+                            for (const key2 in res['_source']['questioncatalog'][key]['questions']) {
+                                // console.log(key2);
+                                addUnique(qna, res['_source']['questioncatalog'][key]['questions'][key2]['label'], data[key][key2]);
+                                addUnique(rawData, res['_source']['questioncatalog'][key]['questions'][key2]['label'], key2);
+                            }
 
-                    for (const item in labels) {
-                        if (data[item] !== undefined) {
-                            newData[item] = data[item];
                         }
-                        for (const val in labels[item]["questions"]) {
-                            qna[labels[item]["questions"][val]["label"]] =
-                                newData[item][val];
-                            rawData[labels[item]["questions"][val]["label"]] = val;
+                        this.displayData = [];
+                        for (const key in qna) {
+                            this.displayData.push({ key: key, value: qna[key] });
                         }
+                        this.showList = true;
+                        this.qna = qna;
+                        this.rawData = rawData;
+                    },
+                    err => {
+                        console.log(err);
                     }
-                    this.displayData = [];
-                    for (const key in qna) {
-                        this.displayData.push({ key: key, value: qna[key] });
-                    }
-                    this.showList = true;
-
-                    this.qna = qna;
-                    this.rawData = rawData;
-                    // console.log(newData);
-                    // console.log(qna);
-                    // this.exportToPDF(rawData, qna, this.report.id, this.report.date);
-
-                },
-                err => {
-                    console.log(err);
-                }
-                );
+                    );
+            }
         }
     }
 
@@ -134,10 +133,7 @@ export class ReportComponent implements OnInit {
                 'level3': 2000
             }
         };
-        /*
-        const cols = ["Questions", "Responses"];
-        const rows = [];
-        */
+
         const response = this.reportData[date];
 
         const doc = new jsPDF();
@@ -146,7 +142,7 @@ export class ReportComponent implements OnInit {
         // size of page, here is A4
         const pageHeight = doc.internal.pageSize.height;
         const pageWidth = doc.internal.pageSize.width;
-        doc.setFont("times");
+        doc.setFont("courier");
 
         // for title
         doc.setFontSize(20);
@@ -181,7 +177,7 @@ export class ReportComponent implements OnInit {
             doc.setTextColor(255, 0, 0);
             doc.setFontStyle("bold");
             if (warning[rawData[item]] !== undefined) {
-                console.log(warning[rawData[item]]['level1']);
+                // console.log(warning[rawData[item]]['level1']);
                 let annonce = '';
                 if (questions_answers[item] >= warning[rawData[item]]['level1'] && questions_answers[item] < warning[rawData[item]]['level2']) {
                     annonce = '* Higher than normal *';
@@ -226,6 +222,8 @@ export class ReportComponent implements OnInit {
         */
 
         //doc.autoTable(cols, rows, options);
+
+
         // open pdf in a newtab
         const string = doc.output("datauristring");
         const iframe =
@@ -235,6 +233,8 @@ export class ReportComponent implements OnInit {
         const x = window.open();
         x.document.open();
         x.document.write(iframe);
+
+        
         // x.document.close();
         // doc.save('Report[' + this.report.id + '][' + this.report.date + '].pdf');
     }

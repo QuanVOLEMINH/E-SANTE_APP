@@ -23,6 +23,7 @@
     "nodemailer-smtp-transport": "^2.7.4"
   },
   "devDependencies": {
+    "@angular/cli": "^1.5.4",
     "nodemon": "^1.12.1"
   }
 }

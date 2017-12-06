@@ -1,7 +1,6 @@
-// tslint:disable:quotemark
-// tslint:disable:forin
 import { Component, OnInit } from "@angular/core";
 import { ResponseService } from "../../services/response.service";
+
 import Chart from "chart.js";
 import ChartScatter from "chart.js-scatter";
 @Component({
@@ -12,12 +11,12 @@ import ChartScatter from "chart.js-scatter";
   providers: [ResponseService]
 })
 export class ChartComponent implements OnInit {
-  private input = {
+  input = {
     id: "",
     type: ""
   };
-  private types = [];
-  private data = {};
+  types = [];
+  data = {};
   canvas: any;
   ctx: any;
   myChart: any;
@@ -25,9 +24,9 @@ export class ChartComponent implements OnInit {
 
   constructor(private _responseService: ResponseService) { }
 
-  ngOnInit() { }
-  // Get list of types
-  getTypes(id) { }
+  ngOnInit() {
+
+  }
 
   clearTypes() {
     this.types = [];

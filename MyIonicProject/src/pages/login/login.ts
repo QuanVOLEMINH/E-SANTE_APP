@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { HelloIonicPage } from '../hello-ionic/hello-ionic';
 import { ItemDetailsPage } from '../item-details/item-details';
 import { TabsPage } from '../tabs/tabs';
-import { Http } from "@angular/http";
 import { QuestionServiceProvider } from "../../providers/question-service/question-service";
 import { NavController } from "ionic-angular";
 import { GoogleFitDataProvider } from "../../providers/googlefit-data/googlefit-data";
@@ -44,7 +43,8 @@ export class LoginPage {
                 //console.log(response);
                 if (response.password == this.user.password) {
                     this.loginFailed = false;
-                    let idPath = response.pathology.charAt(response.pathology.length - 1);
+                    let idPath = response.pathology;
+                    // let idPath = [1, 2, 3];
                     this.nav.setRoot(this.tabPages, { param1: { 'idPath': idPath, 'idPatient': this.user.id } });
 
                 } else {

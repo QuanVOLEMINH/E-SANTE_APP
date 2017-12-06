@@ -11,6 +11,7 @@ button{
     margin: 10px auto;
     padding: 10px 20px 10px;
     color: blue;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 #report li{
     margin: 10px 0px;

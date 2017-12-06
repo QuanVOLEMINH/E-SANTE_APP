@@ -55,11 +55,11 @@ export class HelloIonicPage {
         } else {
           if (res != null) {
             res['id'] = this.idPatient;
-            console.log('res is ');
-            console.log(res);
+            // console.log('res is ');
+            // console.log(res);
             this.googlefitData.sendDataToServer(res).subscribe(
               response => {
-                console.log(response);
+                // console.log(response);
               },
               error => {
                 console.log(error);

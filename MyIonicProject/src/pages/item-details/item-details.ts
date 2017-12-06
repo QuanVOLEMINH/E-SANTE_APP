@@ -1,15 +1,15 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {NavController, NavParams, Slides, ToastController, AlertController} from 'ionic-angular';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {DynamicSelectModel} from "@ng-dynamic-forms/core/src/model/select/dynamic-select.model";
-import {DynamicInputModel} from "@ng-dynamic-forms/core/src/model/input/dynamic-input.model";
-import {DynamicRadioGroupModel} from "@ng-dynamic-forms/core/src/model/radio/dynamic-radio-group.model";
-import {DynamicFormService} from "@ng-dynamic-forms/core/src/service/dynamic-form.service";
-import {DynamicFormGroupModel} from "@ng-dynamic-forms/core/src/model/form-group/dynamic-form-group.model";
-import {DynamicDatePickerModel} from "@ng-dynamic-forms/core/src/model/datepicker/dynamic-datepicker.model";
-import {QuestionServiceProvider} from "../../providers/question-service/question-service";
-import {errorHandler} from "@angular/platform-browser/src/browser";
-import {DynamicSliderModel} from "../../models/slider/dynamic-slider.model";
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { NavController, NavParams, Slides, ToastController, AlertController } from 'ionic-angular';
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { DynamicSelectModel } from "@ng-dynamic-forms/core/src/model/select/dynamic-select.model";
+import { DynamicInputModel } from "@ng-dynamic-forms/core/src/model/input/dynamic-input.model";
+import { DynamicRadioGroupModel } from "@ng-dynamic-forms/core/src/model/radio/dynamic-radio-group.model";
+import { DynamicFormService } from "@ng-dynamic-forms/core/src/service/dynamic-form.service";
+import { DynamicFormGroupModel } from "@ng-dynamic-forms/core/src/model/form-group/dynamic-form-group.model";
+import { DynamicDatePickerModel } from "@ng-dynamic-forms/core/src/model/datepicker/dynamic-datepicker.model";
+import { QuestionServiceProvider } from "../../providers/question-service/question-service";
+import { errorHandler } from "@angular/platform-browser/src/browser";
+import { DynamicSliderModel } from "../../models/slider/dynamic-slider.model";
 
 @Component({
   selector: 'page-item-details',
@@ -28,39 +28,46 @@ export class ItemDetailsPage implements OnInit {
   public message: string;
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public alertCtrl: AlertController,
-              private _formService: DynamicFormService,
-              public _questionService: QuestionServiceProvider,
-              public toastCtrl: ToastController) {
-
-    this.idPath = this.navParams.data.idPath;
-    this.idPatient = this.navParams.data.idPatient;
-    console.log(this.idPath + ' ' + this.idPatient);
+    public navParams: NavParams,
+    public alertCtrl: AlertController,
+    private _formService: DynamicFormService,
+    public _questionService: QuestionServiceProvider,
+    public toastCtrl: ToastController) {
     this.formGroupList = [];
-
+    this.idPatient = this.navParams.data['idPatient'];
+    this.idPath = this.navParams.data['idPath'];
   }
 
   ngOnInit() {
-    //console.log(this.idPath);
-    this._questionService.getListQuestionsById(this.idPath)
-      .subscribe(
-        response => {
-          //console.log(response);
-          this.models = this.modelGenerator(response.questioncatalog);
-          for (let _i = 0; _i < this.models.length; _i++) {
-            let formModel = this.models[_i];
-            console.log(formModel);
-            this.formGroupList.push(this._formService.createFormGroup([formModel]));
-          }
-          //console.log(this.formGroupList);
-        },
-        error => {
-          console.log(error);
+
+    //Add only when not exist
+    function addUnique(data, key, value) {
+      if (data[key] == undefined) data[key] = value;
+    }
+    // console.log(this.navParams.data);
+    let temp = this.navParams.data['questionData'];
+    let data = temp[0]['_source']['questioncatalog'];
+
+    //Build data
+    for (let i = 1; i < temp.length; i++) {
+      for (const key in temp[i]['_source']['questioncatalog']) {
+        addUnique(data, key, temp[i]['_source']['questioncatalog'][key]);
+        for (const keyQuestion in temp[i]['_source']['questioncatalog'][key]['questions']) {
+          addUnique(data[key]['questions'], keyQuestion, temp[i]['_source']['questioncatalog'][key]['questions'][keyQuestion]);
         }
-      );
+      }
+    }
+     console.log(data);
+
+    //Generate models
+    this.models = this.modelGenerator(data);
+    for (let _i = 0; _i < this.models.length; _i++) {
+      let formModel = this.models[_i];
+      // console.log(formModel);
+      this.formGroupList.push(this._formService.createFormGroup([formModel]));
+    }
+
     this.progress = 20;
-    //this.error = this.models[0].group[0].errorMessages.required;
   }
 
   ionViewDidEnter() {
@@ -68,9 +75,11 @@ export class ItemDetailsPage implements OnInit {
   }
 
   modelGenerator(questionsInput) {
+    // console.log(questionsInput);
     let group = [];
     let models = [];
     for (let formGroup in questionsInput) {
+      // console.log(formGroup);
       group = [];
       for (let question in questionsInput[formGroup]['questions']) {
         switch (questionsInput[formGroup]['questions'][question]['type']) {
@@ -137,7 +146,7 @@ export class ItemDetailsPage implements OnInit {
 
   slideChanged() {
     let currentIndex = this.slider.getActiveIndex();
-    this.progress = Math.round((this.slider.getActiveIndex()+1)/this.models.length*100);
+    this.progress = Math.round((this.slider.getActiveIndex() + 1) / this.models.length * 100);
   }
 
   presentToast(message) {
@@ -148,7 +157,7 @@ export class ItemDetailsPage implements OnInit {
     });
 
     toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
+      // console.log('Dismissed toast');
     });
 
     toast.present();
@@ -156,7 +165,7 @@ export class ItemDetailsPage implements OnInit {
 
   onNext(index) {
     //Lock autoSwipes to next slides
-    this.progress = Math.round((this.slider.getActiveIndex()+1)/this.models.length*100);
+    this.progress = Math.round((this.slider.getActiveIndex() + 1) / this.models.length * 100);
     this.slider.lockSwipes(false);
     this.slider.slideNext();
     this.slider.lockSwipes(true);
@@ -167,19 +176,19 @@ export class ItemDetailsPage implements OnInit {
     this.slider.lockSwipes(false);
     this.slider.slidePrev();
     this.slider.lockSwipes(true);
-    this.progress = Math.round(this.slider.getActiveIndex()/this.models.length*100);
+    this.progress = Math.round(this.slider.getActiveIndex() / this.models.length * 100);
     console.log(this.formGroupList);
   }
 
   onSubmit() {
- }
+  }
 
   onSave() {
     this.progress = 100;
     let arrayData = [];
     for (let index of this.formGroupList) {
       arrayData.push(index._value);
-      console.log('Index', index);
+      // console.log('Index', index);
     }
     //console.log(arrayData);
     // convert array to obj
@@ -189,20 +198,20 @@ export class ItemDetailsPage implements OnInit {
     for (let response of arrayData) {
       //console.log('Response key', response[Object.keys(response)[0]]);
       //Convert obj to array for checking null values
-      arr[Object.keys(response)[0]] = Object.keys(response[Object.keys(response)[0]]).map(function(key) {
+      arr[Object.keys(response)[0]] = Object.keys(response[Object.keys(response)[0]]).map(function (key) {
         return response[Object.keys(response)[0]][key];
       });
       //Convert array to obj for storing data
       responses[Object.keys(response)[0]] = response[Object.keys(response)[0]]
     }
     //console.log('Array', arr);
-    
-    let k =  0;
+
+    let k = 0;
     for (let index in arr) {
       //console.log('Indexxxxxxxxx',typeof(arr[index][0]));
-      for (let i = 0 ; i < index.length; i++) {
+      for (let i = 0; i < index.length; i++) {
         arrTotal[k] = arr[index][i];
-        if (arr[index][i] === null ) {
+        if (arr[index][i] === null) {
           arrTotal.push(arr[index][i]);
         }
       }
@@ -212,7 +221,7 @@ export class ItemDetailsPage implements OnInit {
 
     console.log(responses);
 
-   const alert = this.alertCtrl.create({
+    const alert = this.alertCtrl.create({
       title: 'Confirmation',
       message: 'Avez-vous confirmé tous vos réponses?',
       buttons: [
@@ -226,17 +235,17 @@ export class ItemDetailsPage implements OnInit {
         {
           text: 'Oui',
           handler: () => {
-            console.log('Submit clicked');
+            // console.log('Submit clicked');
             this._questionService.toListResponses(responses)
               .subscribe(
-                response => {
-                  console.log(response);
-                  this.message = response.msg;
-                  this.presentToast(this.message);
-                },
-                error => {
-                  console.log(error);
-                }
+              response => {
+                // console.log(response);
+                this.message = response.msg;
+                this.presentToast(this.message);
+              },
+              error => {
+                console.log(error);
+              }
               );
           }
         }
@@ -245,5 +254,5 @@ export class ItemDetailsPage implements OnInit {
     alert.present();
 
 
-    };
+  };
 }
