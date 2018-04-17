@@ -1,0 +1,10 @@
+curl -X POST localhost:9200/responsecatalog/_close
+curl -X PUT localhost:9200/responsecatalog/_settings -d \ 
+'{
+      "index.mapping.total_fields.limit": 2000
+}'
+curl -X POST localhost:9200/responsecatalog/_open
+
+
+
+130 147
