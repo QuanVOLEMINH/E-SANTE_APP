@@ -23,9 +23,7 @@ function getStringDate() {
 
 //GET QUESTIONS BY ID PATHOLOGY - APP
 app.get('/pathologies/:idPath', function (req, res) {
-    // console.log('++++++++++++++++++++++++++++++++++');
     var id = req.params.idPath;
-    // console.log(id);
     var indexName = 'questionscatalog';
     var typeName = 'questions';
     client.get({
@@ -36,7 +34,6 @@ app.get('/pathologies/:idPath', function (req, res) {
         if (error) {
             console.log(error);
         } else {
-            // console.log(response);
             res.status(200).json(response);
         }
     });
