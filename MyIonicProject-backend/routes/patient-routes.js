@@ -5,6 +5,7 @@ var app = module.exports = express.Router();
 var generator = require('generate-password');
 var elasticsearch = require('elasticsearch');
 var errorHandler = require('errorhandler');
+var config = require('./config.json');
 var client = elasticsearch.Client({
     host: 'localhost:9200',
     log: 'info'
@@ -78,8 +79,8 @@ var transporter = nodemailer.createTransport(smtpTransport({
     secure: false,
     requireTLS: true,
     auth: {
-        user: 'dinhhuypfiev@gmail.com',
-        pass: 'V9FGKQ3B'
+        user: config.user.email,
+        pass: config.user.pass
     },
     proxy: 'http://localhost:3001/'
 }));
